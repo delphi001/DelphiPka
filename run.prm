@@ -1,0 +1,50 @@
+## This is the run parameter file for executing DelphiPKA program
+## User should also provide PDB file, forcefield parameter and topology
+##
+## NOTE: Lines starting with "#" mark will be skipped.
+##
+
+PDB file name                      : sample.pdb
+Charge parameter                   : /common1/compbio/TOOLS/DelphiPKA/param/parseres.crg
+Radius parameter                   : /common1/compbio/TOOLS/DelphiPKA/param/parseres.siz
+Topology parameter                 : /common1/compbio/TOOLS/DelphiPKA/param/topology
+
+# By default HETATM is deleted. If user need HETATM for ligand/ion binding
+# Set 1st "F", 3rd "T". And make HETATM in correct PQR format. 
+Remove HETATM                      : T
+Remove water molecule              : T
+HETATM in PQR format               : F
+
+# For protonation only, set 2nd and 3rd options "F". Otherwise, all "T"
+Do Protonation                     : T
+Do Energy Calculation              : T
+Do pKa's  Calculation              : T
+
+# 2nd and 3rd options can create PQR format at user-given pH value 
+Output PQR file (With Topology)    : T
+Output PQR file (With pKa result)  : F
+At given pH Value                  : 7.0
+
+# Parameters for Gaussian function in DelPhi
+# 2nd represents variance (sigma) in Gaussian function
+# 3rd represents reference dielectric constant
+# 4th represents solvent   dielectric constant
+Gaussian surface                   : 1
+Variance of Gaussian distribution  : 0.70
+Internal Dielectric                : 8.0
+External Dielectric                : 80.0
+
+# Clustering/Network Partiton.     Default is Network for more accuracy.
+# Kmean is slightly faster in some case. Turn Kmean on, delete 1st line below
+Cluster Delimitation Threshold (A) : 12.0
+Kmean++ cluster number             : AUTO
+
+# Choose Hydrogen attach Atom of GLU or ASP 
+# Defualt is OE2 for GLU / OD2 for ASP
+Hydrogen of GLU Attached to Atom   : OE1
+Hydrogen of ASP Attached to Atom   : OD1
+
+# pH Range and interval
+pH Initial Value                   : 0.0
+pH End Value                       : 14.0
+pH Interval                        : 1.0

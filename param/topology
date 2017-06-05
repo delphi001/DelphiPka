@@ -1,0 +1,694 @@
+#23456789012345678901234567890123456789012345678901234567890
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  ALA  N    sp2   BK   C    CA   H
+$  ALA  H    s     BK   N
+$  ALA  CA   sp3   BK   N    C    CB   HA
+$  ALA  HA   s     BK   CA
+$  ALA  C    sp2   BK   CA   O    N
+$  ALA  O    sp2   BK   C
+$  ALA  CB   sp3   SD   CA   HB1  HB2  HB3
+$  ALA  HB1  s     SD   CB
+$  ALA  HB2  s     SD   CB
+$  ALA  HB3  s     SD   CB
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  ARG  N    sp2   BK   C    CA   H
+$  ARG  H    s     BK   N
+$  ARG  CA   sp3   BK   N    C    CB   HA
+$  ARG  HA   s     BK   CA
+$  ARG  C    sp2   BK   CA   O    N    
+$  ARG  O    sp2   BK   C
+$  ARG  CB   sp3   SD   CA   CG   HB1  HB2
+$  ARG  HB1  s     SD   CB
+$  ARG  HB2  s     SD   CB
+$  ARG  CG   sp3   SD   CB   CD   HG1  HG2
+$  ARG  HG1  s     SD   CG
+$  ARG  HG2  s     SD   CG
+$  ARG  CD   sp3   SD   CG   NE   HD1  HD2
+$  ARG  HD1  s     SD   CD
+$  ARG  HD2  s     SD   CD
+$  ARG  NE   sp2   SD   CD   CZ   HE
+$  ARG  HE   s     SD   NE
+$  ARG  CZ   sp2   SD   NE   NH1  NH2
+$  ARG  NH1  sp2   SD   CZ  HH11 HH12  
+$  ARG HH11  s     SD   NH1
+$  ARG HH12  s     SD   NH1
+$  ARG  NH2  sp2   SD   CZ  HH21 HH22
+$  ARG HH21  s     SD   NH2
+$  ARG HH22  s     SD   NH2
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  ASN  N    sp2   BK   C    CA   H
+$  ASN  H    s     BK   N
+$  ASN  CA   sp3   BK   N    C    CB   HA
+$  ASN  HA   s     BK   CA
+$  ASN  C    sp2   BK   CA   O    N
+$  ASN  O    sp2   BK   C
+$  ASN  CB   sp3   SD   CA   CG   HB1  HB2
+$  ASN  HB1  s     SD   CB
+$  ASN  HB2  s     SD   CB
+$  ASN  CG   sp2   SD   CB   OD1  ND2
+$  ASN  OD1  sp2   SD   CG
+$  ASN  ND2  sp2   SD   CG  HD21 HD22
+$  ASN HD21  s     SD   ND2
+$  ASN HD22  s     SD   ND2
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  ASP  N    sp2   BK   C    CA   H
+$  ASP  H    s     BK   N
+$  ASP  CA   sp3   BK   N    C    CB   HA
+$  ASP  HA   s     BK   CA
+$  ASP  C    sp2   BK   CA   O    N
+$  ASP  O    sp2   BK   C
+$  ASP  CB   sp3   SD   CA   CG   HB1  HB2
+$  ASP  HB1  s     SD   CB
+$  ASP  HB2  s     SD   CB
+$  ASP  CG   sp2   SD   CB   OD1  OD2
+$  ASP  OD1  sp2   SD   CG   HD1
+$  ASP  OD2  sp2   SD   CG   HD2
+$  ASP  HD1  s     SD   OD1
+$  ASP  HD2  s     SD   OD2
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  CYS  N    sp2   BK   C    CA   H
+$  CYS  H    s     BK   N
+$  CYS  CA   sp3   BK   N    C    CB   HA
+$  CYS  HA   s     BK   CA
+$  CYS  C    sp2   BK   CA   O    N
+$  CYS  O    sp2   BK   C
+$  CYS  CB   sp3   SD   CA   SG   HB1  HB2
+$  CYS  HB1  s     SD   CB
+$  CYS  HB2  s     SD   CB
+$  CYS  SG   sp2   SD   CB   HG
+$  CYS  HG   s     SD   SG
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  GLN  N    sp2   BK   C    CA   H
+$  GLN  H    s     BK   N
+$  GLN  CA   sp3   BK   N    C    CB   HA
+$  GLN  HA   s     BK   CA
+$  GLN  C    sp2   BK   CA   O    N
+$  GLN  O    sp2   BK   C
+$  GLN  CB   sp3   SD   CA   CG   HB1  HB2
+$  GLN  HB1  s     SD   CB
+$  GLN  HB2  s     SD   CB
+$  GLN  CG   sp3   SD   CB   CD   HG1  HG2
+$  GLN  HG1  s     SD   CG
+$  GLN  HG2  s     SD   CG
+$  GLN  CD   sp2   SD   CG   OE1  NE2
+$  GLN  OE1  sp2   SD   CD
+$  GLN  NE2  sp2   SD   CD  HE21 HE22
+$  GLN HE21  s     SD   NE2
+$  GLN HE22  s     SD   NE2
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  GLU  N    sp2   BK   C    CA   H
+$  GLU  H    s     BK   N
+$  GLU  CA   sp3   BK   N    C    CB   HA
+$  GLU  HA   s     BK   CA
+$  GLU  C    sp2   BK   CA   O    N
+$  GLU  O    sp2   BK   C
+$  GLU  CB   sp3   SD   CA   CG   HB1  HB2
+$  GLU  HB1  s     SD   CB
+$  GLU  HB2  s     SD   CB
+$  GLU  CG   sp3   SD   CB   CD   HG1  HG2
+$  GLU  HG1  s     SD   CG
+$  GLU  HG2  s     SD   CG
+$  GLU  CD   sp2   SD   CG   OE1  OE2
+$  GLU  OE1  sp2   SD   CD   HE1
+$  GLU  OE2  sp2   SD   CD   HE2
+$  GLU  HE1  s     SD   OE1
+$  GLU  HE2  s     SD   OE2
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  GLY  N    sp2   BK   C    CA   H
+$  GLY  H    s     BK   N
+$  GLY  CA   sp3   BK   N    C    HA1  HA2
+$  GLY  HA1  s     BK   CA
+$  GLY  HA2  s     BK   CA
+$  GLY  O    sp2   BK   C
+$  GLY  C    sp2   BK   CA   O    N
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  HIS  N    sp2   BK   C    CA   H
+$  HIS  H    s     BK   N
+$  HIS  CA   sp3   BK   N    C    CB   HA
+$  HIS  HA   s     BK   CA
+$  HIS  C    sp2   BK   CA   O    N
+$  HIS  O    sp2   BK   C
+$  HIS  CB   sp3   SD   CA   CG   HB1  HB2
+$  HIS  HB1  s     SD   CB
+$  HIS  HB2  s     SD   CB
+$  HIS  CG   sp2   SD   CB   ND1  CD2
+$  HIS  ND1  sp2   SD   CG   CE1  HD1
+$  HIS  HD1  s     SD   ND1
+$  HIS  CE1  sp2   SD   ND1  NE2  HE1
+$  HIS  HE1  s     SD   CE1
+$  HIS  NE2  sp2   SD   CE1  CD2  HE2
+$  HIS  HE2  s     SD   NE2
+$  HIS  CD2  sp2   SD   NE2  CG   HD2
+$  HIS  HD2  s     SD   CD2
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  ILE  N    sp2   BK   C    CA   H
+$  ILE  H    s     BK   N
+$  ILE  CA   sp3   BK   N    C    CB   HA
+$  ILE  HA   s     BK   CA
+$  ILE  C    sp2   BK   CA   O    N
+$  ILE  O    sp2   BK   C
+$  ILE  CB   sp3   SD   CA   CG1  CG2  HB
+$  ILE  HB   s     SD   CB
+$  ILE  CG1  sp3   SD   CB   CD1 HG11 HG12
+$  ILE HG11  s     SD   CG1
+$  ILE HG12  s     SD   CG2
+$  ILE  CG2  sp3   SD   CB  HG21 HG22 HG23
+$  ILE HG21  s     SD   CG2 
+$  ILE HG22  s     SD   CG2
+$  ILE HG23  s     SD   CG2
+$  ILE  CD1  sp3   SD   CG1 HD11 HD12 HD13
+$  ILE HD11  s     SD   CD1
+$  ILE HD12  s     SD   CD1
+$  ILE HD13  s     SD   CD1
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  LEU  N    sp2   BK   C    CA   H
+$  LEU  H    s     BK   N
+$  LEU  CA   sp3   BK   N    C    CB   HA
+$  LEU  HA   s     BK   CA
+$  LEU  C    sp2   BK   CA   O    N
+$  LEU  O    sp2   BK   C
+$  LEU  CB   sp3   SD   CA   CG   HB1  HB2
+$  LEU  HB1  s     SD   CB
+$  LEU  HB2  s     SD   CB
+$  LEU  CG   sp3   SD   CB   CD1  CD2  HG
+$  LEU  HG   s     SD   CG
+$  LEU  CD1  sp3   SD   CG  HD11 HD12 HD13
+$  LEU HD11  s     SD   CD1
+$  LEU HD12  s     SD   CD1
+$  LEU HD13  s     SD   CD1
+$  LEU  CD2  sp3   SD   CG  HD21 HD22 HD23
+$  LEU HD21  s     SD   CD2
+$  LEU HD22  s     SD   CD2
+$  LEU HD23  s     SD   CD2
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  LYS  N    sp2   BK   C    CA   H
+$  LYS  H    s     BK   N
+$  LYS  CA   sp3   BK   N    C    CB   HA
+$  LYS  HA   s     BK   CA
+$  LYS  C    sp2   BK   CA   O    N
+$  LYS  O    sp2   BK   C
+$  LYS  CB   sp3   SD   CA   CG   HB1  HB2
+$  LYS  HB1  s     SD   CB
+$  LYS  HB2  s     SD   CB
+$  LYS  CG   sp3   SD   CB   CD   HG1  HG2
+$  LYS  HG1  s     SD   CG
+$  LYS  HG2  s     SD   CG
+$  LYS  CD   sp3   SD   CG   CE   HD1  HD2
+$  LYS  HD1  s     SD   CD
+$  LYS  HD2  s     SD   CD
+$  LYS  CE   sp3   SD   CD   NZ   HE1  HE2
+$  LYS  HE1  s     SD   CE
+$  LYS  HE2  s     SD   CE
+$  LYS  NZ   sp3   SD   CE   HZ1  HZ2  HZ3
+$  LYS  HZ1  s     SD   NZ
+$  LYS  HZ2  s     SD   NZ
+$  LYS  HZ3  s     SD   NZ
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  MET  N    sp2   BK   C    CA   H
+$  MET  H    s     BK   N
+$  MET  CA   sp3   BK   N    C    CB   HA
+$  MET  HA   s     BK   CA
+$  MET  C    sp2   BK   CA   O    N
+$  MET  O    sp2   BK   C
+$  MET  CB   sp3   SD   CA   CG   HB1  HB2
+$  MET  HB1  s     SD   CB
+$  MET  HB2  s     SD   CB
+$  MET  CG   sp3   SD   CB   SD   HG1  HG2
+$  MET  HG1  s     SD   CG
+$  MET  HG2  s     SD   CG
+$  MET  SD   sp3   SD   CG   CE
+$  MET  CE   sp3   SD   SD   HE1  HE2  HE3
+$  MET  HE1  s     SD   CE
+$  MET  HE2  s     SD   CE
+$  MET  HE3  s     SD   CE
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  PHE  N    sp2   BK   C    CA   H
+$  PHE  H    s     BK   N
+$  PHE  CA   sp3   BK   N    C    CB   HA
+$  PHE  HA   s     BK   CA
+$  PHE  C    sp2   BK   CA   O    N
+$  PHE  O    sp2   BK   C
+$  PHE  CB   sp3   SD   CA   CG   HB1  HB2
+$  PHE  HB1  s     SD   CB
+$  PHE  HB2  s     SD   CB
+$  PHE  CG   sp2   SD   CB   CD1  CD2
+$  PHE  CD1  sp2   SD   CG   CE1  HD1
+$  PHE  HD1  s     SD   CD1
+$  PHE  CD2  sp2   SD   CG   CE2  HD2
+$  PHE  HD2  s     SD   CD2
+$  PHE  CE1  sp2   SD   CD1  CZ   HE1
+$  PHE  HE1  s     SD   CE1
+$  PHE  CE2  sp2   SD   CD2  CZ   HE2
+$  PHE  HE2  s     SD   CE2
+$  PHE  CZ   sp2   SD   CE1  CE2  HZ
+$  PHE  HZ   s     SD   CZ
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  PRO  N    sp2   BK   C    CA   CD
+$  PRO  CA   sp3   BK   N    C    CB   HA
+$  PRO  HA   s     BK   CA
+$  PRO  C    sp2   BK   CA   O    N
+$  PRO  O    sp2   BK   C
+$  PRO  CB   sp3   SD   CA   CG   HB1  HB2
+$  PRO  HB1  s     SD   CB
+$  PRO  HB2  s     SD   CB
+$  PRO  CG   sp3   SD   CB   CD   HG1  HG2
+$  PRO  HG1  s     SD   CG
+$  PRO  HG2  s     SD   CG
+$  PRO  CD   sp3   SD   CG   N    HD1  HD2
+$  PRO  HD1  s     SD   CD
+$  PRO  HD2  s     SD   CD
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  SER  N    sp2   BK   C    CA   H
+$  SER  H    s     BK   N
+$  SER  CA   sp3   BK   N    C    CB   HA
+$  SER  HA   s     BK   CA
+$  SER  C    sp2   BK   CA   O    N
+$  SER  O    sp2   BK   C
+$  SER  CB   sp3   SD   CA   OG   HB1  HB2
+$  SER  HB1  s     SD   CB
+$  SER  HB2  s     SD   CB
+$  SER  OG   sp3   SD   CB   HG
+$  SER  HG   s     SD   OG
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  THR  N    sp2   BK   C    CA   H
+$  THR  H    s     BK   N
+$  THR  CA   sp3   BK   N    C    CB   HA
+$  THR  HA   s     BK   CA
+$  THR  C    sp2   BK   CA   O    N
+$  THR  O    sp2   BK   C
+$  THR  CB   sp3   SD   CA   OG1  CG2  HB
+$  THR  HB   s     SD   CB
+$  THR  OG1  sp3   SD   CB   HG1
+$  THR  HG1  s     SD   OG1
+$  THR  CG2  sp3   SD   CB  HG21 HG22 HG23
+$  THR HG21  s     SD   CG2
+$  THR HG22  s     SD   CG2
+$  THR HG23  s     SD   CG2
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  TRP  N    sp2   BK   C    CA   H
+$  TRP  H    s     BK   N
+$  TRP  CA   sp3   BK   N    C    CB   HA
+$  TRP  HA   s     BK   CA
+$  TRP  C    sp2   BK   CA   O    N
+$  TRP  O    sp2   BK   C
+$  TRP  CB   sp3   SD   CA   CG   HB1  HB2
+$  TRP  HB1  s     SD   CB
+$  TRP  HB2  s     SD   CB
+$  TRP  CG   sp2   SD   CB   CD1  CD2
+$  TRP  CD1  sp2   SD   CG   NE1  HD1
+$  TRP  HD1  s     SD   CD1
+$  TRP  CD2  sp2   SD   CG   CE2  CE3
+$  TRP  NE1  sp2   SD   CD1  CE2  HE1
+$  TRP  HE1  s     SD   NE1
+$  TRP  CE2  sp2   SD   CD2  NE1  CZ2
+$  TRP  CE3  sp2   SD   CD2  CZ3  HE3
+$  TRP  HE3  s     SD   CE3
+$  TRP  CZ2  sp2   SD   CE2  CH2  HZ2
+$  TRP  HZ2  s     SD   CZ2
+$  TRP  CZ3  sp2   SD   CE3  CH2  HZ3
+$  TRP  HZ3  s     SD   CZ3
+$  TRP  CH2  sp2   SD   CZ2  CZ3  HH2
+$  TRP  HH2  s     SD   CH2
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  TYR  N    sp2   BK   C    CA   H
+$  TYR  H    s     BK   N
+$  TYR  CA   sp3   BK   N    C    CB   HA
+$  TYR  HA   s     BK   CA
+$  TYR  C    sp2   BK   CA   O    N
+$  TYR  O    sp2   BK   C
+$  TYR  CB   sp3   SD   CA   CG   HB1  HB2
+$  TYR  HB1  s     SD   CB
+$  TYR  HB2  s     SD   CB
+$  TYR  CG   sp2   SD   CB   CD1  CD2
+$  TYR  CD1  sp2   SD   CG   CE1  HD1
+$  TYR  HD1  s     SD   CD1
+$  TYR  CD2  sp2   SD   CG   CE2  HD2
+$  TYR  HD2  s     SD   CD2  
+$  TYR  CE1  sp2   SD   CD1  CZ   HE1
+$  TYR  HE1  s     SD   CE1
+$  TYR  CE2  sp2   SD   CD2  CZ   HE2
+$  TYR  HE2  s     SD   CE2
+$  TYR  CZ   sp2   SD   CE1  CE2  OH
+$  TYR  OH   sp3   SD   CZ   HH
+$  TYR  HH   s     SD   OH
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  VAL  N    sp2   BK   C    CA   H
+$  VAL  H    s     BK   N
+$  VAL  CA   sp3   BK   N    C    CB   HA
+$  VAL  HA   s     BK   CA
+$  VAL  C    sp2   BK   CA   O    N
+$  VAL  O    sp2   BK   C
+$  VAL  CB   sp3   SD   CA   CG1  CG2  HB
+$  VAL  HB   s     SD   CB
+$  VAL  CG1  sp3   SD   CB  HG11 HG12 HG13
+$  VAL HG11  s     SD   CG1
+$  VAL HG12  s     SD   CG1
+$  VAL HG13  s     SD   CG1
+$  VAL  CG2  sp3   SD   CB  HG21 HG22 HG23
+$  VAL HG21  s     SD   CG2
+$  VAL HG22  s     SD   CG2
+$  VAL HG23  s     SD   CG2
+#
+######## Following parameters for nucleic acid ##############
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$   A   P    sp3   SD   OP1  OP2  O3'  O5'
+$   A   OP1  s     SD   P
+$   A   OP2  s     SD   P
+$   A   O5'  sp3   SD   P    C5'
+$   A   C5'  sp3   SD   O5'  C4'  H5'  H5'' 
+$   A   C4'  sp3   SD   C5'  O4'  C3'  H4'
+$   A   O4'  sp3   SD   C4'  C1'
+$   A   C3'  sp3   SD   C4'  O3'  C2'  H3'
+$   A   O3'  sp3   SD   C3'  P
+$   A   C2'  sp3   SD   C3'  O2'  C1'  H2'
+$   A   O2'  sp3   SD   C2' HO2'
+$   A   C1'  sp3   SD   O4'  C2'  N9   H1'
+$   A   N9   sp2   SD   C1'  C8   C4
+$   A   C8   sp2   SD   N9   N7   H8
+$   A   N7   sp2   SD   C8   C5
+$   A   C5   sp2   SD   N7   C6   C4
+$   A   C6   sp2   SD   C5   N6   N1
+$   A   N6   sp2   SD   C6   H61  H62
+$   A   N1   sp2   SD   C6   C2   H1
+$   A   C2   sp2   SD   N1   N3   H2
+$   A   N3   sp2   SD   C2   C4
+$   A   C4   sp2   SD   N9   C5   N3
+$   A   H5'  s     SD   C5'
+$   A  H5''  s     SD   C5'
+$   A   H4'  s     SD   C4'
+$   A   H3'  s     SD   C3'
+$   A   H2'  s     SD   C2'
+$   A  HO2'  s     SD   O2'
+$   A   H1'  s     SD   C1'
+$   A   H8   s     SD   C8
+$   A   H61  s     SD   N6
+$   A   H62  s     SD   N6
+$   A   H2   s     SD   C2
+$   A   H1   s     SD   N1
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$   C   P    sp3   SD   O5'  OP1  OP2  O3'
+$   C   OP1  s     SD   P
+$   C   OP2  s     SD   P
+$   C   C5'  sp3   SD   C4'  O5'  H5'  H5''
+$   C   O5'  sp3   SD   C5'  P
+$   C   C4'  sp3   SD   C3'  O4'  C5'  H4'
+$   C   O4'  sp3   SD   C1'  C4'
+$   C   C3'  sp3   SD   C2'  C4'  O3'  H3'
+$   C   O3'  sp3   SD   C3'  P
+$   C   C2'  sp3   SD   C1'  O2'  C3'  H2'
+$   C   O2'  sp3   SD   C2' HO2'
+$   C   C1'  sp3   SD   N1   C2'  O4'  H1'
+$   C   N1   sp2   SD   C2   C6   C1'
+$   C   C2   sp2   SD   N1   N3   O2
+$   C   N3   sp2   SD   C2   C4   H3
+$   C   C4   sp2   SD   N3   C5   N4
+$   C   C5   sp2   SD   C4   C6   H5
+$   C   C6   sp2   SD   N1   C5   H6
+$   C   O2   s     SD   C2
+$   C   N4   sp2   SD   C4   H41  H42
+$   C   H1'  s     SD   C1'
+$   C   H2'  s     SD   C2'
+$   C   H3'  s     SD   C3'
+$   C   H4'  s     SD   C4'
+$   C  HO2'  s     SD   O2'
+$   C   H5'  s     SD   C5'
+$   C  H5''  s     SD   C5'
+$   C   H41  s     SD   N4
+$   C   H42  s     SD   N4
+$   C   H3   s     SD   N3
+$   C   H5   s     SD   C5
+$   C   H6   s     SD   C6
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$   G   P    sp3   SD   OP1  OP2  O3'  O5'
+$   G   OP1  s     SD   P
+$   G   OP2  s     SD   P
+$   G   O5'  sp3   SD   P    C5'
+$   G   C5'  sp3   SD   O5'  C4'  H5'  H5'' 
+$   G   C4'  sp3   SD   C5'  O4'  C3'  H4'
+$   G   O4'  sp3   SD   C4'  C1'
+$   G   C3'  sp3   SD   C4'  O3'  C2'  H3'
+$   G   O3'  sp3   SD   C3'  P
+$   G   C2'  sp3   SD   C3'  O2'  C1'  H2'
+$   G   O2'  sp3   SD   C2' HO2'
+$   G   C1'  sp3   SD   O4'  C2'  N9   H1'
+$   G   N9   sp2   SD   C1'  C8   C4
+$   G   C8   sp2   SD   N9   N7   H8
+$   G   N7   sp2   SD   C8   C5
+$   G   C5   sp2   SD   N7   C6   C4
+$   G   C6   sp2   SD   C5   O6   N1
+$   G   O6   s     SD   C6
+$   G   N1   sp2   SD   C6   C2   H1
+$   G   C2   sp2   SD   N1   N3   N3
+$   G   N2   sp2   SD   C2   H21  H22
+$   G   N3   sp2   SD   C2   C4
+$   G   C4   sp2   SD   N9   C5   N3
+$   G   H1'  s     SD   C1'
+$   G   H2'  s     SD   C2'
+$   G   H3'  s     SD   C3'
+$   G   H4'  s     SD   C4'
+$   G  HO2'  s     SD   O2'
+$   G   H5'  s     SD   C5'
+$   G  H5''  s     SD   C5'
+$   G   H8   s     SD   C8
+$   G   H1   s     SD   N1
+$   G   H21  s     SD   N2
+$   G   H22  s     SD   N2
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$   U   P    sp3   SD   O5'  OP1  OP2  O3'
+$   U   OP1  s     SD   P
+$   U   OP2  s     SD   P
+$   U   O5'  sp3   SD   C5'  P
+$   U   C5'  sp3   SD   C4'  O5'  H5'  H5''
+$   U   C4'  sp3   SD   C3'  O4'  C5'  H4'
+$   U   O4'  sp3   SD   C1'  C4'
+$   U   C3'  sp3   SD   C2'  C4'  O3'  H3'
+$   U   O3'  sp3   SD   C3'  P
+$   U   C2'  sp3   SD   C1'  C3'  O2'  H2'
+$   U   O2'  sp3   SD   C2' HO2'
+$   U   C1'  sp3   SD   N1   C2'  O4'  H1'
+$   U   N1   sp2   SD   C2   C6   C1'
+$   U   C2   sp2   SD   N1   N3   O2
+$   U   N3   sp2   SD   C2   C4   H3
+$   U   C4   sp2   SD   N3   C5   O4
+$   U   C5   sp2   SD   C4   C6   H5
+$   U   C6   sp2   SD   N1   C5   H6
+$   U   O2   s     SD   C2
+$   U   O4   s     SD   C4
+$   U   H1'  s     SD   C1'
+$   U   H2'  s     SD   C2'
+$   U  HO2'  s     SD   O2'
+$   U   H3'  s     SD   C3'
+$   U   H4'  s     SD   C4'
+$   U   H5'  s     SD   C5'
+$   U  H5''  s     SD   C5'
+$   U   H3   s     SD   N3
+$   U   H5   s     SD   C5
+$   U   H6   s     SD   C6
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  DA   P    sp3   SD   OP1  OP2  O3'  O5'
+$  DA   OP1  s     SD   P
+$  DA   OP2  s     SD   P
+$  DA   O5'  sp3   SD   P    C5'
+$  DA   C5'  sp3   SD   O5'  C4'  H5'  H5'' 
+$  DA   C4'  sp3   SD   C5'  O4'  C3'  H4'
+$  DA   O4'  sp3   SD   C4'  C1'
+$  DA   C3'  sp3   SD   C4'  O3'  C2'  H3'
+$  DA   O3'  sp3   SD   C3'  P
+$  DA   C2'  sp3   SD   C3'  C1'  H2'  H2''
+$  DA   C1'  sp3   SD   O4'  C2'  N9   H1'
+$  DA   N9   sp2   SD   C1'  C8   C4
+$  DA   C8   sp2   SD   N9   N7   H8
+$  DA   N7   sp2   SD   C8   C5
+$  DA   C5   sp2   SD   N7   C6   C4
+$  DA   C6   sp2   SD   C5   N6   N1
+$  DA   N6   sp2   SD   C6   H61  H62
+$  DA   N1   sp2   SD   C6   C2   H1
+$  DA   C2   sp2   SD   N1   N3   H2
+$  DA   N3   sp2   SD   C2   C4
+$  DA   C4   sp2   SD   N9   C5   N3
+$  DA   H5'  s     SD   C5'
+$  DA  H5''  s     SD   C5'
+$  DA   H4'  s     SD   C4'
+$  DA   H3'  s     SD   C3'
+$  DA   H2'  s     SD   C2'
+$  DA  H2''  s     SD   C2'
+$  DA   H1'  s     SD   C1'
+$  DA   H8   s     SD   C8
+$  DA   H61  s     SD   N6
+$  DA   H62  s     SD   N6
+$  DA   H2   s     SD   C2
+$  DA   H1   s     SD   N1
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  DC   P    sp3   SD   O5'  OP1  OP2  O3'
+$  DC   OP1  s     SD   P
+$  DC   OP2  s     SD   P
+$  DC   C5'  sp3   SD   C4'  O5'  H5'  H5''
+$  DC   O5'  sp3   SD   C5'  P
+$  DC   C4'  sp3   SD   C3'  O4'  C5'  H4'
+$  DC   O4'  sp3   SD   C1'  C4'
+$  DC   C3'  sp3   SD   C2'  C4'  O3'  H3'
+$  DC   O3'  sp3   SD   C3'  P
+$  DC   C2'  sp3   SD   C1'  C3'  H2'  H2''
+$  DC   C1'  sp3   SD   N1   C2'  O4'  H1'
+$  DC   N1   sp2   SD   C2   C6   C1'
+$  DC   C2   sp2   SD   N1   N3   O2
+$  DC   N3   sp2   SD   C2   C4   H3
+$  DC   C4   sp2   SD   N3   C5   N4
+$  DC   C5   sp2   SD   C4   C6   H5
+$  DC   C6   sp2   SD   N1   C5   H6
+$  DC   O2   s     SD   C2
+$  DC   N4   sp2   SD   C4   H41  H42
+$  DC   H1'  s     SD   C1'
+$  DC   H2'  s     SD   C2'
+$  DC  H2''  s     SD   C2'
+$  DC   H3'  s     SD   C3'
+$  DC   H4'  s     SD   C4'
+$  DC   H5'  s     SD   C5'
+$  DC  H5''  s     SD   C5'
+$  DC   H41  s     SD   N4
+$  DC   H42  s     SD   N4
+$  DC   H3   s     SD   N3
+$  DC   H5   s     SD   C5
+$  DC   H6   s     SD   C6
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  DG   P    sp3   SD   OP1  OP2  O3'  O5'
+$  DG   OP1  s     SD   P
+$  DG   OP2  s     SD   P
+$  DG   O5'  sp3   SD   P    C5'
+$  DG   C5'  sp3   SD   O5'  C4'  H5'  H5'' 
+$  DG   C4'  sp3   SD   C5'  O4'  C3'  H4'
+$  DG   O4'  sp3   SD   C4'  C1'
+$  DG   C3'  sp3   SD   C4'  O3'  C2'  H3'
+$  DG   O3'  sp3   SD   C3'  P
+$  DG   C2'  sp3   SD   C3'  C1'  H2'  H2''
+$  DG   C1'  sp3   SD   O4'  C2'  N9   H1'
+$  DG   N9   sp2   SD   C1'  C8   C4
+$  DG   C8   sp2   SD   N9   N7   H8
+$  DG   N7   sp2   SD   C8   C5
+$  DG   C5   sp2   SD   N7   C6   C4
+$  DG   C6   sp2   SD   C5   O6   N1
+$  DG   O6   s     SD   C6
+$  DG   N1   sp2   SD   C6   C2   H1
+$  DG   C2   sp2   SD   N1   N3   N3
+$  DG   N2   sp2   SD   C2   H21  H22
+$  DG   N3   sp2   SD   C2   C4
+$  DG   C4   sp2   SD   N9   C5   N3
+$  DG   H1'  s     SD   C1'
+$  DG   H2'  s     SD   C2'
+$  DG  H2''  s     SD   C2'
+$  DG   H3'  s     SD   C3'
+$  DG   H4'  s     SD   C4'
+$  DG   H5'  s     SD   C5'
+$  DG  H5''  s     SD   C5'
+$  DG   H8   s     SD   C8
+$  DG   H1   s     SD   N1
+$  DG   H21  s     SD   N2
+$  DG   H22  s     SD   N2
+#
+#  res atom obtal conf batm batm batm batm
+# |---|----|-----|----|----|----|----|----|----|----|----|----|----|----|
+$  DT   P    sp3   SD   O5'  OP1  OP2  O3'
+$  DT   OP1  s     SD   P
+$  DT   OP2  s     SD   P
+$  DT   O5'  sp3   SD   C5'  P
+$  DT   C5'  sp3   SD   C4'  O5'  H5'  H5''
+$  DT   C4'  sp3   SD   C3'  O4'  C5'  H4'
+$  DT   O4'  sp3   SD   C1'  C4'
+$  DT   C3'  sp3   SD   C2'  C4'  O3'  H3'
+$  DT   O3'  sp3   SD   C3'  P
+$  DT   C2'  sp3   SD   C1'  C3'  H2'  H2''
+$  DT   C1'  sp3   SD   N1   C2'  O4'  H1'
+$  DT   N1   sp2   SD   C2   C6   C1'
+$  DT   C2   sp2   SD   N1   N3   O2
+$  DT   N3   sp2   SD   C2   C4   H3
+$  DT   C4   sp2   SD   N3   C5   O4
+$  DT   C5   sp2   SD   C4   C6   C7
+$  DT   C6   sp2   SD   N1   C5   H6
+$  DT   C7   sp3   SD   C5   H71  H72  H73
+$  DT   O2   s     SD   C2
+$  DT   O4   s     SD   C4
+$  DT   H1'  s     SD   C1'
+$  DT   H2'  s     SD   C2'
+$  DT  H2''  s     SD   C2'
+$  DT   H3'  s     SD   C3'
+$  DT   H4'  s     SD   C4'
+$  DT   H5'  s     SD   C5'
+$  DT  H5''  s     SD   C5'
+$  DT   H3   s     SD   N3
+$  DT   H6   s     SD   C6
+$  DT   H71  s     SD   C7
+$  DT   H72  s     SD   C7
+$  DT   H73  s     SD   C7
+#
+# |---|-----|-------| 
+* PKA   ASP    4.50
+* PKA   AS0    0.00
+* PKA   HIS    6.50
+* PKA   HI0    0.00
+* PKA   ARG    12.0
+* PKA   AR0    0.00
+* PKA   GLU    4.80
+* PKA   GL0    0.00
+* PKA   LYS    10.0
+* PKA   LY0    0.00
+* PKA   CTR    3.60
+* PKA   CT0    0.00
+* PKA   NTR    8.00
+* PKA   NT0    0.00  
+* PKA     A    3.80
+* PKA     C    4.35
+* PKA    DA    4.10
+* PKA    DC    4.40
