@@ -3,7 +3,11 @@ project(DelphiPka)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-SET(CMAKE_CXX_COMPILER /usr/local/bin/mpicxx)
+if (APPLE)
+    set(CMAKE_CXX_COMPILER /usr/local/bin/mpicxx)
+else ()
+    set(CMAKE_CXX_COMPILER mpicxx)
+endif ()
 
 set(CMAKE_CXX_STANDARD 11)
 
