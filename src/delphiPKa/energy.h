@@ -36,6 +36,7 @@ private:
     const float& ionrad;
     const float& prbrad;
     const float& maxc;
+    const float& salt;
     
     const int&   iGaussian;
     const float& fSigma;
@@ -169,6 +170,7 @@ public:
     ionrad(pData->ionrad),
     prbrad(pData->prbrad),
     maxc(pData->maxc),
+    salt(pData->salt),
     iGaussian(pData->iGaussian),
     fSigma(pData->fSigma),
     fSrfcut(pData->fSrfcut),

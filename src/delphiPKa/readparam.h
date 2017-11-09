@@ -58,6 +58,8 @@ private:
     float& pH_initial;
     float& pH_end;
     float& pH_step;
+
+    float& salt;
     
     /*  END */
     
@@ -95,7 +97,8 @@ public:
     n_cluster(pData->n_cluster),
     pH_initial(pData->pH_initial),
     pH_end(pData->pH_end),
-    pH_step(pData->pH_step)
+    pH_step(pData->pH_step),
+    salt(pData->salt)
     
     
     {};

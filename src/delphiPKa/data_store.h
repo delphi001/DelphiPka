@@ -59,6 +59,8 @@ public:
     float pH_initial =  0.0;
     float pH_end     = 14.0;
     float pH_step    =  1.0;
+
+    float salt       = 0.15;
     
     unordered_map<string, float> sizmap;
     unordered_map<string, float> crgmap;

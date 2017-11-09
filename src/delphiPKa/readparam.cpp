@@ -126,6 +126,7 @@ void CReadParam :: run()
                 if(strtmp1 == "pH Initial Value")               pH_initial = stof(strtmp2);
                 if(strtmp1 == "pH Interval")                       pH_step = stof(strtmp2);
 
+                if(strtmp1 == "Salt")                                 salt = stof(strtmp2);
             }
             
         }
