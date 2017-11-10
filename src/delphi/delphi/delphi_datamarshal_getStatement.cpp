@@ -8,6 +8,8 @@
  *
  * The order included headers in this file is crucial in order to avoid ambiguous reference to "real" when
  * compiling the code in Mac system.
+ *
+ *
  */
 
 #include "delphi_datamarshal.h"
@@ -64,7 +66,9 @@ bool CDelphiDataMarshal::getStatement(string strLineNoSpace)
     */
    if (2 == found)
    {
-      for (int ii = 1; ii < iStatementNum; ii++)
+     //ARGO - Just tracking
+     //ARGO-cout << "Found argument " << strStatement << " in 2" << endl;
+     for (int ii = 1; ii < iStatementNum; ii++)
       {
          if (rgstrStatement_2lAbbre[ii] == strStatement)
          { typearg = ii; break; }
@@ -75,6 +79,7 @@ bool CDelphiDataMarshal::getStatement(string strLineNoSpace)
     */
    else if ( (2 < found) && (7 > found) )
    {
+      //ARGO-cout << "Found argument " << strStatement << " in 2<>7" << endl;
       for (int ii = 1; ii < iStatementNum; ii++)
       {
          if (rgstrStatement_ShortForm[ii] == strStatement)
@@ -90,6 +95,7 @@ bool CDelphiDataMarshal::getStatement(string strLineNoSpace)
       char c1stLetter[1];
       strStatement.copy(c1stLetter,1,0);
 
+      //ARGO-cout << "Found argument " << strStatement << " in " << c1stLetter[0] << endl;
 
       switch (c1stLetter[0])
       {
@@ -108,6 +114,9 @@ bool CDelphiDataMarshal::getStatement(string strLineNoSpace)
             if (        "CONVERGENCEINTERVAL" == strStatement) typearg = 16;
             if (        "CONVERGENCEFRACTION" == strStatement) typearg = 17;
             if (                     "CUTOFF" == strStatement) typearg = 45;
+	        if (                  "CONVOLUTE" == strStatement) typearg = 54; //ARGO ua 2016: convolute eps1
+            if (                 "CONVKSIGMA" == strStatement) typearg = 55; //kernel sigma
+            if (                  "CONVHSEPS" == strStatement) typearg = 56; //heavyside epsilon.
             break;
          case 'E':
             if (         "EXTERIORDIELECTRIC" == strStatement) typearg =  5;
@@ -121,6 +130,8 @@ bool CDelphiDataMarshal::getStatement(string strLineNoSpace)
             if (                   "GRIDSIZE" == strStatement) typearg =  1;
             if (            "GRIDCONVERGENCE" == strStatement) typearg = 23;
             if (                   "GAUSSIAN" == strStatement) typearg = 49; //Lin Li: gaussian
+			if (                  "GSDENSITY" == strStatement) typearg = 57; //Zhe Jia: gaussian
+			if (                  "GEPENALTY" == strStatement) typearg = 58; //Zhe Jia: gaussian
             break;
          case 'I':
             if (                  "IONRADIUS" == strStatement) typearg =  7;
@@ -129,6 +140,9 @@ bool CDelphiDataMarshal::getStatement(string strLineNoSpace)
             if (                  "ITERATION" == strStatement) typearg = 10;
             if (                     "INHOMO" == strStatement) typearg = 47;
             break;
+	 case 'K':
+	    if (                  "KCLUSTERS" == strStatement) typearg = 53;	//argo: fOR THE K-CLUSTERING METHOD OF FINDING SURFACE POTENTIAL
+	    break;
          case 'L':
             if (            "LINEARITERATION" == strStatement) typearg = 10;
             if (           "LINEARITERATIONS" == strStatement) typearg = 10;
@@ -165,6 +179,8 @@ bool CDelphiDataMarshal::getStatement(string strLineNoSpace)
             if ("SPHERICALCHARGEDISTRIBUTION" == strStatement) typearg = 13;
             if (                      "SIGMA" == strStatement) typearg = 46;
             if (                     "SRFCUT" == strStatement) typearg = 48;
+            if (                    "SURFPOT" == strStatement) typearg = 51; //argo
+            if (                   "SURFDIST" == strStatement) typearg = 52; //argo
             break;
          case 'T':
             if (                "TEMPERATURE" == strStatement) typearg = 44;
@@ -440,10 +456,49 @@ bool CDelphiDataMarshal::getStatement(string strLineNoSpace)
             break;
          case 49:
             iGaussian = boost::lexical_cast<int>(strArgument);
+            if ( iGaussian > 0 && iConvolute > 0 ) CBadCombination warning(iConvolute, iGaussian);
+            if ( zetaOn > 0 ) CBad_SURFDIST warning(zetaOn);
             break;
         case 50:
             fRadipz = boost::lexical_cast<float>(strArgument);
             break;
+        //ARGO 12 FEB 2016--------- SURFACE POTENTIAL --------------------
+        case 51:
+            zetaOn = boost::lexical_cast<int>(strArgument);
+            //cout << " Read> Surface Potential " << zetaOn << endl;
+            //turn on bZetaPhiOut;
+            bZetaPhiOut = true;
+            bPhimapOut=true;
+            break;
+        case 52:
+            zetaDistance = boost::lexical_cast<delphi::delphi_real>(strArgument);
+            if (( 10.0 < zetaDistance || zetaDistance < 0.0 || iGaussian > 0 || iConvolute > 0) && zetaOn==1) CBad_SURFDIST warning(zetaOn);
+	      break;
+	      case 53:
+    	    // This part is of no use. It is still here though. - Argo
+    	    iKclusters = boost::lexical_cast<int>(strArgument);
+    	    //cout << " Info> Number of clusters for averaging surface potential : " << iKclusters << endl;
+	      break;
+	//ARGO --------------- CONVOLUTE -----------------------
+        case 54:
+            iConvolute = boost::lexical_cast<int>(strArgument);
+            if ( iGaussian > 0 && iConvolute > 0 ) CBadCombination warning(iConvolute, iGaussian);
+            if ( zetaOn > 0 ) CBad_SURFDIST warning(zetaOn);
+  	    break;
+        case 55:
+        	fksigma = boost::lexical_cast<delphi::delphi_real>(strArgument);
+        	//cout << " Info> Convolution kernel sigma  = " << fksigma << endl;
+        	break;
+        case 56:
+        	fhvsd_eps = boost::lexical_cast<delphi::delphi_real>(strArgument);
+        	//cout << " Info> Heavyside Boundary to be set where EPS = " << fhvsd_eps << endl;
+        	break;
+		case 57:
+			iGaussianDensity = boost::lexical_cast<int>(strArgument);
+			break;
+		case 58:
+			iGaussianEnergy = boost::lexical_cast<int>(strArgument);
+			break;
 
       } // end of switch (typearg)
 
@@ -479,4 +534,3 @@ int CDelphiDataMarshal::yesno(string strArgument, string strStatement)
 
    return -1;
 }
-

@@ -26,7 +26,9 @@ class CReacFieldEnergyOverEST : public CWarning
    public:
 	CReacFieldEnergyOverEST()
       {
+
          cerr << "BE CAREFUL!! REACTION FIELD ENERGY MIGHT BE OVERESTIMATED!!!! \n";
+	 
       }
 };
 

@@ -26,7 +26,7 @@ class CForce
       string strResidueNum; // residue number     a4
       string strChain;      // subunit name       a1
       delphi_real fValue;   // atom radii/charge  f8.4
-     
+
    public:
       /**
        * default constructor
@@ -45,31 +45,31 @@ class CForce
        * @param strAtomIn atom name read from input file
        */
       void setAtom(const string strAtomIn) {this->strAtom = strAtomIn;}
-      
+
       /**
        * function to set residue name
        * @param strResidueNameIn residue name read from input file
        */
       void setResidue(const string strResidueNameIn) {this->strResidue = strResidueNameIn;}
-      
+
       /**
        * function to set residue number
        * @param strResidueNumIn residue number read from input file
        */
       void setResidueNum(const string strResidueNumIn) {this->strResidueNum = strResidueNumIn;}
-  
+
       /**
        * function to set chain name
        * @param strChainIn chain name read from input file
        */
-      void setChain(const string strChainIn) {this->strChain = strChainIn;} 
-      
+      void setChain(const string strChainIn) {this->strChain = strChainIn;}
+
       /**
        * function to set the value (either charge or radius) associated with a particular atom
        * @param fValueIn force field value associated with this atom
        */
       void setValue(const delphi_real fValueIn) {this->fValue = fValueIn;}
-  
+
       /**
        * function to get atom name
        * @return atom name
@@ -81,19 +81,19 @@ class CForce
        * @return residue name
        */
       string getResidue() const {return this->strResidue;}
-      
+
       /**
        * function to get residue number
        * @return residue number
        */
       string getResidueNum() const {return this->strResidueNum;}
-      
+
       /**
        * function to get chain name
        * @return chain name
        */
       string getChain() const {return this->strChain;}
-      
+
       /**
        * function to get force field value
        * @return charge or radius of this atom
@@ -113,6 +113,10 @@ class CAtomPdb // delphi_pdb_file_record
       SGrid<delphi_real> gPose;
       string strAtInf;
 
+      //argo added a new attribute
+      //look for strAtResname* tags
+      string strAtResname;  //residue name
+
    public:
       /**
        * default constructor
@@ -123,26 +127,27 @@ class CAtomPdb // delphi_pdb_file_record
          this->fCharge  = 0.0;
          this->gPose.nX = 0.0; this->gPose.nY = 0.0; this->gPose.nZ = 0.0;
          this->strAtInf = " ";
-      }; 
+         this->strAtResname = " ";
+      };
 
       /**
        * function to set radius of this atom
        * @param fRadiusIn radius of this atom
        */
       void setRadius(const delphi_real fRadiusIn) {this->fRadius = fRadiusIn;}
-      
+
       /**
        * function to set charge of this atom
        * @param fChargeIn charge on this atom
        */
       void setCharge(const delphi_real fChargeIn) {this->fCharge = fChargeIn;}
-      
+
       /**
        * function to set position of this atom
        * @param gPoseIn position of this atom
        */
       void setPose(const SGrid<delphi_real> gPoseIn) {this->gPose = gPoseIn;}
-      
+
       /**
        * function to set position of this atom
        * @param fX x-coordinate of this atom
@@ -151,36 +156,48 @@ class CAtomPdb // delphi_pdb_file_record
        */
       void setPose(const delphi_real fX, const delphi_real fY, const delphi_real fZ)
       {this->gPose.nX = fX; this->gPose.nY = fY; this->gPose.nZ = fZ;}
-      
+
       /**
        * function to store the rest of line read from .pdb file for this atom
        * @param strAtInfIn string of the line containing the rest info in .pdb for this atom
        */
       void setAtInf(const string strAtInfIn) {this->strAtInf = strAtInfIn;}
-      
+
+      /**
+       * function to store the residue name as read from .pdb file for this atom
+       * @param strAtInfIn string of the line containing the residue name info in .pdb for this atom
+       */
+      void setAtResname(const string strAtResname_in) {this->strAtResname = strAtResname_in;}
+
       /**
        * function to get radius of this atom
        * @return radius of this atom
        */
       delphi_real getRadius() const {return this->fRadius;}
-      
+
       /**
        * function to get charge on this atom
        * @return charge on this atom
        */
       delphi_real getCharge() const {return this->fCharge;}
-      
+
       /**
        * function to get position of this atom
        * @return position of this atom
        */
       SGrid<delphi_real> getPose() const {return this->gPose;}
-      
+
       /**
        * function to get rest info of this atom
        * @return string containing rest info of this atom
        */
-      string getAtInf() const {return this->strAtInf;} 
+      string getAtInf() const {return this->strAtInf;}
+
+      /**
+       * function to get residue name of this atom
+       * @return string containing residue name of this atom
+       */
+      string getAtResname() const {return this->strAtResname;}
 };
 
 

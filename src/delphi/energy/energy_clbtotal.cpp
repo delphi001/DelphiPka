@@ -102,9 +102,9 @@ void CDelphiEnergy::energy_clbtotal(delphi_real& fEnergy_SolvToChgIn, delphi_rea
     }
     
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
-
+#ifdef VERBOSE
 	cout << " number of g.p. in solution contributing to the energy :  " << iGridOutput << endl;
-	
+#endif	
 
 
 // ++++++++ Starting parallel computing and evoke OpenMP +++++++++++ //

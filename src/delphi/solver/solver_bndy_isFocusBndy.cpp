@@ -186,18 +186,21 @@ bool CDelphiFastSOR::isFocusBndy(delphi_real *** phimap)
 
     if (fZero > abs(fScale1-fScale))
     {
+#ifdef VERBOSE		
         cout << "scales are the same.\n";
         cout << "therefore assuming this to be a continuence\n";
+#endif		
     }
     else
     {
+#ifdef VERBOSE			
         cout << "\n";
         cout << " focussing potential map:\n";
         if (debug_solver)   cout << title << endl;
         cout << "original scale (grids/A)      : " << fScale1 << endl;
         cout << "object centre at (A) : " << fgBoxCenter1.nX << " "
              << fgBoxCenter1.nY << " " << fgBoxCenter1.nZ << endl;
-
+#endif	
         //----- check to see that new grid lies within old one that is going to provide bc's
         iout = 0;
         goff = (iGrid+1.0)/2.0;
@@ -236,7 +239,9 @@ bool CDelphiFastSOR::isFocusBndy(delphi_real *** phimap)
         isgrid = iGrid;
         iGrid  = iGrid1;
         gmid = (isgrid+1.0)/2.0;
+#ifdef VERBOSE		
         cout << "pulling boundary values out of old potential map...\n";
+#endif
 //        cout << "phimap_pre[0]: " << phimap_pre[0][0][0] << endl;
 //        cout << "phimap_pre[1][1][2]: " << phimap_pre[0][0][1] << endl;
 

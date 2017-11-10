@@ -8,7 +8,7 @@
 #include "solver_fastSOR.h"
 
 const string strEmpty60 = "                                                           ";
-const string strLine60  = "-----------------------------------------------------------";
+const string strLine60 = " ----------------------------------------------------------------";
 
 void CDelphiFastSOR::conplt(const vector<delphi_real>& array,const string& title,const int& iclr,const int& iscl,const int& imk,
                             const int& iplt,const char symb,const int& ixmin,const int& ixmax,vector<string>& iplot,delphi_real& ymin,delphi_real& ymax)
@@ -75,6 +75,9 @@ void CDelphiFastSOR::postItr(const vector<delphi_real>& rmaxl,const vector<delph
    /*
     * remap into phimap
     */
+//   cout << "Lin postItr 0: prgfPhiMap[0]: " << prgfPhiMap[0]  << endl; //Lin Test 2016/04
+//   cout << "Lin postItr 0: phimap1[0]: " << phimap1[0]  << endl; //Lin Test 2016/04
+//   cout << "Lin postItr 0: phimap2[0]: " << phimap2[0]  << endl; //Lin Test 2016/04
    for (delphi_integer iy = 0; iy < (iGrid*iGrid*iGrid-1)/2; iy++)
    {
       delphi_integer ix = iy*2;
@@ -83,12 +86,18 @@ void CDelphiFastSOR::postItr(const vector<delphi_real>& rmaxl,const vector<delph
    }
    prgfPhiMap[iGrid*iGrid*iGrid-1] = phimap1[iHalfGridNum-1];
 
-#ifdef VERBOSE
+//#ifdef VERBOSE
    cout << endl;
-   cout << "finished qdiffx linear iterations "; pTimer->showTime(); cout << endl;
-   cout << "total time elapsed so far: "; pTimer->showElapse(); cout << endl;
+
+//   cout << "Lin postItr 1: prgfPhiMap[0]: " << prgfPhiMap[0]  << endl; //Lin Test 2016/04
+//   cout << "Lin postItr 1: phimap1[0]: " << phimap1[0]  << endl; //Lin Test 2016/04
+//   cout << "Lin postItr 1: phimap2[0]: " << phimap2[0]  << endl; //Lin Test 2016/04
+   cout << " Time> Finished qdiffx linear iterations "; pTimer->showTime();
+   //cout << "total time elapsed so far: "; pTimer->showElapse(); cout << endl;
    //cout << "mean,max change (kT/e)   : " << rmsch2 << " " << rmxch2 << endl;
-#endif
+   cout << strLine60 << endl;
+   cout << endl;
+//#endif
 
    /*
     * plot convergence history

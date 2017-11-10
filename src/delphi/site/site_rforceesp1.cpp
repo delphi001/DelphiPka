@@ -40,6 +40,7 @@ vector< SGrid<delphi_real> > CSite::rforceeps1()
       realds += prgfSurfCrgE[p]/0.0393; rmyds += deltas;
       trullo = fact*sigmap*sigmap*deltas;
 
+#ifdef VERBOSE	  
       if (400 == (p+1))
       {
          cout << "normale " << prgfgSurfCrgE[p].nX << " " << prgfgSurfCrgE[p].nY << " " << prgfgSurfCrgE[p].nZ << endl;
@@ -47,7 +48,7 @@ vector< SGrid<delphi_real> > CSite::rforceeps1()
          cout << prgfgSurfCrgA[p].nX << " " << prgfgSurfCrgA[p].nY << " " << prgfgSurfCrgA[p].nZ << endl;
          cout << "area " << prgfSurfCrgE[p]/0.0393 << " " << prgfSurfCrgE[p]*fScale*fScale/0.0393 << endl;
       }
-
+#endif
       j = prgiAtSurf[p];
 
       for (iat = 0; iat < iAtomNum; iat++)

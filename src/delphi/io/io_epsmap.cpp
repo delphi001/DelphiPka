@@ -1,131 +1,248 @@
 /*
- * io_epsmap.cpp
  *
- *  Created on: Feb 4, 2014
- *      Author: chuan
+ * Author: Arghya Chakravorty (Argo)
+ * writing Epsilon map for
+ * 1> 2-dielectric model
+ * 2> Gaussian module
+ * 3> COnvolution module
  *
- * Fortran95 description:
- *  kim sharp/9 feb 88
- *  reformats epsilon array epsmap to compact array (MKG format)
- *     old format: epsmap(65,65,65,3) delphi_real*4
- *     new format: neps(5,65,65,3) delphi_integer*2
- *  where first index 1-65 now compressed into 1-5 plus offset into 16 bit words
- *  compact format also contains oldmid, the center of the protein in real coordinates
- *  compaction is effected by storing real eps (which take values of 0. and 1.) as bits in a 16 bit word access is
- *  via pointers idimx and ioffset thus x arrary indices of reps 0-15 -> word 1, 16-31 -> word 2 etc
+ * Written on 21-Sep, 2016
+ *
  */
 
 #include "io.h"
 
-void CIO::writeEpsMap(const delphi_integer& iAtomNumIn,const delphi_integer& iObjectNumIn,const delphi_integer& iGrid,
-                      const delphi_real& fScale,const SGrid<delphi_real>& fgBoxCenter,
-                      const vector< SGrid<delphi_integer> >& vctigEpsMap,const vector<bool>& vctbDielecMap,
-                      const string& strEpsFile)
+using namespace std;
+
+// CIO::writeEpsMap(const delphi_integer& iAtomNumIn,const delphi_integer& iObjectNumIn,const delphi_integer& iGrid,
+//                  const delphi_real& fScale,const SGrid<delphi_real>& fgBoxCenter,
+//                  const vector< SGrid<delphi_integer> >& vctigEpsMap,const vector<bool>& vctbDielecMap,
+//                  const string& strEpsFile)
+
+void CIO::writeHomoEpsMap(const delphi_integer& iGrid,
+                          const delphi_real&    repsout,
+                          const delphi_real&    repsin,
+                          const delphi_real& fScale,
+                          const SGrid<delphi_real>& fgBoxCenter,
+                          const vector<bool>& vctbDielecMap,
+                          const string& strEpsFile)
 {
-   iAtomNum = iAtomNumIn; iObjectNum = iObjectNumIn;
 
-   const delphi_integer iMaxWord = iGrid/16+1,iEpsDim = iAtomNum+iObjectNum+2;
+  int ix, iy, iz, iw, l;
 
-   //----- LOCAL
-   vector<delphi_integer> idimx,ip2,ioffset;
-   delphi_integer ix,iy,iz,iw,i,k1;
-   SGrid<delphi_integer> j123;
+  delphi_real coeff=0.5291772108;
+  delphi_real stepsize=1.0/fScale;
+  SGrid<delphi_real> origin = (fgBoxCenter-stepsize*(iGrid-1)/2.0)/coeff;
 
-   int kmap = 1;
-   delphi_real scale = fScale;
-   SGrid<delphi_real> oldmid = fgBoxCenter;
+  ofstream eps_out(strEpsFile.c_str());
 
-   cout << " setting up pointers...\n";
-   for (ix = 0; ix < iGrid; ix++)
-   {
-      idimx.push_back( (ix+1)/16+1 );
-      ioffset.push_back( (ix+1)%16 );
+  eps_out     << setw(10) << fixed << setprecision(6) << fScale << setw(6) << iGrid
+              << setw(10) << setprecision(6) << fgBoxCenter.nX
+              << setw(10) << setprecision(6) << fgBoxCenter.nY
+              << setw(10) << setprecision(6) << fgBoxCenter.nZ
+              << endl;
+  eps_out << "Gaussian cube format Epsilon map for homogeneous dielectric distro." << endl;
 
-      if (15 != ix%16) ip2.push_back( (delphi_integer)pow(2.0,(ix+1)%16) );
-      else             ip2.push_back( (delphi_integer)-pow(2.0,15.0) );
-   }
+  eps_out << fixed << setprecision(6);
+  eps_out << setw(5) << right << 1 << setw(14) << right << origin.nX << setw(14) << right << origin.nY << setw(14) << right << origin.nZ << endl;
+  eps_out << setw(5) << right << iGrid << setw(14) << right << stepsize/coeff << setw(14) << right << 0.0 << setw(14) << right << 0.0 << endl;
+  eps_out << setw(5) << right << iGrid << setw(14) << right << 0.0 << setw(14) << right << stepsize/coeff << setw(14) << right << 0.0 << endl;
+  eps_out << setw(5) << right << iGrid << setw(14) << right << 0.0 << setw(14) << right << 0.0 << setw(14) << right << stepsize/coeff << endl;
+  eps_out << setw(5) << right << 1 << setw(14) << right << 0.0 << setw(14) << right << 0.0 << setw(14) << right << 0.0 << setw(14) << right << 0.0 << endl;
 
-   cout << " clearing bits...\n";
-   SGrid<delphi_integer> *** neps = new SGrid<delphi_integer> ** [iGrid];
-   for (iz = 0; iz < iGrid; iz++)
-   {
-      neps[iz] = new SGrid<delphi_integer> * [iGrid];
-      for (iy = 0; iy < iGrid; iy++)
+  eps_out.unsetf(ios_base::floatfield); // return to eps_out default notation
+
+  eps_out.precision(5);
+
+
+  for (ix = 1; ix <= iGrid; ix++)
+  {
+    for (iy = 1; iy <= iGrid; iy++)
+    {
+      l = 0;
+      for (iz = 1; iz <= iGrid; iz++)
       {
-         neps[iz][iy] = new SGrid<delphi_integer> [iMaxWord];
-         for (i = 0; i < iMaxWord; i++)
-         {
-            neps[iz][iy][i].nX = 0; neps[iz][iy][i].nY = 0; neps[iz][iy][i].nZ = 0;
-         }
+        iw = (iz-1)*iGrid*iGrid + (iy-1)*iGrid + (ix-1);
+
+        eps_out << setw(13) << scientific << (vctbDielecMap[iw]?repsout:repsin) << " " ;
+        l++;
+        if(l == 6)
+        {
+          eps_out << endl;
+          l=0;
+        }
+
       }
-   }
+      eps_out << endl;
+    }
+  }
 
-   delphi_integer *** keps = new delphi_integer ** [iGrid];
-   for (iz = 0; iz < iGrid; iz++)
-   {
-      keps[iz] = new delphi_integer * [iGrid];
-      for (iy = 0; iy < iGrid; iy++)
-      {
-         keps[iz][iy] = new delphi_integer [iMaxWord];
-         for (i = 0; i < iMaxWord; i++)
-         {
-            keps[iz][iy][i] = 0;
-         }
-      }
-   }
+  eps_out.close();
 
-   cout << " generating compact fine epsilon array...\n";
-   for (iz = 0; iz < iGrid; iz++)
-   {
-      for (ix = 0; ix < iGrid; ix++)
-      {
-         i = idimx[ix];
-         for (iy = 0; iy < iGrid; iy++)
-         {
-            j123.nX = 0; j123.nY = 0; j123.nZ = 0; k1 = 0;
-
-            iw = iz*iGrid*iGrid + iy*iGrid + ix;
-            if (0 != vctigEpsMap[iw].nX/iEpsDim) j123.nX = ip2[ix];
-            if (0 != vctigEpsMap[iw].nY/iEpsDim) j123.nY = ip2[ix];
-            if (0 != vctigEpsMap[iw].nZ/iEpsDim) j123.nZ = ip2[ix];
-            if (vctbDielecMap[iw])               k1      = ip2[ix];
-
-            neps[iz][iy][i-1] = neps[iz][iy][i-1] + j123;
-            keps[iz][iy][i-1] = keps[iz][iy][i-1] + k1;
-         }
-      }
-   }
-
-   cout << " writing to compact epsilon file\n\n";
-   cout << "dielectric map written to file" << strEpsFile << "\n\n";
-
-   ofstream ofEpsFileStream(strEpsFile.c_str(),ios::binary);
-   ofEpsFileStream.write(reinterpret_cast<char*>(&kmap),sizeof(kmap));
-   ofEpsFileStream.write(reinterpret_cast<char*>(&scale),sizeof(scale));
-   ofEpsFileStream.write(reinterpret_cast<char*>(&oldmid),sizeof(oldmid));
-
-   for (iz = 0; iz < iGrid; iz++)
-   {
-      for (iy = 0; iy < iGrid; iy++)
-      {
-         for (i = 0; i < iMaxWord; i++)
-         {
-            ofEpsFileStream.write(reinterpret_cast<char*>(&neps[iz][iy][i]),sizeof(SGrid<delphi_integer>));
-         }
-      }
-   }
-
-   for (iz = 0; iz < iGrid; iz++)
-   {
-      for (iy = 0; iy < iGrid; iy++)
-      {
-         for (i = 0; i < iMaxWord; i++)
-         {
-            ofEpsFileStream.write(reinterpret_cast<char*>(&keps[iz][iy][i]),sizeof(delphi_integer));
-         }
-      }
-   }
-
-   ofEpsFileStream.close();
 }
 
+
+
+
+
+
+void CIO::writeGaussEpsMap(const delphi_integer& iGrid,
+                           const delphi_real&    repsout,
+                           const delphi_real& fScale,
+                           const SGrid<delphi_real>& fgBoxCenter,
+                           const vector< SGrid<delphi_real> >& vctigEpsMap,
+                           const string& strEpsFile)
+{
+  // cout << "Function called - Gaussian" << endl;
+
+  delphi_real coeff=0.5291772108;
+  delphi_real stepsize=1.0/fScale;
+  delphi_real sum_eps = 0;
+
+  SGrid<delphi_real> origin = (fgBoxCenter-stepsize*(iGrid-1)/2.0)/coeff;
+  vector<delphi_real> grid_eps(iGrid*iGrid*iGrid);
+
+  int i,j,k,l,d;
+
+  for (i=1; i <= iGrid; i++)
+  {
+    for (j = 1; j <= iGrid; j++)
+    {
+      for ( k = 1; k <= iGrid; k++)
+      {
+
+        if ( !( i == iGrid || j == iGrid || k == iGrid || i == 1 || j == 1 || k == 1) )
+        {
+          sum_eps = vctigEpsMap[(i-1)*iGrid*iGrid + (j-1)*iGrid + (k-1)].nX +
+                    vctigEpsMap[(i-2)*iGrid*iGrid + (j-1)*iGrid + (k-1)].nX +
+                    vctigEpsMap[(i-1)*iGrid*iGrid + (j-1)*iGrid + (k-1)].nY +
+                    vctigEpsMap[(i-1)*iGrid*iGrid + (j-2)*iGrid + (k-1)].nY +
+                    vctigEpsMap[(i-1)*iGrid*iGrid + (j-1)*iGrid + (k-1)].nZ +
+                    vctigEpsMap[(i-1)*iGrid*iGrid + (j-1)*iGrid + (k-2)].nZ;
+
+          sum_eps /= 6;
+
+          grid_eps[(i-1)*iGrid*iGrid + (j-1)*iGrid + (k-1)] = sum_eps;
+
+        }
+        else
+        {
+          grid_eps[(i-1)*iGrid*iGrid + (j-1)*iGrid + (k-1)] = repsout;
+        }
+
+        // cout << grid_eps[(i-1)*iGrid*iGrid + (j-1)*iGrid + (k-1)] << endl;
+
+      }
+    }
+  }
+
+  ofstream eps_out(strEpsFile.c_str());
+
+  eps_out     << setw(10) << fixed << setprecision(6) << fScale << setw(6) << iGrid
+              << setw(10) << setprecision(6) << fgBoxCenter.nX
+              << setw(10) << setprecision(6) << fgBoxCenter.nY
+              << setw(10) << setprecision(6) << fgBoxCenter.nZ
+              << endl;
+  eps_out << "Gaussian cube format Epsilon map for gaussian-smoothing mode" << endl;
+
+  eps_out << fixed << setprecision(6);
+  eps_out << setw(5) << right << 1 << setw(14) << right << origin.nX << setw(14) << right << origin.nY << setw(14) << right << origin.nZ << endl;
+  eps_out << setw(5) << right << iGrid << setw(14) << right << stepsize/coeff << setw(14) << right << 0.0 << setw(14) << right << 0.0 << endl;
+  eps_out << setw(5) << right << iGrid << setw(14) << right << 0.0 << setw(14) << right << stepsize/coeff << setw(14) << right << 0.0 << endl;
+  eps_out << setw(5) << right << iGrid << setw(14) << right << 0.0 << setw(14) << right << 0.0 << setw(14) << right << stepsize/coeff << endl;
+  eps_out << setw(5) << right << 1 << setw(14) << right << 0.0 << setw(14) << right << 0.0 << setw(14) << right << 0.0 << setw(14) << right << 0.0 << endl;
+
+  eps_out.unsetf(ios_base::floatfield); // return to eps_out default notation
+
+  eps_out.precision(5);
+
+  vector<delphi_real>::iterator it = grid_eps.begin();
+
+  l = 0;
+  d = 0;
+  while ( it != grid_eps.end())
+  {
+    eps_out << setw(13) << scientific << *it << " " ;
+    it++;
+    l++;
+    d++;
+
+    if (( l == 6) || ( d == iGrid ))
+    {
+      eps_out << endl;
+      l = 0;
+      if ( d == iGrid)
+      {
+        d = 0;
+      }
+    }
+
+  }
+
+  eps_out.close();
+  grid_eps.resize(0);
+
+}
+
+
+
+
+
+void CIO::writeConvEpsMap(const delphi_integer& iGrid,
+                          const delphi_real& fScale,
+                          const SGrid<delphi_real>& fgBoxCenter,
+                          vector<delphi_real>& vct_cepsmap,
+                          const string& strEpsFile)
+{
+
+  int ix, iy, iz, iw, l,d;
+
+  delphi_real coeff=0.5291772108;
+  delphi_real stepsize=1.0/fScale;
+  SGrid<delphi_real> origin = (fgBoxCenter-stepsize*(iGrid-1)/2.0)/coeff;
+
+  ofstream eps_out(strEpsFile.c_str());
+
+  eps_out     << setw(10) << fixed << setprecision(6) << fScale << setw(6) << iGrid
+              << setw(10) << setprecision(6) << fgBoxCenter.nX
+              << setw(10) << setprecision(6) << fgBoxCenter.nY
+              << setw(10) << setprecision(6) << fgBoxCenter.nZ
+              << endl;
+  eps_out << "Gaussian cube format Epsilon map for convolution mode" << endl;
+
+  eps_out << fixed << setprecision(6);
+  eps_out << setw(5) << right << 1 << setw(14) << right << origin.nX << setw(14) << right << origin.nY << setw(14) << right << origin.nZ << endl;
+  eps_out << setw(5) << right << iGrid << setw(14) << right << stepsize/coeff << setw(14) << right << 0.0 << setw(14) << right << 0.0 << endl;
+  eps_out << setw(5) << right << iGrid << setw(14) << right << 0.0 << setw(14) << right << stepsize/coeff << setw(14) << right << 0.0 << endl;
+  eps_out << setw(5) << right << iGrid << setw(14) << right << 0.0 << setw(14) << right << 0.0 << setw(14) << right << stepsize/coeff << endl;
+  eps_out << setw(5) << right << 1 << setw(14) << right << 0.0 << setw(14) << right << 0.0 << setw(14) << right << 0.0 << setw(14) << right << 0.0 << endl;
+
+  eps_out.unsetf(ios_base::floatfield); // return to eps_out default notation
+
+  eps_out.precision(5);
+
+  vector<delphi_real>::iterator it = vct_cepsmap.begin();
+
+  l = 0;
+  d = 0;
+  while ( it != vct_cepsmap.end())
+  {
+    eps_out << setw(13) << scientific << *it << " " ;
+    it++;
+    l++;
+    d++;
+
+    if (( l == 6) || ( d == iGrid ))
+    {
+      eps_out << endl;
+      l = 0;
+      if ( d == iGrid)
+      {
+        d = 0;
+      }
+    }
+
+  }
+
+  eps_out.close();
+}

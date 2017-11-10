@@ -9,7 +9,7 @@
 
 void CSite::wirtePAnalysis()
 {
-    cout << "#######in writePAnalysis ######" << endl;
+    //cout << "#######in writePAnalysis ######" << endl;
     //LinLi:2013 March: for analyzing the average potential against z-axis.
     int i,j,k,m,xbox,ybox,zbox,lbox;
     float rmid,distance;
@@ -26,7 +26,7 @@ void CSite::wirtePAnalysis()
     }
     lbox=int(radipz*fScale);
 
-    cout << "LinLi,radipz,scale,distance,lbox: " << radipz<< " " << fScale<< " " << distance<< " " << lbox << endl;
+    //cout << "LinLi,radipz,scale,distance,lbox: " << radipz<< " " << fScale<< " " << distance<< " " << lbox << endl;
 
     ofstream pzfile;
     pzfile.open ("pz.txt");

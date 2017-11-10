@@ -50,10 +50,12 @@ void CDelphiSpace::crgarr()
  *2011-05-30 Part 2 (more difficult) : from charge distributions
  *running distrTOpointeger without assigning values to  arrays not allocated yet
 */
+#ifdef VERBOSE
     if (ndistr>0) {
         cout << "Warning: call distrTOpoFloat2Int(ic1,false)..." << endl;
             //call distrTOpoFloat2Int(ic1,false);
     }
+#endif	
     nqass=ic1;
 
 /**
@@ -127,8 +129,8 @@ void CDelphiSpace::crgarr()
     }// do
 
 #ifdef VERBOSE
-        if(!iGaussian==1&&inhomo==1&&logs)cout <<"number of charges coming from molecules " << ic1 << endl;
-#endif // VERBOSE
+        if(!(iGaussian==1) && inhomo==1 && logs)cout <<"number of charges coming from molecules " << ic1 << endl;
+
 
 
 //insert charges from charge distributions
@@ -136,6 +138,7 @@ void CDelphiSpace::crgarr()
         cout << "Warning: call distrTOpoFloat2Int(ic1,false)..." << endl;
             //call distrTOpoFloat2Int(ic1,false);
     }
+#endif // VERBOSE	
 //bDebug++++++++++++++++++++++++WWW
 /*
     if (false)
@@ -303,7 +306,8 @@ void CDelphiSpace::crgarr()
     }// do
 
     ipassed=false;
-
+	int zero_radius_cnt = 0;
+	
     for(i=1; i<=nqass; i++)
     {
         ii=crgatn[i];
@@ -313,12 +317,16 @@ void CDelphiSpace::crgarr()
             if (sDelPhiPDB[ii].radius<=0.)
             {
                 ipassed=true;
+				zero_radius_cnt++;
+#ifdef VERBOSE				
                 cout << ii << " " << delphipdb[ii-1].getAtInf() << " is charged! Radius moved from zero to " << radpolext << endl;
-                sDelPhiPDB[ii].radius=radpolext;
+#endif              
+			  sDelPhiPDB[ii].radius=radpolext;
             }// if
         }// if
     }// do
 
-    if(ipassed) cout <<"BE CAREFUL!! A WRONG ASSIGNMENT FOR THE RADIUS MIGHT LEAD TO INACCURATE REACTION FIELD ENERGY !!!" << endl;
+    if(ipassed) {CZeroChargeRadius war(zero_radius_cnt);};
+		//cout <<"BE CAREFUL!! A WRONG ASSIGNMENT FOR THE RADIUS MIGHT LEAD TO INACCURATE REACTION FIELD ENERGY !!!" << endl;
 
 }// void crgarr;

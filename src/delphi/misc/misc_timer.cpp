@@ -48,7 +48,7 @@ void CTimer :: start()
 #endif
    
    tNow = tStart; tmNowDateTime = tmStartDateTime;  
-   cout << "\nProgram started on ";
+   cout << "\n Time> Program started on ";
    this->showTime(); 
 
 }
@@ -74,7 +74,7 @@ void CTimer :: exit()
  
    tNow = time(0); tmNowDateTime = localtime(&tNow);  
 
-   cout << endl << "   total CPU time ";
+   cout << endl << " Time> Total CPU time ";
 
 #ifdef PARALLEL_OMP
    cout << "with OpenMP on " << omp_get_num_procs() << " threads ";   // LinWang : added for OpenMP timer 
@@ -86,7 +86,7 @@ void CTimer :: exit()
 
    cout << endl;
 
-   cout << "Delphi exited on ";
+   cout << " Time> Delphi exited on ";
    this->showTime();  
 
 }

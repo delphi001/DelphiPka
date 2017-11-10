@@ -12,7 +12,7 @@ void CDelphiDataMarshal::setDefault()
    //----------------------- set by Statments ------------------------//
    bAutoConverge        = true;         // iautocon AUTOC
    iBndyType            = 2;            // ibctyp   BNDCON
-   fPercentageFill      = 80.0;         // perfil   PERFIL
+   fPercentageFill      = 10000.0;      // perfil   PERFIL //first ste to be 10000, will be updated in updateParameters.cpp
    bFixedRelaxParam     = false;        // icheb    CHEBIT
    bOutGraspSurf        = false;        // isrf     CLCSRF
    iConvergeFract       = 1;            // icon2    CONFRA
@@ -43,7 +43,7 @@ void CDelphiDataMarshal::setDefault()
    fSpectralRadius      = 0.9975;       // uspec    RELFAC
    fRelaxParam          = 1.0;          // relpar   RELPAR
    fRmsc                = 0.0;          // res1     RMSC
-   fScale               = 2.0;          // scale    SCALE
+   fScale               = 10000.0;      // scale    SCALE //first ste to be 10000, will be updated in updateParameters.cpp
    bSolvePB             = true;         // isolv    SOLVPB
    vctiValence1.push_back(1);           // ival     VAL+1,VAL-1
    vctiValence1.push_back(1);
@@ -65,6 +65,17 @@ void CDelphiDataMarshal::setDefault()
    iGaussian            = 0;
    fRadipz              = -1.0;
 
+   //--------------------ARGO : ZETA on 12-feb,2016 ---------------//
+   zetaOn			= 0;
+   zetaDistance			= 0.0;
+   bZetaPhiOut 			= false;
+   iKclusters			= 4;
+   //--------------------ARGO : ua 2016 ---------------//
+   iConvolute			= 0;
+   fksigma				= 2.1;
+   fhvsd_eps			= 45;
+
+
    //-------------------------- io file names ------------------------//
    //strParamFile       = "fort.10";    // prmnam
    strSizeFile          = "fort.11";    // siznam
@@ -81,6 +92,7 @@ void CDelphiDataMarshal::setDefault()
    strGraspFile         = "grasp.srf";  // srfnam
    strEnergyFile        = "energy.dat"; // nrgnam
    strScrgFile          = "scrg.dat";   // scrgnam
+   strZetaPhiFile	      = "surfacePot.zphi";//zphinam
 
    //----------------------- set by functions ------------------------//
    // set by CENTER or CENT function:
@@ -282,8 +294,19 @@ void CDelphiDataMarshal::setDefault()
    rgstrStatement_ShortForm[48]   = "SRFCUT";
    rgstrStatement_ShortForm[49]   = "GAUSSIAN";
    rgstrStatement_ShortForm[50]   = "RADIPZ";
+   //--------------------ARGO: Zeta on 12-feb,2106-----------------//
+   rgstrStatement_ShortForm[51]   = "SURFPOT";
+   rgstrStatement_ShortForm[52]   = "SURFDIST";
+   rgstrStatement_ShortForm[53]   = "KCLUSTERS";	//NOT-IN-USE. IT'S THERE TO AVOID REARRANGING THE ARGS NUMBERS
 
+   //--------------------ARGO: UA 2016 ----------------------------//
+   rgstrStatement_ShortForm[54]   = "CONVOLUTE";
+   rgstrStatement_ShortForm[55]	  = "CONVKSIGMA";
+   rgstrStatement_ShortForm[56]	  = "CONVHSEPS";
 
+   //--------------------Zhe: Gaussian Salt Nov. 2016------------//
+   rgstrStatement_ShortForm[57] = "GSDENSITY";
+   rgstrStatement_ShortForm[58] = "GEPENALTY";
 
    rgstrStatement_2lAbbre[0]      = "UNUSED";
    rgstrStatement_2lAbbre[1]      = "GS";
@@ -338,6 +361,20 @@ void CDelphiDataMarshal::setDefault()
    rgstrStatement_2lAbbre[48]     = "SF";
    rgstrStatement_2lAbbre[49]     = "GN";
    rgstrStatement_2lAbbre[50]     = "RZ";
+
+  //------------------Argo : ZETA on 12 feb, 2016 ---------------//
+   rgstrStatement_2lAbbre[51]     = "SU";
+   rgstrStatement_2lAbbre[52]     = "SD";
+   rgstrStatement_2lAbbre[53]     = "KC";	//NOT-IN-USE. IT'S THERE TO AVOID REARRANGING THE ARGS NUMBERS
+
+   //-----------------Argo : UA 2016 ----------------------------//
+   rgstrStatement_2lAbbre[54]     = "CV";
+   rgstrStatement_2lAbbre[55]     = "KS";
+   rgstrStatement_2lAbbre[56]     = "CE";
+
+   //--------------------Zhe: Gaussian Salt Nov. 2016------------//
+   rgstrStatement_2lAbbre[57] = "GD";
+   rgstrStatement_2lAbbre[58] = "GE";
 
    //------------------------------ functions ------------------------//
    rgstrFunction_FullForm[0]      = "UNUSED";

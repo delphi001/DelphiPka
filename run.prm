@@ -30,6 +30,7 @@ At given pH Value                  : 7.0
 # 3rd represents reference dielectric constant
 # 4th represents solvent   dielectric constant
 Gaussian surface                   : 1
+Surface cutoff                     : 20
 Variance of Gaussian distribution  : 0.70
 Internal Dielectric                : 8.0
 External Dielectric                : 80.0

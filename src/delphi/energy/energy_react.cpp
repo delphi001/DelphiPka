@@ -5,7 +5,9 @@
  *
  * This file is function of reaction field energy (solvation) calculation.
  * It's called by energy_run function if energy function solvation(s or sol) flag set to be TRUE.
- * 
+ *
+ * ARGO: INCLUDES CHANGES IN OUTPUT FORMATTING ONLY
+ * ARGO: NO TECHNICAL CHANGE
  */
 
 #include "energy.h"
@@ -24,13 +26,13 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
 
 	vector<delphi_real> spdiv(iTotalBdyGridNum), spot(iTotalBdyGridNum), schrg_omp(iTotalBdyGridNum);
 	vector < SGridValue<delphi_real> > cgrid(iTotalBdyGridNum);
-    
-    SGrid<int> ixyz;
-	
+
+    	SGrid<int> ixyz;
+
 	fFact = 0.9549296586/(2.0*fScale*fEPKT);
 	fConstSixth = 1.0/6.0;
-    fEnergy_Temp1=0.0;
-    fEnergy_SelfReaction=0.0;
+    	fEnergy_Temp1=0.0;
+    	fEnergy_SelfReaction=0.0;
 
 // +++++++ Define these variables in this scope for OpenMP ++++++ //
 
@@ -41,15 +43,15 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
     vector<delphi_real> prgfgCrgPoseA_nY(iCrgGridNum);
     vector<delphi_real> prgfgCrgPoseA_nZ(iCrgGridNum);
     vector<delphi_real> prggvAtomicCrg_nValue(iCrgGridNum);
-    
+
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
-    
+
 	for(i=0;i<iTotalBdyGridNum;i++){
 
 		ix = prgigBndyGrid[i].nX;
 		iy = prgigBndyGrid[i].nY;
 		iz = prgigBndyGrid[i].nZ;
-        
+
 
 		temp1 = prgfPhimap[(iz-1)*iGrid*iGrid+(iy-1)*iGrid+ix]+prgfPhimap[(iz-1)*iGrid*iGrid+(iy-1)*iGrid+(ix-2)];
 		temp2 = prgfPhimap[(iz-1)*iGrid*iGrid+(iy)*iGrid+(ix-1)]+prgfPhimap[(iz-1)*iGrid*iGrid+(iy-2)*iGrid+(ix-1)];
@@ -61,13 +63,13 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
         cgrid[i].nGrid.nY = iy;
         cgrid[i].nGrid.nZ = iz;
         cgrid[i].nValue = temp;
-        
+
 
 	}
 
 	if(iCrgBdyGrid!=0){
-		
- 
+
+
 /* The folloing Loop for variable cgrid moved to above and vector push_back has discarded for higher performance.
 
         SGridValue<delphi_real> fCGridValue_Temp;
@@ -78,7 +80,7 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
 			fCGridValue_Temp.nValue = spdiv[i];
 			cgrid.push_back(fCGridValue_Temp);
 		}*/
-		
+
 		for(i=0;i<iCrgBdyGrid;i++){
 			ix = prgdgvCrgBndyGrid[i].fgCoord.nX;
 			iy = prgdgvCrgBndyGrid[i].fgCoord.nY;
@@ -102,7 +104,7 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
 
 	fEnergy_Temp1=0.0;
     schrg.reserve(iTotalBdyGridNum);
-    
+
 	for(i=0;i<iTotalBdyGridNum;i++){
 		temp=spdiv[i]*fFact;
 		schrg[i] = temp;
@@ -146,35 +148,35 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
 				}
 
 				fEnergy_SelfReaction = fEnergy_SelfReaction * fEPKT;
-
-				cout << " self-reaction field energy       :               " << setw(8) << right << fEnergy_SelfReaction << " kt" << endl;
-
+#ifdef VERBOSE
+				cout << enerString << left << setw(MAXWIDTH) <<  "Self-reaction field energy" << " : " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << fEnergy_SelfReaction << " kT" << endl;
+#endif
 				if(bEngOut){
 					ofstream ofEnergyFile;
 					ofEnergyFile.open(strEnergyFile,std::fstream::app);
-					ofEnergyFile << "self-reaction field energy     :  " << fEnergy_SelfReaction << " kt \n";
+					ofEnergyFile << "Self-reaction field energy     :  " << fEnergy_SelfReaction << " kT \n";
 				    ofEnergyFile.close();
 				}
 			}
-                
+
           	// +++++++++++++ Next TWO LOOPS for OpenMP ++++++++++ //
-                
+
                 for(i=0;i<iTotalBdyGridNum;i++)
                 {
                     prgfgSurfCrgA_nX[i] = prgfgSurfCrgA[i].nX;
                     prgfgSurfCrgA_nY[i] = prgfgSurfCrgA[i].nY;
                     prgfgSurfCrgA_nZ[i] = prgfgSurfCrgA[i].nZ;
-                    
+
                 }
                 for(j=0;j<iCrgGridNum;j++)
                 {
-                    
+
                     prgfgCrgPoseA_nX[j] = prgfgCrgPoseA[j].nX;
                     prgfgCrgPoseA_nY[j] = prgfgCrgPoseA[j].nY;
                     prgfgCrgPoseA_nZ[j] = prgfgCrgPoseA[j].nZ;
                     prggvAtomicCrg_nValue[j] = prggvAtomicCrg[j].nValue;
                 }
-                
+
 		// ++++++++ Starting parallel computing and evoke OpenMP +++++++++++ //
 		// Refer OpenMP website for more details about tutorials and manuals //
 		// http://openmp.org/wp/openmp-specifications 						 //
@@ -184,19 +186,19 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
 
 			#pragma omp parallel shared(prgfgSurfCrgA_nX,prgfgSurfCrgA_nY,prgfgSurfCrgA_nZ,prgfgCrgPoseA_nX,prgfgCrgPoseA_nY,prgfgCrgPoseA_nZ,prggvAtomicCrg_nValue,spot,schrg_omp) private(j,dx,dy,dz,dist,ptemp)
 			{
-			
+
 			#pragma omp for reduction( + : fEnergy_TotalCharge, fEnergy_Temp)
-			
+
 #endif
 
 				for(i=0;i<iTotalBdyGridNum;i++){
 					ptemp = 0.0;
-	
+
 					for(j=0;j<iCrgGridNum;j++){
                         dx = prgfgSurfCrgA_nX[i] - prgfgCrgPoseA_nX[j];
                         dy = prgfgSurfCrgA_nY[i] - prgfgCrgPoseA_nY[j];
                         dz = prgfgSurfCrgA_nZ[i] - prgfgCrgPoseA_nZ[j];
-                        
+
                         dist = sqrt(dx*dx + dy*dy + dz*dz);
                         ptemp = ptemp + prggvAtomicCrg_nValue[j]/dist;
 					} // vectorization
@@ -213,27 +215,30 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
 
 				fEnergy_Solvation = fEnergy_Temp*fEPKT/2.0;
 
-				cout << " total s.charge,no epsin carrying :               " << setw(8) << right << fEnergy_TotalCharge << endl;
+				if ( debug_energy ) cout << enerString << left << setw(MAXWIDTH) << "Total s.charge,no epsin carrying" << " : " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << fEnergy_TotalCharge << endl;
+
+#ifdef VERBOSE
 				if(iTotalBdyGridNum==0 || iGrid<5){
-					cout << " Midpoints are out side the cube and delphi cannot determine the molecular surface." << endl;
-					cout << " Please enlarge the gsize or decrease the perfil value." << endl;
+					cout << " WARNING !!! Midpoints are out side the cube and delphi cannot determine the molecular surface." << endl;
+					cout << " WARNING !!! Please enlarge the gsize or decrease the perfil value." << endl;
 				}
-				cout << " corrected reaction field energy  :               " << setw(8) << right << fEnergy_Solvation << " kt" << endl;
-				cout << " total reaction field energy      :               " << setw(8) << right << (fEnergy_SelfReaction+fEnergy_Solvation) <<" kt" << endl;
+#endif
+				cout << enerString << left << setw(MAXWIDTH) << "Corrected reaction field energy" << " : " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << fEnergy_Solvation << " kT" << endl;
+				//cout << enerString << left << setw(MAXWIDTH) << "Total reaction field energy" << " : " << setw(NUMWIDTH) << right << (fEnergy_SelfReaction+fEnergy_Solvation) <<" kT" << endl;
 
 				ergr = fEnergy_SelfReaction+fEnergy_Solvation;
 
 				if(bEngOut){
 					ofstream ofEnergyFile;
 					ofEnergyFile.open(strEnergyFile,std::fstream::app);
-					ofEnergyFile << "corrected reaction field energy : " << fEnergy_Solvation << " kt\n";
-					ofEnergyFile << "total reaction field energy     : " << (fEnergy_SelfReaction+fEnergy_Solvation) <<" kt\n";
+					ofEnergyFile << "Corrected reaction field energy : " << fEnergy_Solvation << " kT\n";
+					ofEnergyFile << "Total reaction field energy     : " << (fEnergy_SelfReaction+fEnergy_Solvation) <<" kT\n";
 					ofEnergyFile.close();
 				}
 		}
 
 		if(bSurfCrgOut){
-			cout << " writing surface charge file      :               " << strScrgFile << endl;
+			cout << " Writing surface charge file " << strScrgFile << endl;
 			ofstream ofScrgFile;
 			ofScrgFile.open(strScrgFile);
 			// iSurfCrgFormatOut -> scrgfrm; integer Format of file scrgnam, = 0 if unknown format, = 1 if �PDB�.
@@ -268,7 +273,7 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
 					spt1 = spot[i]*fEnergy_Temp1*fEPKT/2.0;
 
 					if(iSurfCrgFormatOut==0){
-						ofScrgFile << setw(8) << fixed << right << i+1 << "  " << prgfgSurfCrgA[i].nX << "  " << prgfgSurfCrgA[i].nY << "  " << prgfgSurfCrgA[i].nZ << "  " << fEnergy_Temp1 << endl;
+						ofScrgFile << setw(NUMWIDTH) << fixed << right << i+1 << "  " << prgfgSurfCrgA[i].nX << "  " << prgfgSurfCrgA[i].nY << "  " << prgfgSurfCrgA[i].nZ << "  " << fEnergy_Temp1 << endl;
 					}
 
                     if(iSurfCrgFormatOut==1 || iSurfCrgFormatOut==2){
@@ -280,17 +285,17 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
 		}
 
 		if(bSurfEngOut){
-			cout << " writing surface energy file      :               surfen.dat" << endl;
+			cout << " Writing surface energy file = surfen.dat" << endl;
 			ofstream surfen;
 			surfen.open("surfen.dat");
 			fEnergy_Temp2=0.0;
 
 			for(i=0;i<iTotalBdyGridNum;i++)
 			{
-				
+
                 fEnergy_Temp1 = 0.000;
-            
-				surfen << setw(8) << fixed << right << i+1 << "  " << prgfgSurfCrgA[i].nX << "  " << prgfgSurfCrgA[i].nY << "  " << prgfgSurfCrgA[i].nZ << "  " << fEnergy_Temp1 << endl;
+
+				surfen << setw(NUMWIDTH) << fixed << right << i+1 << "  " << prgfgSurfCrgA[i].nX << "  " << prgfgSurfCrgA[i].nY << "  " << prgfgSurfCrgA[i].nZ << "  " << fEnergy_Temp1 << endl;
 
 			}
 
@@ -298,9 +303,9 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
 		}
 
 	}
- 
+
 // +++++++++++++++++++++ Clean memory occupied by these vectors ++++++++++++++++ //
-   
+
     vector<delphi_real>().swap(prgfgSurfCrgA_nX);
     vector<delphi_real>().swap(prgfgSurfCrgA_nY);
     vector<delphi_real>().swap(prgfgSurfCrgA_nZ);
@@ -308,10 +313,9 @@ void CDelphiEnergy::energy_react(delphi_real& fEnergy_Solvation, delphi_real& fE
     vector<delphi_real>().swap(prgfgCrgPoseA_nY);
     vector<delphi_real>().swap(prgfgCrgPoseA_nZ);
     vector<delphi_real>().swap(prggvAtomicCrg_nValue);
-    
+
     vector<delphi_real>().swap(spdiv);
     vector<delphi_real>().swap(spot);
 	vector<delphi_real>().swap(schrg_omp);
 
 }
-

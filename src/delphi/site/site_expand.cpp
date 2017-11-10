@@ -52,5 +52,7 @@ void CSite::expand(const int& mgrid, vector<delphi_real>& phimapIn)
    }
 
    fScale = fScale/rscale;
+#ifdef VERBOSE   
    cout << "new scale is " << fScale << " grids/ang" << endl;
-}
+#endif
+   }

@@ -10,10 +10,18 @@
 bool CDelphiFastSOR::isCoulombBndy(delphi_real *** phimap)
 {
    int ix,iy,iz,ic;
+   delphi_real fEpsTemp;//when Gaussian or convolution is on, the epsvalue need to be determined.
    delphi_real fDist,fTempVal;
    SGrid<delphi_real> fgXYZ,fgTempGrid;
 
    fNetCrg = fMinusCrg + fPlusCrg;
+   fEpsTemp=fEpsOut;
+   if ((iGaussian==1 || iConvolute != 0 ) && inhomo==1) fEpsTemp=fEpsIn;
+
+   //cout << "Lin Li: fEpsOut: " << setprecision(10) << fEpsOut << endl;
+   //cout << "Lin Li: fEpsIn: " << fEpsIn << endl;
+   //cout << "Lin Li: fEpsTemp: " << fEpsTemp << endl;
+   //cout << "Lin Li: igaussian: " << iGaussian << "   inhomo: " << inhomo << endl; 
 
    for (iz = 0; iz < iGrid; iz += 1)
    {
@@ -27,7 +35,7 @@ bool CDelphiFastSOR::isCoulombBndy(delphi_real *** phimap)
              {
                 fgTempGrid = prggvCrgedAtom[ic].nGrid - fgXYZ;
                 fDist      = sqrt(optDot<delphi_real>(fgTempGrid,fgTempGrid))/fScale;
-                fTempVal   = prggvCrgedAtom[ic].nValue*exp(-fDist/fDebyeLength)/(fDist*fEpsOut);
+                fTempVal   = prggvCrgedAtom[ic].nValue*exp(-fDist/fDebyeLength)/(fDist*fEpsTemp);
                 phimap[iz][iy][ix] += fTempVal;
              }
           }
@@ -46,7 +54,7 @@ bool CDelphiFastSOR::isCoulombBndy(delphi_real *** phimap)
              {
                 fgTempGrid = prggvCrgedAtom[ic].nGrid - fgXYZ;
                 fDist      = sqrt(optDot<delphi_real>(fgTempGrid,fgTempGrid))/fScale;
-                fTempVal   = prggvCrgedAtom[ic].nValue*exp(-fDist/fDebyeLength)/(fDist*fEpsOut);
+                fTempVal   = prggvCrgedAtom[ic].nValue*exp(-fDist/fDebyeLength)/(fDist*fEpsTemp);
                 phimap[iz][iy][ix] += fTempVal;
              }
           }
@@ -65,7 +73,7 @@ bool CDelphiFastSOR::isCoulombBndy(delphi_real *** phimap)
             {
                fgTempGrid = prggvCrgedAtom[ic].nGrid - fgXYZ;
                fDist      = sqrt(optDot<delphi_real>(fgTempGrid,fgTempGrid))/fScale;
-               fTempVal   = prggvCrgedAtom[ic].nValue*exp(-fDist/fDebyeLength)/(fDist*fEpsOut);
+               fTempVal   = prggvCrgedAtom[ic].nValue*exp(-fDist/fDebyeLength)/(fDist*fEpsTemp);
                phimap[iz][iy][ix] += fTempVal;
             }
          }

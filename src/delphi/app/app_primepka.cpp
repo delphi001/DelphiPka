@@ -3,7 +3,7 @@
 #include "../solver/solver_fastSOR.h"
 #include "../energy/energy.h"
 #include "../site/site.h"
-#include "../../delphiPKa/prime_environment.h"
+#include "../../delphipka/prime_environment.h"
 
 class StreamRedirector
 {

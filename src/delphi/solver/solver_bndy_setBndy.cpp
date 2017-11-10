@@ -29,7 +29,10 @@ void CDelphiFastSOR::setBndy()
       case 1: // zero option
          bSucessFail = true; break;
       case 2: // quasi coulombic dipole option
-         bSucessFail = isDipolarBndy(phimap); break;
+         //cout << "Lin setBndy: phimap[0][0][0]: " << phimap[0][0][0]  << endl; //Lin Test 2016/04
+         bSucessFail = isDipolarBndy(phimap); //break;
+         //cout << "Lin setBndy: phimap[0][0][0]: " << phimap[0][0][0]  << endl; //Lin Test 2016/04
+         break;
       case 3: // focussing option-bc's come from a previous phimap
          bSucessFail = isFocusBndy(phimap);  break;
       case 4: // a summation of the potential resulted from each point of charge
@@ -59,9 +62,9 @@ void CDelphiFastSOR::setBndy()
    }
    delete[] phimap;
 
-//#ifdef VERBOSE
-   delphi_integer iMidGrid = (iGrid + 1)/2;
 
+   delphi_integer iMidGrid = (iGrid + 1)/2;
+#ifdef VERBOSE
    cout << " some initial phi values: \n";
    cout << " midg,midg,1; midg,midg,igrid : " << scientific << prgfPhiMap[0*iGrid*iGrid+(iMidGrid-1)*iGrid+(iMidGrid-1)] << "   "
         << prgfPhiMap[(iGrid-1)*iGrid*iGrid+(iMidGrid-1)*iGrid+(iMidGrid-1)] << endl;
@@ -77,7 +80,7 @@ void CDelphiFastSOR::setBndy()
 
    //cout << " midg,midg,midg; igrid-1,midg,midg : " << scientific << prgfPhiMap[(iMidGrid-1)*iGrid*iGrid+(iMidGrid-1)*iGrid+iMidGrid-1] << "   "
    //     << prgfPhiMap[(iMidGrid-1-1)*iGrid*iGrid+(iMidGrid-1)*iGrid+(iGrid-1)] << endl;
-//#endif
+#endif
 
 
 #ifdef DEBUG_DELPHI_SOLVER_SETBC

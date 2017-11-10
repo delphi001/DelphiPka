@@ -3,6 +3,17 @@
 #include "../misc/misc_grid.h"
 #include "../space/space.h"
 
+//ARGO 12-FEB,2016
+#include <fstream>;
+
+//ARGO: 2016-FEB-09
+/* Snippet of code meant to find the find boudary points on the zeta-surface
+   Will use the zetaSurfMap-3D array of booleans to gather the boundary points
+   along the lines of how Delphi already does it for VDW surface.
+   --> Couple of new varibales have been defined
+ */
+ 
+ 
 using namespace std;
 
 void CDelphiSpace::VdwToMs()
@@ -14,6 +25,19 @@ void CDelphiSpace::VdwToMs()
 //2011-05-17 bndeps is declared in pointers module
     delphi_integer eps[7],nt;
     delphi_integer itmp[7],dim1,cont;
+    
+    //ARGO
+    bool zeta_tmp[7];
+    int zeta = 1;
+    delphi_integer zbgp,zext;
+    delphi_integer lx,ly,lz;
+    delphi_integer px,py,pz;	//for reading the points at which BND is detected from zetaSurfMap
+    delphi_real stepsize = 1.0/fScale;
+    string tempFileName = "temp." + strZetaPhiFile;
+    SGrid<delphi_real> cornerOrigin = (fgBoxCenter-stepsize*((iGrid-1)/2.0));
+    //
+    
+    
     delphi_integer iaprec,dim,epsdim,isign;
 //    delphi_integer imap[4][6]= {0}; //use same indexes
     delphi_integer imap[5][7]= {0};
@@ -23,6 +47,11 @@ void CDelphiSpace::VdwToMs()
     SGrid <delphi_real> xq,dxyz,dr123,dx123,u123;
     SGrid <delphi_real> goff[7]= {0.,0.,0.},xg,x1xyz,s123,xxyyzz;
     SGrid <delphi_integer> ixyz,it123,jxyz;
+    
+    //for int_coord operations on zetaSurface
+    //SGrid <delphi_integer> z_xyz;
+    delphi_real coordx,coordy,coordz;
+	
     //type(int_coord), allocatable :: ibgrd_temp(:);
     //SGrid <delphi_integer> * ibgrd_temp;
     //bool out,intb;
@@ -49,8 +78,9 @@ void CDelphiSpace::VdwToMs()
 //2011-05-17 Arrays allocated by ordinary F95 allocate statement
     //allocate(ibnd(ibmx),r0(iNatom),r02(iNatom),rs2(iNatom));
     if(debug_space) cout << "############ start vdwToMs: ##############" << endl;
-
-
+#ifdef VERBOSE	
+    cout << " Info> Drawing MS from vdW surface" << endl;
+#endif
 
 
     if(debug_space) cout << "iAtomMed_v.size(): " << iAtomMed_v.size() << endl;
@@ -262,6 +292,155 @@ void CDelphiSpace::VdwToMs()
             }// do
         }// do
     }// do
+    
+    
+    
+    //ARGO:
+    /* Finding the boundary points on the zeta-surface
+     * In this case, it writes a file "strZetaPhiFile + ".zTemp""
+     * It resets zetaSurfMap to {true} and then assigns bnd at points
+     * the file lists.
+     * requires the file to be read else where
+    */
+
+    
+    if (zetaOn == 1) {
+    
+    	ofstream zetaSite_file;
+    	zetaSite_file.open(tempFileName);
+    	
+    	//zetaSite_file << "#gridCenter at : " << fgBoxCenter.nX << " " << fgBoxCenter.nY << " " << fgBoxCenter.nZ << endl;
+       	for (lz=2; lz < iGrid; lz++)
+		{
+		    for (ly=2; ly < iGrid; ly++)
+		    {
+		        for (lx=2; lx < iGrid; lx++)
+		        {
+		            		zext=0;
+					zbgp=0;
+				
+					zeta_tmp[0] = zetaSurfMap[lz][ly][lx];
+					// six neighbors: IN THE NEWS+/- FORMAT
+					zeta_tmp[1] = zetaSurfMap[lz+1][ly][lx]; 
+					zeta_tmp[2] = zetaSurfMap[lz-1][ly][lx]; 
+					zeta_tmp[3] = zetaSurfMap[lz][ly+1][lx]; 
+					zeta_tmp[4] = zetaSurfMap[lz][ly-1][lx]; 
+					zeta_tmp[5] = zetaSurfMap[lz][ly][lx+1]; 
+					zeta_tmp[6] = zetaSurfMap[lz][ly][lx-1]; 
+				
+				//FALSE if its interior
+					if(zeta_tmp[0]) {
+					
+						//external point - need not worry about it anyway
+							//zetaSurfMap[lz][ly][lx] = true;
+						
+						//ARGO 09-MARCH 2016
+						//Earlier TRUE Points were neglected but that probably created large differences in ZP results when scale was changed
+						//So this time we are not letting these TRUE points slip by just because they are outside.
+						
+						if (zeta_tmp[1] && zeta_tmp[2] && zeta_tmp[3] && zeta_tmp[4] && zeta_tmp[5] && zeta_tmp[6]) {
+							//A TRUE Point surrunded by all TRUE Points. Definitely an external point
+						} else {
+							
+							coordz = cornerOrigin.nZ + (lz*stepsize);
+							coordy = cornerOrigin.nY + (ly*stepsize);
+							coordx = cornerOrigin.nX + (lx*stepsize);
+							zetaSite_file << coordx << " " << coordy << " " << coordz << "\t\t" << lx << " " << ly << " " << lz << endl;
+							
+						}
+				
+					} else {
+				
+					//definitely internal or boundary point
+						//if (( zeta_tmp[1] != zeta_tmp[2] ) || ( zeta_tmp[3] != zeta_tmp[4] ) || ( zeta_tmp[5] != zeta_tmp[6] )) {
+						if (!zeta_tmp[1] && !zeta_tmp[2] && !zeta_tmp[3] && !zeta_tmp[4] && !zeta_tmp[5] && !zeta_tmp[6]) {
+							//it probably is an internal point
+							
+						} else {
+						        //it probably is an external boundary point with at least one difference around it
+							coordz = cornerOrigin.nZ + (lz*stepsize);
+							coordy = cornerOrigin.nY + (ly*stepsize);
+							coordx = cornerOrigin.nX + (lx*stepsize);
+							zetaSite_file << coordx << " " << coordy << " " << coordz << "\t\t" << lx << " " << ly << " " << lz << endl;
+							//zetaSite_file << float(z_xyz) << endl;
+						
+							//zetaSurfMap[lz][ly][lx] = false;
+							//But it appears that the points are written in the k-j-i format
+							// refer to ../site/site_writePotential_cube.cpp
+						}
+					}
+				
+		        }//lx
+
+		    }//ly
+		}//lz
+    
+    zetaSite_file.close();
+    
+    /*ofstream zetaSite_file;
+    	zetaSite_file.open("zeta_sites.dat");
+    	cout << coeff << endl;
+       	for (lz=1; lz <= iGrid; lz++)
+		{
+		    for (ly=1; ly <= iGrid; ly++)
+		    {
+		        for (lx=1; lx <= iGrid; lx++)
+		        {
+		            		if (zetaSurfMap[lz][ly][lx]) {
+	            				coordz = cornerOrigin.nZ + (lz*stepsize);
+						coordy = cornerOrigin.nY + (ly*stepsize);
+						coordx = cornerOrigin.nX + (lx*stepsize);
+		            			zetaSite_file <<  lx << " " << ly << " " << lz << endl;
+				
+		        }//lx
+
+		    }//ly
+		}//lz
+	zetaSite_file.close();*/
+   
+    
+    //ARGO 12-FEB,2016
+    /*Time to reset zetaSurfMap to { true }
+     */
+
+    for ( lz = 1; lz <= iGrid ; lz++ )
+    {
+    	for ( ly = 1; ly <= iGrid; ly++ )
+	{
+		for ( lx = 1; lx <= iGrid; lx++ ) 
+		{
+			zetaSurfMap[lz][ly][lx] = true;
+		}
+	}
+    }
+
+     
+     std::ifstream infile(tempFileName);
+     while (infile >> px >> py >> pz >> lx >> ly >> lz)
+     {
+     	zetaSurfMap[lz][ly][lx]=false;
+     }
+
+    //Done with defining the zetaSurfMap newly
+    //Will now put the 3D array into the vector
+    ////Needs to be used in SITE module for reporting phi at zeta bnd points
+    for ( lz = 1; lz <= iGrid ; lz++ )
+    {
+    	for ( ly = 1; ly <= iGrid; ly++ )
+	{
+		for ( lx = 1; lx <= iGrid; lx++ ) 
+		{
+#ifdef KJI
+			zetaSurfMap_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+(k-1)]=zetaSurfMap[i][j][k];
+#endif
+			zetaSurfMap_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+(k-1)]=zetaSurfMap[k][j][i];
+		}
+	}
+    }
+
+
+   }//IF-ZETA IS TRUE 
+    
     if(debug_space) cout << "Problems up to here: "<< endl;
 
     iBoundNum=n;
@@ -271,15 +450,15 @@ void CDelphiSpace::VdwToMs()
 
 
 #ifdef VERBOSE
-    cout <<"boundary points facing continuum solvent= " << iBoundNumsurf << endl;
-    cout <<"total number of boundary points before elab.= " << iBoundNum << endl;
+    cout <<" VdMS> Boundary points facing continuum solvent= " << iBoundNumsurf << endl;
+    cout <<" VdMS> Total number of boundary points before elab.= " << iBoundNum << endl;
 #endif //VERBOSE
 
 
     if (iBoundNum>ibmx)
     {
-        cout <<"iBoundNum= " << iBoundNum << " is greater than ibmx = " << ibmx << endl;
-        cout <<"increase ibmx in vwtms.f" << endl;
+        cout <<" WARNING !!! iBoundNum= " << iBoundNum << " is greater than ibmx = " << ibmx << endl;
+        cout <<" WARNING !!! Increase ibmx in vwtms.f" << endl;
         exit(0);
     }// if
 
@@ -527,7 +706,7 @@ void CDelphiSpace::VdwToMs()
         icume.assign(extot+1,0);
 
 #ifdef VERBOSE
-        cout << " grid for indexing accessible points =  " << cba << endl;
+        cout << " VdMS> grid for indexing accessible points =  " << cba << endl;
 #endif // VERBOSE
         //cout << "Lin Li: extot: " << extot << endl;
         indver(extot);
@@ -602,7 +781,6 @@ void CDelphiSpace::VdwToMs()
 */
                     remov=false;
 
-//tengo il mod perche' deve pr}//ere solo punti in atomi
                     eps[1]=(iepsmp[iz][iy][ix].nX%epsdim);
                     eps[2]=(iepsmp[iz][iy][ix].nY%epsdim);
                     eps[3]=(iepsmp[iz][iy][ix].nZ%epsdim);
@@ -614,7 +792,6 @@ void CDelphiSpace::VdwToMs()
                     remov=((eps[3]>1&&eps[3]<=iNatom+1)||(eps[4]>1&&eps[4]<=iNatom+1))||remov;
                     remov=((eps[5]>1&&eps[5]<=iNatom+1)||(eps[6]>1&&eps[6]<=iNatom+1))||remov;
 
-//da farsi solo se pores eps2 contiene il mezzo
                     eps2[1]=(iepsmp[iz][iy][ix].nX/epsdim);
                     eps2[2]=(iepsmp[iz][iy][ix].nY/epsdim);
                     eps2[3]=(iepsmp[iz][iy][ix].nZ/epsdim);
@@ -659,7 +836,7 @@ void CDelphiSpace::VdwToMs()
 //2011-05-18 Indexes lcb1, mcb1, ncb1 are transfred via qlog module and are set in INDVER void
                             if (optORLE(jxyz,0)||optORGE(jxyz,lmncb1))
                             {
-                                cout <<"midpoint out of cube" << endl;
+                                cout <<" VdMS> midpoint out of cube" << endl;
                                 //write(6,'(2i5,3f8.3,3i6,3i8)')i,j,xxyyzz,jxyz,lmncb1;
                                 cout <<iepsmp[ iz][ iy ][ix ].nX << endl;
                                 cout <<iepsmp[ iz][ iy ][ix ].nY << endl;
@@ -856,8 +1033,11 @@ void CDelphiSpace::VdwToMs()
                                     }// if
                                 }// do
 
-                                if(liml!=0||limu!=0) cout <<"a bgp close to nothing" << endl;
-
+                                if(liml!=0||limu!=0) {
+#ifdef VERBOSE
+									cout <<" VdMS> a bgp close to nothing" << endl;
+#endif
+								}
                             }
                             else
                             {
@@ -880,7 +1060,9 @@ void CDelphiSpace::VdwToMs()
                                 ia=cbal[kk];
                                 //if(liml==3911) cout << "kk,ia: " << kk << " " << ia << endl;
                                 //if (ia==0) cout << "ia: " << ia << endl;
-                                if (ia==0) cout <<"problems with cube" << endl;
+#ifdef VERBOSE
+                                if (ia==0) cout <<" VdMS> problems with cube" << endl;
+#endif								
                                 //if (ia==0) cout << "liml;limu: " << liml << " " << limu << endl;
 
                                 if (ia<=iNatom&&ia>0)
@@ -920,7 +1102,7 @@ void CDelphiSpace::VdwToMs()
                                     iii=ia-iNatom;
 
                                     xq=s123;
-                                    cout << "call distobj: ii, iii: " << ii << " " << iii << endl;
+                                   // cout << " VdMS> call distobj: ii, iii: " << ii << " " << iii << endl;
 /**
  *check if bgp is inside VdW of object
 */
@@ -1012,7 +1194,7 @@ void CDelphiSpace::VdwToMs()
                                         if (ia!=iac&&eps[j]==0)
                                         {
                                             xq=u123;
-                                            cout << "call distobj: ia:" << ia << endl;
+                                            //cout << " VdMS> call distobj: ia:" << ia << endl;
                                             //call distobj(xq,dist,dxyz,ia-iNatom,fRadPrb[1],true);
 
                                             flag=true;
@@ -1056,7 +1238,9 @@ void CDelphiSpace::VdwToMs()
                                 }
                                 else
                                 {
-                                    cout <<"assigning arbitrary epsilon in cavity" << endl;
+#ifdef VERBOSE									
+                                    cout <<" VdMS> assigning arbitrary epsilon in cavity" << endl;
+#endif									
                                     imedia=iAtomMed[1];
                                 }// if
                             }
@@ -1079,7 +1263,10 @@ void CDelphiSpace::VdwToMs()
                                 iepsmp[iz+imap[3][j]][iy+imap[2][j]][ix+imap[1][j]].nZ=eps[j]+imedia*epsdim;
                                 break;
                             default:
-                                cout <<"????? flag1" << endl;
+#ifdef VERBOSE								
+                                cout <<" VdMS> ????? flag1" << endl;
+#endif						
+							;
                             }// select;
 
                             eps2[j]=imedia;
@@ -1157,7 +1344,7 @@ void CDelphiSpace::VdwToMs()
                             if((iepsmp[iz2-1][iy2][ix2].nZ/epsdim)>0) nt=nt+1;
                             if(nbe[nt]!=(ibgp==1&&iext==1))
                             {
-                                cout <<"PROBLEMS3" << ix2 << iy2 << iz2 << endl;
+                                cout <<" VdMS> PROBLEMS3" << ix2 << iy2 << iz2 << endl;
                             }// if
 #endif //DEBUG
                             if ((ibgp==0)&&(bndeps[ix2][iy2][iz2][1]!=0))
@@ -1187,7 +1374,7 @@ void CDelphiSpace::VdwToMs()
                                 bndeps[ix2][iy2][iz2][1]=n2+m;
 				if(n2+m > ibmx)
 				{
-				   cout << "this case is too big, ibmx need to be encreased." << endl; // Lin Li
+				   cout << " WARNING !!! This case is too big, ibmx need to be encreased." << endl; // Lin Li
 				   exit(0);
 				}
                                 ibnd[n2+m]=int_coord(ix2,iy2,iz2);
@@ -1289,9 +1476,9 @@ void CDelphiSpace::VdwToMs()
 
                     if (nbe[nt] != (ibgp==1&&iext==1))
                     {
-                        cout <<"PROBLEMS4" << ix << iy << iz << endl;
-                        cout <<"epsdim=" << epsdim << "ibgp=" << ibgp << "iext=" << iext << endl;
-                        cout <<"itmp" << itmp << endl;
+                        cout <<" VdMS> PROBLEMS4" << ix << iy << iz << endl;
+                        cout <<" VdMS> epsdim=" << epsdim << "ibgp=" << ibgp << "iext=" << iext << endl;
+                        cout <<" VdMS> itmp" << itmp << endl;
                         /*
                         cout <<iepsmp[ iy ][x ][ix << iy << iz<< iz].nX << endl;
                         cout <<iepsmp[ iy ][x ][ix << iy << iz<< iz].nY << endl;
@@ -1315,7 +1502,7 @@ void CDelphiSpace::VdwToMs()
                             bndeps[ix][iy][iz][1]=0;
                             bndeps[ix][iy][iz][2]=0;
                             mr=mr+1;
-                            if(iext==1)cout <<"//!!born a new external point!!!" << endl;
+                            if(iext==1)cout <<" //!!born a new external point!!!" << endl;
                         }// if
                     }// if
 
@@ -1325,18 +1512,19 @@ void CDelphiSpace::VdwToMs()
 
             n1=n2+1;
             n2=n2+m;
-#ifdef VORBOSE
-            cout <<"bgp added m=" << m << " bgp removed mr =" << mr << endl;
-#endif // VERBOSE
+#ifdef VERBOSE
+            cout <<" VdMS> bgp added m=" << m << " bgp removed mr =" << mr << endl;
 
-            cout <<"bgp added m=" << m << " bgp removed mr =" << mr << endl;
+
+            cout <<" VdMS> bgp added m=" << m << " bgp removed mr =" << mr << endl;
+#endif // VERBOSE
             if (m>mpr)
             {
                 ndv=ndv+1;
                 if (ndv>20)   //Lin Li: the value used to be 2,;
                 {
 // sometimes not enough
-                    cout <<"surface iteration did not converge" << endl;
+                    cout <<" WARNING !!! Surface iteration did not converge" << endl;
                     exit (0);
                 }// if
             }
@@ -1412,7 +1600,7 @@ void CDelphiSpace::VdwToMs()
 
         if (n2>ibmx)
         {
-            cout <<"ibnd upper bound " << n2 << " exceeds ibmx" << endl;
+            cout <<" WARNING !!! ibnd upper bound " << n2 << " exceeds ibmx" << endl;
             exit (0);
         }//if
 
@@ -1441,7 +1629,7 @@ void CDelphiSpace::VdwToMs()
 
 
 #ifdef VERBOSE
-        cout <<"no. cavity mid-points inaccessible to solvent = " << ncav << endl;
+        cout <<" VdMS> Number of cavity mid-points inaccessible to solvent = " << ncav << endl;
 #endif // VERBOSE
 
 
@@ -1506,7 +1694,7 @@ void CDelphiSpace::VdwToMs()
                 }
                 else
                 {
-                    cout << "j=" << j << " is larger than ibmx= " << ibmx << " << thus stopped..." << endl;
+                    cout << " VdMS> j=" << j << " is larger than ibmx= " << ibmx << " << thus stopped..." << endl;
                     exit (0);
                 }// if
             }// if
@@ -1578,15 +1766,14 @@ void CDelphiSpace::VdwToMs()
 
         if (j>ibmx)
         {
-            cout << "no. ms points exceeds ibmx" << endl;
+            cout << " WARNING !!! Number of  MS points exceeds ibmx" << endl;
             exit (0);
         }// if
 
         iBoundNum=j;
 
 #ifdef VERBOSE
-        cout <<"after surface elaboration iBoundNum= " << iBoundNum << endl;
-        cout <<" and iBoundNumsurf= " << iBoundNumsurf << endl;
+        cout <<" VdMS> After surface elaboration iBoundNum= " << iBoundNum << " and iBoundNumsurf= " << iBoundNumsurf << endl;
 #endif // VERBOSE
 
     }// if
@@ -1621,7 +1808,7 @@ void CDelphiSpace::VdwToMs()
         if (isolv&&(irea||logs||lognl||isen||isch))
         {
 #ifdef VERBOSE
-            cout <<"scaling boundary grid points ..." << endl;
+           cout <<" VdMS> Scaling boundary grid points ..." << endl;
 #endif // VERBOSE
 
 
@@ -1662,7 +1849,7 @@ void CDelphiSpace::VdwToMs()
             sclbp();
 
 #ifdef VERBOSE
-                cout << iall << " points had to be assigned by global comparison" << endl;
+                cout << " Info> " << iall << " points had to be assigned by global comparison" << endl;
 #endif // VERBOSE
 
             if (!isite && scsnor_v.size() >0 ) vector<SGrid <delphi_real> >().swap(scsnor_v); //no need to deallocate for vectors
@@ -1687,8 +1874,10 @@ void CDelphiSpace::VdwToMs()
         }
         else
         {
-            cout <<"msrf routine cannot be run" << endl;
-            cout <<"because there are also geometric objects" << endl;
+#ifdef VERBOSE			
+            cout << " WARNING !!! msrf routine cannot be run" << endl;
+            cout << " WARNING !!! because there are also geometric objects" << endl;
+#endif			
         }// if
     }// if
         //cout << "Lin Li: free atsurf??" << endl;
@@ -1729,5 +1918,9 @@ void CDelphiSpace::VdwToMs()
 
         ibgrd_v.resize(iBoundNum);
         ibgrd=&ibgrd_v[-1];
-
+	
+	//At the very end of things
+#ifdef VERBOSE	
+	cout << " VdMS> MS creation done" << endl; 
+#endif	
 }// void vwtms;

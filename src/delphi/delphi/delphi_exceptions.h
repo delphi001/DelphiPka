@@ -16,7 +16,7 @@
 /**
  * user-specified &epsilon in one medium is invalid
  */
-class CInvalidEpsInMedium : public CException 
+class CInvalidEpsInMedium : public CException
 {
    public:
       CInvalidEpsInMedium(const delphi_integer& iMedium)
@@ -29,7 +29,7 @@ class CInvalidEpsInMedium : public CException
 /**
  * obsolete object types
  */
-class CIsAnObjectType : public CException 
+class CIsAnObjectType : public CException
 {
    public:
       CIsAnObjectType(const string& strObject)
@@ -42,7 +42,7 @@ class CIsAnObjectType : public CException
 /**
  * no atom(s) read from the input file for a molecule
  */
-class CNoAtomsInMolecule : public CException 
+class CNoAtomsInMolecule : public CException
 {
    public:
       CNoAtomsInMolecule(const delphi_integer& iObject)
@@ -55,7 +55,7 @@ class CNoAtomsInMolecule : public CException
 /**
  * no boundary elements and uniform dielectric flag
  */
-class CNoBndyAndDielec : public CException 
+class CNoBndyAndDielec : public CException
 {
    public:
       CNoBndyAndDielec(shared_ptr<CTimer> pTimer)
@@ -88,7 +88,7 @@ class CBadStatementAssignment : public CWarning
       {
          cerr << "UNRECOGNIZED STATEMENT \"" << strStatement << " = " << strArgument << "\" ";
          cerr << "(DEFAULT VALUE IS USED)" << endl;
-      }	   
+      }
 };
 
 /**
@@ -117,8 +117,8 @@ class COutUnknownPHIFormat : public CWarning
       COutUnknownPHIFormat(const string&  strFormat)
       {
          cerr << "UNKNOWN WRITE-OUT PHIMAP FILE FORMAT " << strFormat << " (DEFAULT PHIMAP FILE FORMAT IS USED)" << endl;
-      }	   
-}; 
+      }
+};
 
 /**
  * obsolete format option, PDBA, for output SCRG file
@@ -129,8 +129,8 @@ class COutOBSOLETEPDBAFormat : public CWarning
       COutOBSOLETEPDBAFormat(const string& strFormat)
       {
          cerr << "WRITE-OUT OPTION " << strFormat << " NO LONGER SUPPORTED!" << " (DEFAULT SCRG FORMAT IS USED)" << endl;
-      }	   
-};	 	   
+      }
+};
 
 /**
  * unrecognized function in the parameter file
@@ -144,9 +144,9 @@ class CUnknownFunction : public CWarning
          cerr << " The function specifier   " << strFuncName << " is" << endl;
          cerr << " not recognized. Therefore the function will not be processed " << endl;
          cerr << " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
-	   }	   
+	   }
 };
-	
+
 /**
  * negative dielectric constants
  */
@@ -170,7 +170,7 @@ class CToUnformattedFile : public CWarning
       {
          cerr << "MORE THAN 10 CHARACTERS OUT OF THE FIRST 80 CHARACTERS IN THE FILE " << strFile << " ARE NOT IN THE LIST OF ASCI \n"
               << "<" << strASCI << "> (RESET THE PDB FILE FORMAT TO BE \"UNFORMATTED\")" << endl;
-      }	   
+      }
 };
 
 /**
@@ -182,7 +182,7 @@ class CSystemOutsideBox : public CWarning
       CSystemOutsideBox()
       {
          cerr << "PART OF SYSTEM OUTSIDE THE BOX!" << endl;
-      }	   
+      }
 };
 
 /**
@@ -194,9 +194,9 @@ class CReadWriteUnformatPdb : public CWarning
       CReadWriteUnformatPdb(bool& bOutPdbFormat)
       {
          cerr << "CANNOT WRITE AN UNFORMATTED PDB FILE, WHILE READING IN AN UNFORMATTED PDB FILE (THE WRITE OPTION IS DISABLED)" << endl;
-         
+
          bOutPdbFormat = false;
-      }	   
+      }
 };
 
 /**
@@ -208,9 +208,9 @@ class CReadWriteUnformatFrc : public CWarning
       CReadWriteUnformatFrc(bool& bOutFrcFormat)
       {
          cerr << "CANNOT WRITE AN UNFORMATTED FRC FILE, WHILE READING IN AN UNFORMATTED PDB FILE (WRITE OPTION IS DISABLED)" << endl;
-         
-         bOutFrcFormat = false;  
-      }	   
+
+         bOutFrcFormat = false;
+      }
 };
 
 /**
@@ -578,12 +578,29 @@ class COutOfRange_VDROP : public CWarning
 };
 
 /**
+ * input surface distance is a bad value - negative or more than 10.
+ */
+
+class CBad_SURFDIST : public CWarning
+{
+	public:
+	CBad_SURFDIST(int& zetaOn)
+	{
+      zetaOn = 0;
+	  cerr << " SURFACE POTENTIAL CALCULATIONS HAVE BEEN TURNED OFF DUE TO ONE OF THE FOLLOWING REASONS\n";
+      cerr << "    -- SURFDIST IS > 10.0" << endl;
+      cerr << "    -- SURFDIST IS < 0.0" << endl;
+      cerr << "    -- GAUSSIAN/CONVOLUTE MODULE IS ON. " << endl;
+	}
+};
+
+/**
  * input function has no parameter(s)
  */
-class CEnmptyParameter_FUNCTION : public CWarning
+class CEmptyParameter_FUNCTION : public CWarning
 {
    public:
-   CEnmptyParameter_FUNCTION(const string& strFunction)
+   CEmptyParameter_FUNCTION(const string& strFunction)
       {
          cerr << "FUNCTION \"" << strFunction << "\" HAS NO PARAMETER(S) (SKIP THIS FUNCTION)\n";
       }
@@ -638,6 +655,21 @@ class CUncondionalOff_WRITE : public CWarning
       {
          cerr << "WRITE(OFF): EVERYTHING DESCRIBED IN PREVIOUS WRITE FUNCTION IS TURNED OFF (NO OUTPUT FILE WILL BE PRODUCED)\n";
       }
+};
+
+/**
+ * Both GAUSSIAN and CONVOLUTE are turned on. Let GAUSSIAN take over
+ */
+class CBadCombination : public CWarning
+{
+	public:
+	CBadCombination(int& iConvolute, int& iGaussian)
+	{
+		cerr << "BOTH GAUSSIAN AND CONVOLUTE MODES ARE ON.";
+		iGaussian = 1;
+		iConvolute = 0;
+		cerr << "PROCEEDING WITH GAUSSIAN = ON & CONVOLUTE = OFF \n";
+	}
 };
 
 #endif // DELPHI_EXCEPTIONS_H_

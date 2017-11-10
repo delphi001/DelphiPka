@@ -57,8 +57,7 @@ void CDelphiFastSOR::itrOddPoints(const int& forWhom, const int& flag)
                temp1 = phimap2[ix-1]         + phimap2[(ix-1)-1];
                temp2 = phimap2[(ix-1)+lat1]  + phimap2[(ix-1)-lat2];
                temp3 = phimap2[(ix-1)+long1] + phimap2[(ix-1)-long2];
-               //phimap1[ix-1] = phimap1[ix-1]*om1 + (qmap1[ix-1]+temp1+temp2+temp3)*prgfSaltMap1[ix-1];
-			   phimap1[ix - 1] = phimap1[ix - 1] * om1 + (qmap1[ix - 1] + temp1 + temp2 + temp3)*prgfSaltMap1[ix - 1];
+               phimap1[ix-1] = phimap1[ix-1]*om1 + (qmap1[ix-1]+temp1+temp2+temp3)*prgfSaltMap1[ix-1];
             }
          }
       }
@@ -76,6 +75,13 @@ void CDelphiFastSOR::itrOddPoints(const int& forWhom, const int& flag)
                temp2 = phimap2[(ix-1)+lat1]  + phimap2[(ix-1)-lat2];
                temp3 = phimap2[(ix-1)+long1] + phimap2[(ix-1)-long2];
                phimap1[ix-1] = phimap1[ix-1]*om1 + (temp1+temp2+temp3)*sixth;
+                //cout << "phimap1: " << right << setw(10) << flag << setw(10) << ix << setw(20) << setprecision(5) << fixed << phimap1[ix-1] << endl;
+               //if(flag==1)cout << "1phimap1: " << right << setw(10) << flag << setw(10) << ix << setw(20) << setprecision(5) << fixed << phimap1[ix-1] << endl;
+
+               //if( flag==2 && ix==498 )
+               //cout << "phimap1: " << right << setw(10) << flag << setw(8) << ix << setw(20) << setprecision(5) << fixed << phimap1[ix-1]
+               //     << " " << om1 << " " << temp1  << " " << temp2 << " " << temp3 << " " << sixth <<endl;
+
             }
          }
       }
@@ -88,87 +94,47 @@ void CDelphiFastSOR::itrOddPoints(const int& forWhom, const int& flag)
        * first we add back the dielectric boundary points, by recalculating them individually. note this is still
        * vectorised by means of a gathering load by the compiler.
        */
-	  if (iGaussian != 0 || iConvolute != 0)
+
+	  if (false) //If we use Gaussian based boundary
 	  {
-		  if (fZero < abs(fIonStrength)) // If there is ion, Gaussian or convolution
-		  {
 #ifdef PARALLEL_OMP
 #pragma omp for schedule(auto)
 #endif
-			  for (n = 0; n < iDielecBndyEven; n++)
-			  {
-				  ix = prgiBndyDielecIndex[n];
-
-				  //We need to recalculate the boudary points
-				  //Here we only calculate the pure linear part, and then add back the nonliear part
-
-				  delphi_real eps1 = gaussianBoundaryDielec[n][0];
-				  delphi_real eps2 = gaussianBoundaryDielec[n][1];
-				  delphi_real eps3 = gaussianBoundaryDielec[n][2];
-				  delphi_real eps4 = gaussianBoundaryDielec[n][3];
-				  delphi_real eps5 = gaussianBoundaryDielec[n][4];
-				  delphi_real eps6 = gaussianBoundaryDielec[n][5];
-
-				  delphi_real phi1 = phimap2[(ix - 1) - 1];
-				  delphi_real phi2 = phimap2[ix - 1];
-				  delphi_real phi3 = phimap2[(ix - 1) - lat2];
-				  delphi_real phi4 = phimap2[(ix - 1) + lat1];
-				  delphi_real phi5 = phimap2[(ix - 1) - long2];
-				  delphi_real phi6 = phimap2[(ix - 1) + long1];
-
-				  delphi_real myLastPhi =  phimap1[ix - 1] - (qmap1[ix - 1] + temp1 + temp2 + temp3)*prgfSaltMap1[ix - 1];
-
-				  delphi_real myDensity = gaussianBoundaryDensity[n];
-
-				  delphi_real myExpSolvE = calcExpSolvE(myDensity);
-
-				  delphi_real myNonlinearCorrection = gaussianBoundaryNonlinear[n];
-
-				  delphi_real numerator = (eps1*phi1 + eps2*phi2 + eps3*phi3 + eps4*phi4 + eps5*phi5 + eps6*phi6) / fEPKT;
-				  delphi_real demonimator = (eps1 + eps2 + eps3 + eps4 + eps5 + eps6) / fEPKT + fDebFct*myExpSolvE;
-
-				  phimap1[ix - 1] = myLastPhi + (numerator / demonimator + myNonlinearCorrection)* (1 - (om1));
-
-			  }
-		  }
-		  else  //if there is no ion, Gaussian or convolution 
+		  for (n = 0; n < iDielecBndyEven; n++)
 		  {
-#ifdef PARALLEL_OMP
-#pragma omp for schedule(auto)
-#endif
-			  for (n = 0; n < iDielecBndyEven; n++)
-			  {
-				  ix = prgiBndyDielecIndex[n];
+			  ix = prgiBndyDielecIndex[n];
 
-				  //We need to recalculate the boudary points
-				  //Here we only calculate the pure linear part, and then add back the nonliear part
+			  //We need to recalculate the boudary points
 
-				  delphi_real eps1 = gaussianBoundaryDielec[n][0];
-				  delphi_real eps2 = gaussianBoundaryDielec[n][1];
-				  delphi_real eps3 = gaussianBoundaryDielec[n][2];
-				  delphi_real eps4 = gaussianBoundaryDielec[n][3];
-				  delphi_real eps5 = gaussianBoundaryDielec[n][4];
-				  delphi_real eps6 = gaussianBoundaryDielec[n][5];
+			  //Here we only calculate the pure linear part, and then add back the nonliear part
 
-				  delphi_real phi1 = phimap2[(ix - 1) - 1];
-				  delphi_real phi2 = phimap2[ix - 1];
-				  delphi_real phi3 = phimap2[(ix - 1) - lat2];
-				  delphi_real phi4 = phimap2[(ix - 1) + lat1];
-				  delphi_real phi5 = phimap2[(ix - 1) - long2];
-				  delphi_real phi6 = phimap2[(ix - 1) + long1];
+			  delphi_real eps1 = gaussianBoundaryDielec[n][0];
+			  delphi_real eps2 = gaussianBoundaryDielec[n][1];
+			  delphi_real eps3 = gaussianBoundaryDielec[n][2];
+			  delphi_real eps4 = gaussianBoundaryDielec[n][3];
+			  delphi_real eps5 = gaussianBoundaryDielec[n][4];
+			  delphi_real eps6 = gaussianBoundaryDielec[n][5];
 
-				  delphi_real myLastPhi = phimap1[ix - 1] - (phi1 + phi2 + phi3 + phi4 + phi5 + phi6)*sixth;				  
+			  delphi_real phi1 = phimap2[(ix - 1) - 1];
+			  delphi_real phi2 = phimap2[ix - 1];
+			  delphi_real phi3 = phimap2[(ix - 1) - lat2];
+			  delphi_real phi4 = phimap2[(ix - 1) + lat1];
+			  delphi_real phi5 = phimap2[(ix - 1) - long2];
+			  delphi_real phi6 = phimap2[(ix - 1) + long1];
 
-				  delphi_real numerator = eps1*phi1 + eps2*phi2 + eps3*phi3 + eps4*phi4 + eps5*phi5 + eps6*phi6;
-				  delphi_real demonimator = eps1 + eps2 + eps3 + eps4 + eps5 + eps6  ;
+			  delphi_real myDensity = gaussianBoundaryDensity[n];
 
-				  phimap1[ix - 1] = myLastPhi + (numerator / demonimator)* (1 - (om1));
+			  delphi_real mySaltConc = calcSaltConc(myDensity);
 
-			  }
+			  delphi_real myNonlinearCorrection = gaussianBoundaryNonlinear[n];
+
+			  delphi_real numerator = (eps1*phi1 + eps2*phi2 + eps3*phi3 + eps4*phi4 + eps5*phi5 + eps6*phi6) / fEPKT;
+			  delphi_real demonimator = (eps1 + eps2 + eps3 + eps4 + eps5 + eps6) / fEPKT + fDebFct * mySaltConc;
+
+			  phimap1[ix - 1] = phimap1[ix - 1] * (om1) + (numerator / demonimator)*(1 + myNonlinearCorrection)* (1 - (om1));
 		  }
-
 	  }
-	  else // if not Gaussian or convolution
+	  else // Not Gaussian based boudary 
 	  {
 #ifdef PARALLEL_OMP
 #pragma omp for schedule(auto)
@@ -180,9 +146,20 @@ void CDelphiFastSOR::itrOddPoints(const int& forWhom, const int& flag)
 			  temp2 = phimap2[(ix - 1) - lat2] * prgfBndyDielec[n][2] + phimap2[(ix - 1) + lat1] * prgfBndyDielec[n][3];
 			  temp3 = phimap2[(ix - 1) - long2] * prgfBndyDielec[n][4] + phimap2[(ix - 1) + long1] * prgfBndyDielec[n][5];
 			  phimap1[ix - 1] += temp1 + temp2 + temp3;
-		  }
-	  }
+			  /*
+			  if(flag==1)cout << "2phimap1: " << right << setw(10) << flag << setw(10) << ix << setw(10) << setprecision(5) << fixed << phimap1[ix-1]
+			  <<setw(10) << phimap2[(ix-1)-long2] <<setw(10) << prgfBndyDielec[n][4]
+			  <<setw(10) << phimap2[(ix-1)+long1] <<setw(10) <<prgfBndyDielec[n][5]
+			  <<setw(10) << (ix-1)-long2 <<setw(10) << (ix-1)+long1
+			  << endl;
+			  */
+			  //if( flag==1 && ix==498 )
+			  //  cout << "phimap1: " << right << setw(10) << ix << setw(20) << setprecision(5) << fixed << phimap1[ix-1]
+			  //    << " " << temp1  << " " << temp2 << " " << temp3 <<endl;
 
+		  }
+
+	  }
 
       /*
        * Now reset boundary values altered in above loops.
@@ -211,62 +188,34 @@ void CDelphiFastSOR::itrOddPoints(const int& forWhom, const int& flag)
        */
       if (0 != forWhom)
       {
-		  if (iGaussian != 0 || iConvolute != 0)
+		  if (false) //Add the charge potential for the charged grid points in Gaussian Based boundary
 		  {
-			  if (fZero < abs(fIonStrength)) // If there is ion, Gaussian or convolution
-			  {
 #ifdef PARALLEL_OMP
 #pragma omp for schedule(auto)
 #endif
-				  for (n = 0; n < iCrgedGridEven; n++)
-				  {
-					  ix = prgiCrgPose[n];
-
-					  delphi_real eps1 = gaussianChargeDielec[n][0];
-					  delphi_real eps2 = gaussianChargeDielec[n][1];
-					  delphi_real eps3 = gaussianChargeDielec[n][2];
-					  delphi_real eps4 = gaussianChargeDielec[n][3];
-					  delphi_real eps5 = gaussianChargeDielec[n][4];
-					  delphi_real eps6 = gaussianChargeDielec[n][5];
-
-					  delphi_real myDensity = gaussianChargeDensity[n];
-					  delphi_real myCharge = prgfCrgValG[n];
-
-					  delphi_real myExpSolvE = calcExpSolvE(myDensity);
-
-					  delphi_real myNonlinearCorrection = gaussianChargeNonlinear[n];
-
-					  delphi_real numerator = myCharge * f4Pi*fScale;
-					  delphi_real demonimator = (eps1 + eps2 + eps3 + eps4 + eps5 + eps6) / fEPKT + fDebFct * myExpSolvE;
-
-					  phimap1[ix - 1] = phimap1[ix - 1] + (numerator / demonimator + myNonlinearCorrection)* (1 - (om1));
-
-				  }
-			  }
-			  else // If there is no ion, Gaussian or convolution
+			  for (n = 0; n < iCrgedGridEven; n++)
 			  {
-#ifdef PARALLEL_OMP
-#pragma omp for schedule(auto)
-#endif
-				  for (n = 0; n < iCrgedGridEven; n++)
-				  {
-					  ix = prgiCrgPose[n];
+				  ix = prgiCrgPose[n]; 
 
-					  delphi_real eps1 = gaussianChargeDielec[n][0];
-					  delphi_real eps2 = gaussianChargeDielec[n][1];
-					  delphi_real eps3 = gaussianChargeDielec[n][2];
-					  delphi_real eps4 = gaussianChargeDielec[n][3];
-					  delphi_real eps5 = gaussianChargeDielec[n][4];
-					  delphi_real eps6 = gaussianChargeDielec[n][5];
+				  delphi_real eps1 = gaussianChargeDielec[n][0];
+				  delphi_real eps2 = gaussianChargeDielec[n][1];
+				  delphi_real eps3 = gaussianChargeDielec[n][2];
+				  delphi_real eps4 = gaussianChargeDielec[n][3];
+				  delphi_real eps5 = gaussianChargeDielec[n][4];
+				  delphi_real eps6 = gaussianChargeDielec[n][5];
 
-					  delphi_real myCharge = prgfCrgValG[n];
+				  delphi_real myDensity = gaussianChargeDensity[n];
+				  delphi_real myCharge = prgfCrgValG[n];
 
-					  delphi_real numerator = myCharge * f4Pi*fScale;
-					  delphi_real demonimator = (eps1 + eps2 + eps3 + eps4 + eps5 + eps6) / fEPKT;
+				  delphi_real mySaltConc = calcSaltConc(myDensity);
 
-					  phimap1[ix - 1] = phimap1[ix - 1] + (numerator / demonimator)* (1 - (om1));
+				  delphi_real myNonlinearCorrection = gaussianChargeNonlinear[n];
 
-				  }
+				  delphi_real numerator = myCharge * f4Pi*fScale;
+				  delphi_real demonimator = (eps1 + eps2 + eps3 + eps4 + eps5 + eps6) / fEPKT + fDebFct * mySaltConc;
+
+				  phimap1[ix - 1] = phimap1[ix - 1] + (numerator / demonimator)*(1 + myNonlinearCorrection)* (1 - (om1));
+
 			  }
 		  }
 
@@ -282,6 +231,7 @@ void CDelphiFastSOR::itrOddPoints(const int& forWhom, const int& flag)
 
 			  }
 		  }
+
       }
 
 #ifdef PARALLEL_OMP

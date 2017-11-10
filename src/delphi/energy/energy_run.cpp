@@ -16,7 +16,7 @@ void CDelphiEnergy::run()
 {
     bool ido;
     int i, iw, iGridOutput, iisitpot;
-    debug_energy=false;
+    debug_energy=true;
 
     delphi_real fEnergy_Grid=0.0;
     delphi_real fEnergy_Solvation=0.0;
@@ -28,7 +28,18 @@ void CDelphiEnergy::run()
     delphi_real fEnergy_SolvToChgOut = 0.0;  // Solvent contribution to fixed charges  outside the cube is zero.
     delphi_real fEnergy_Total=0.0;
 
+	if (inhomo == 1) fIonStrength = 0;
+
     SGrid<int> ixyz;
+
+      infoString = " Info> ";
+      timeString = " Time> ";
+      enerString = " Energy> ";
+      MAXWIDTH = 45;
+      NUMWIDTH = 12;
+      //ARGO: Remove (if) TRUE in the final version. Only for debugging here
+      //      bool debug_energy=false;
+      //
 
     /*
     #ifdef PARALLEL_OMP
@@ -71,14 +82,13 @@ void CDelphiEnergy::run()
     if(bAnalyEng)
     {
         fEnergy_AnalyGrid=0.0;
-        cout << " analytic grid energy is no longer available." << endl;
-
+        cout << " WARNING !!! Analytic grid energy is no longer available." << endl;
 
         if(bEngOut)
         {
             ofstream ofEnergyFile;
             ofEnergyFile.open(strEnergyFile,std::fstream::app);
-            ofEnergyFile << " analytic grid energy is " << fEnergy_AnalyGrid << " kt.\n";
+            ofEnergyFile << " Analytic grid energy is " << fEnergy_AnalyGrid << " kT.\n";
             ofEnergyFile.close();
         }
         exit (EXIT_FAILURE);
@@ -92,7 +102,7 @@ void CDelphiEnergy::run()
         lim_min = 2+ieBuffz.nMin;  //ieBuffz(pdc->getKey_constRef< SExtrema<int> >("bufz"))
         lim_max = iGrid-1-ieBuffz.nMax;	 //lim%min=2+bufz%min ; lim%max=igrid-1-bufz%max
 
-
+		if (debug_energy) cout << " iCrgedGridB: " << iCrgedGridB << endl;
         for(i=0; i<iCrgedGridB; i++)
         {
             ixyz = prgigGridCrgPose[i];
@@ -109,54 +119,65 @@ void CDelphiEnergy::run()
 
                 fEnergy_Grid = fEnergy_Grid + prgfPhimap[iw]*prgfGridCrg[i];
 
-                //cout << "LinLi: in grid energy: " << setw(10)<< i << setw(20) << fixed << setprecision(7) << prgfPhimap[iw] << setw(20) << prgfGridCrg[i] << endl;
+              //  cout << "LinLi: in grid energy: " << setw(10)<< i << setw(10) << iw << setw(20) << fixed << setprecision(7) << prgfPhimap[iw] << setw(20) << prgfGridCrg[i] << endl;
 
             }
 
 
         }
-
+		
         fEnergy_Grid = fEnergy_Grid / 2.0;
 
-        if(debug_energy)cout << "iGaussian,inhomo,bSolvEng: " << iGaussian << " " << inhomo << " " << bSolvEng << endl;
-        if(iGaussian==1&&inhomo==1&&bSolvEng)
+		if (debug_energy) cout << "fEnergy_Grid: " << fEnergy_Grid << endl;
+
+        if(debug_energy) cout << " Gaus> iGaussian,inhomo,bSolvEng: " << iGaussian << " " << inhomo << " " << bSolvEng << endl;
+        if(debug_energy) cout << " Conv> iConvolute,inhomo,bSolvEng: " << iConvolute << " " << inhomo << " " << bSolvEng << endl;
+
+        //ARGO modification of IF condition
+        if((iGaussian==1||iConvolute!=0)&&inhomo==1&&bSolvEng)
         {
             ergsgaussian=fEnergy_Grid;
-            if(debug_energy)cout << "ergsgaussian: " << ergsgaussian << endl;
+            if(debug_energy) cout << "ergsgaussian: " << ergsgaussian << endl;
         }
         else
         {
 
-            cout << endl << " total grid energy                :               " << setw(8) << right << fEnergy_Grid << " kt" << endl;
+            cout << enerString << left << setw(MAXWIDTH) << "Total grid energy" << " : " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << fEnergy_Grid << " kT" << endl;
         }
         if(bEngOut)
         {
             ofstream ofEnergyFile;
             ofEnergyFile.open(strEnergyFile,std::fstream::app);
-            ofEnergyFile << "total grid energy		:   " << setw(8) << fEnergy_Grid << " kt \n";
+            ofEnergyFile << "Total grid energy		:   " << setw(NUMWIDTH) << setprecision(NUMPRECISION) << fixed << fEnergy_Grid << " kT \n";
             ofEnergyFile.close();
         }
 
     }
 
     //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
-    if(iGaussian==1&&inhomo==0&&bSolvEng)
+    //ARGO modification of IF condition
+    if((iGaussian==1||iConvolute!=0)&&inhomo==0&&bSolvEng)
     {
-        //write(6,"(a,f20.4,a)"),        ' corrected reaction field energy :',ergg-ergsgaussian,' kt'
-        cout << " corrected reaction field energy  :               " << setw(8) << right << fEnergy_Grid-ergsgaussian << " kt" << endl;
+        //write(6,"(a,f20.4,a)"),        ' corrected reaction field energy :',ergg-ergsgaussian,' kT'
+        cout << enerString << left << setw(MAXWIDTH) << "Corrected reaction field energy" << " : " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << fEnergy_Grid-ergsgaussian << " kT" << endl;
         //ergs=fEnergy_Grid-ergsgaussian;
         ergs=fEnergy_Grid-ergsgaussian;
+        if (debug_energy) cout << "Gaus> iGaussian,ergs = " << iGaussian << " " << ergs << endl;
+        if (debug_energy) cout << "Conv> iConvolute,ergs = " << iConvolute << " " << ergs << endl;
     }
 
 
     //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
-    if(iGaussian==0)   //LinLi:if iGaussian==1, skip other energy terms
+    //ARGO modification of IF-condition
+    if(iGaussian==0 && iConvolute==0)   //LinLi,Argo :if iGaussian==1 || iConvolute!=0, skip other energy terms
     {
         //goto 1212
         if(bGridEng && bAnalyEng)
         {
-            cout << " difference energy, in kt, is  " << fEnergy_Grid-fEnergy_AnalyGrid << endl;
-            cout << " difference energy, in kcals, is  " << (fEnergy_Grid-fEnergy_AnalyGrid)*0.6 << endl;
+			#ifdef VERBOSE
+            cout << " Difference energy, in kT, is  " << fEnergy_Grid-fEnergy_AnalyGrid << endl;
+            cout << " Difference energy, in kcals, is  " << (fEnergy_Grid-fEnergy_AnalyGrid)*0.6 << endl;
+			#endif
         }
 
         //  +++++++++++++++ For polarized membrane (not supported and not tested) +++++ //
@@ -164,12 +185,14 @@ void CDelphiEnergy::run()
 
         if(iBndyType == 5)
         {
-            cout << " WARNING!!!Not completely tested routine for polarized membrane!!" << endl;
+            cout << " WARNING!!! Not completely tested routine for polarized membrane!!" << endl;
             exit (EXIT_FAILURE);
 
             if(bNonlinearEng || bAnalySurfEng)
             {
-                cout << "This option is not yet working with fixed potential difference!" << endl;
+				#ifdef VERBOSE
+                cout << " WARNING !!! This option is not yet working with fixed potential difference!" << endl;
+				#endif
 
                 fEnergy_AnalySurf=0.0;
                 fEnergy_Nonlinear=0.0;
@@ -198,7 +221,7 @@ void CDelphiEnergy::run()
             		}
 
             		enface = deltaphi * fgPotentialDrop.nZ * fEpsOut; * ((iGrid-1.0)/((iGrid-2.0)*(iGrid-2.0))/(4.0*fPi*fScale));// unclear operation here!!
-            		cout << "Energy contribution from voltage drop = " << enface << " kt" << endl;
+            		cout << "Energy contribution from voltage drop = " << enface << " kT" << endl;
             		fields.close();
 
             		ofstream potcen;
@@ -225,7 +248,7 @@ void CDelphiEnergy::run()
 
             fEnergy_Solvation = 0.0;
             fEnergy_AnalySurf = 0.0;
-            fEnergy_Nonlinear=0.0;
+            fEnergy_Nonlinear = 0.0;
             fEnergy_SolvToChgIn = 0.0;
 
             if(bPotentiallnSite)
@@ -244,7 +267,8 @@ void CDelphiEnergy::run()
 
 
     //if( bCoulombEng && ( !bIonsEng || !bNonlinearEng ) )
-    if( bCoulombEng && ( !bIonsEng || !bNonlinearEng ) && !(iGaussian==1 && inhomo==1 ))
+    //ARGO modification of the IF-condition
+    if( bCoulombEng && ( !bIonsEng || !bNonlinearEng ) && !((iGaussian==1 || iConvolute!=0) && inhomo==1 ))
     {
 
         fEnergy_Coulombic = 0.0;
@@ -259,15 +283,14 @@ void CDelphiEnergy::run()
             {
                 CIonicCalcUnderTest waring;
             }
+#ifdef VERBOSE
+            cout << enerString << "Solvent contribution to fixed charges" << endl;
 
-            cout << " solvent contribution to fixed charges" << endl;
+            cout << enerString << left << setw(MAXWIDTH) << "Respectively inside and outside the cube" << " : "
+            << setw(NUMWIDTH) << right << fEnergy_SolvToChgIn << "  kT   " << setprecision(NUMPRECISION) << fixed << fEnergy_SolvToChgOut << "  kT" << endl;  // where is ergestout??
 
-            cout << " respectively inside and outside the cube :               ";
-
-            cout << setw(8) << right << fEnergy_SolvToChgIn << "  kt   " << fEnergy_SolvToChgOut << "  kt" << endl;  // where is ergestout??
-
-            cout << " total ionic direct contribution  :               " << setw(8) << right << (fEnergy_SolvToChgIn+fEnergy_SolvToChgOut) << "  kt" << endl;
-
+            cout << enerString << left << setw(MAXWIDTH) << "Total ionic direct contribution" << " : " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << (fEnergy_SolvToChgIn+fEnergy_SolvToChgOut) << "  kT" << endl;
+#endif
         }
 
         else
@@ -289,7 +312,7 @@ void CDelphiEnergy::run()
             }
         }
 
-        cout << " coulombic energy                 :               " << setw(8) << right << fEnergy_Coulombic << " kt" << endl;
+        cout << enerString << left << setw(MAXWIDTH) << "Coulombic energy" << " : " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << fEnergy_Coulombic << " kT" << endl;
 
         if(bEngOut)
         {
@@ -298,7 +321,7 @@ void CDelphiEnergy::run()
 
             ofEnergyFile.open(strEnergyFile,std::fstream::app);
 
-            ofEnergyFile << "total coulombic energy  :  " << fEnergy_Coulombic << " kt \n";
+            ofEnergyFile << "Total coulombic energy  :  " << setprecision(NUMPRECISION) << fixed << fEnergy_Coulombic << " kT \n";
 
             ofEnergyFile.close();
         }
@@ -310,17 +333,18 @@ void CDelphiEnergy::run()
     {
         energy_nonl(fEnergy_Nonlinear, iGridOutput);	// call nonlinear function.
 
-        fEnergy_Coulombic = 0.0;
-        fEnergy_SolvToChgIn = 0.0;
+
 
         if(bIonsEng)
         {
+			fEnergy_Coulombic = 0.0;
+			fEnergy_SolvToChgIn = 0.0;
 
             energy_clbnonl(fEnergy_Coulombic, fEnergy_SolvToChgIn, iGridOutput);
 
-            cout << " direct ionic contribution inside the box :       " << setw(8) << right << fEnergy_SolvToChgIn << " kt" << endl;
+            cout << enerString << left << setw(MAXWIDTH) <<"Direct ionic contribution inside the box" << " : " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << fEnergy_SolvToChgIn << " kT" << endl;
 
-            cout << " coulombic energy                 :               " << setw(8) << right << fEnergy_Coulombic << " kt" << endl;
+            cout << enerString << left << setw(MAXWIDTH) <<"Coulombic energy" << " : " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << fEnergy_Coulombic << " kT" << endl;
 
             if(bEngOut)
             {
@@ -328,7 +352,7 @@ void CDelphiEnergy::run()
 
                 ofEnergyFile.open(strEnergyFile,std::fstream::app);
 
-                ofEnergyFile << "total coulombic energy :  " << setw(8) << fEnergy_Coulombic << " kt \n";
+                ofEnergyFile << "Total coulombic energy :  " << setw(NUMWIDTH) << setprecision(NUMPRECISION) << fixed << fEnergy_Coulombic << " kT \n";
 
                 ofEnergyFile.close();
             }
@@ -340,14 +364,15 @@ void CDelphiEnergy::run()
 
     //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-    if(iGaussian==0) //if iGaussian==1,skip these terms
+    //Argo modification of the IF-condition
+    if(iGaussian==0 && iConvolute==0) //if iGaussian==1 || iConvolute != 0,skip these terms
     {
         //goto 1213
 
         if(bSolvEng && bIonsEng)
         {
 
-            cout << " Energy arising from solvent and boundary pol.  " << setw(8) << right << (fEnergy_Nonlinear+fEnergy_Solvation+fEnergy_SolvToChgIn+fEnergy_SolvToChgOut) << " kt" << "\n";
+            cout << " Energy arising from solvent and boundary pol.  " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << (fEnergy_Nonlinear+fEnergy_Solvation+fEnergy_SolvToChgIn+fEnergy_SolvToChgOut) << " kT" << "\n";
         }
 
         //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -356,7 +381,7 @@ void CDelphiEnergy::run()
         if(bNonlinearEng && bGridEng)
         {
 
-            cout << " total non linear grid energy	  :               " << setw(8) << right << (fEnergy_Grid+fEnergy_Nonlinear) << " kt \n";
+            cout << enerString << left << setw(MAXWIDTH) << "Total non linear grid energy" << " : " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << (fEnergy_Grid+fEnergy_Nonlinear) << " kT \n";
         }
 
         //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -365,7 +390,7 @@ void CDelphiEnergy::run()
 
         if(bSolvEng || bCoulombEng)
         {
-            cout << " all required energy terms but grid and self_react.:  " << setw(8) << right << fEnergy_Total << " kt" << endl;
+            cout << enerString << left << setw(MAXWIDTH) << "All required energy terms but grid energy    " << " : " << setw(NUMWIDTH) << right << setprecision(NUMPRECISION) << fixed << fEnergy_Total << " kT" << endl;
 
             if(bEngOut)
             {
@@ -373,7 +398,7 @@ void CDelphiEnergy::run()
 
                 ofEnergyFile.open(strEnergyFile,std::fstream::app);
 
-                ofEnergyFile << "total required energy (everything calculated but grid and self_reaction energies: " << setw(8) << fEnergy_Total << " kt \n";
+                ofEnergyFile << "Total required energy (everything calculated but grid and self_reaction energies: " << setw(NUMWIDTH) << setprecision(NUMPRECISION) << fixed << fEnergy_Total << " kT \n";
 
                 ofEnergyFile.close();
             }
@@ -384,7 +409,7 @@ void CDelphiEnergy::run()
         if(bAnalySurfEng && bAnalyEng && bGridEng)
         {
 
-            cout << " excess grid energy =               " << setw(8) << right  << (fEnergy_Grid - fEnergy_AnalySurf - fEnergy_AnalyGrid) << endl;
+            cout << enerString << left << setw(MAXWIDTH) << "Excess grid energy" << " : " << setw(NUMWIDTH) << right  << setprecision(NUMPRECISION) << fixed << (fEnergy_Grid - fEnergy_AnalySurf - fEnergy_AnalyGrid) << endl;
         }
 
         //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -399,7 +424,7 @@ void CDelphiEnergy::run()
         ergions = fEnergy_SolvToChgIn + fEnergy_SolvToChgOut;
 
     } //1213
-    else
+    else if (iGaussian==1 || iConvolute!=0)
     {
         ergg    = fEnergy_Grid;
         ergc    = fEnergy_Coulombic;

@@ -34,7 +34,7 @@ const int MOD4PDB    = 30;
 const int PQR4PDB    = 31;
 
 /* CommPDB format is updated and used for communication with DelPhi and PrimePKA without read/write files
- * Updated: Dec 15, 2014 by Lin Wang 
+ * Updated: Dec 15, 2014 by Lin Wang
  */
 const int CommPDB    = 40;
 
@@ -76,7 +76,7 @@ class CIO
        * @return true if the file formatted, false otherwise.
        */
       bool checkFileFormat(const string& strFile);
-                 
+
       /*
        * ******************* for reading atom force (radii/size and charge) file *******************
        * ********** these static attributes are declared here and defined in io_force.cpp **********
@@ -210,16 +210,16 @@ class CIO
        * @param bPostProcess flag for post processing
        */
       void readUnformattedPdb(const string& strPdbFile,ifstream& ifPdbFileStream,bool& bPostProcess);
-    
+
       void commVecPDB(const vector<string>& strCommPDB);
-    
+
 #ifdef DEBUG_IO_PDB
       /**
        * debug function to print values read from .pdb file
        */
-      void printPDB();                        
+      void printPDB();
 #endif
-           
+
       /**
        * F95 var.: iatrad
        * whether there is radius info
@@ -232,7 +232,7 @@ class CIO
        */
       vector<delphi_integer> prgiObjectMediaNum;
 
-   public:     
+   public:
 
       /**
        * F95 var.: nmedia
@@ -293,7 +293,7 @@ class CIO
        * constructor I using default Dielectric constant and epkt values
        */
       CIO():fDielec(4.0),fEPKT(167100.9162872952/297.3342119)
-      {     
+      {
 #ifdef DEBUG_OBJECT
          cout << endl;
          cout << "****************************************************************\n";
@@ -304,12 +304,12 @@ class CIO
          //iRadiusNum      = 0;
          //iCrgNum         = 0;
          iMediaNum       = 1;
-         iObjectNum      = 1;  
+         iObjectNum      = 1;
          iAtomNum        = 0;
          iObjectMediaNum = 1;
          bOnlyMolecule   = true;
          bExistRadiiInfo = false;
-         iResidueNum     = 0;        
+         iResidueNum     = 0;
       };
 
       /**
@@ -327,14 +327,14 @@ class CIO
          //iRadiusNum      = 0;
          //iCrgNum         = 0;
          iMediaNum       = 1;
-         iObjectNum      = 1;  
+         iObjectNum      = 1;
          iAtomNum        = 0;
          iObjectMediaNum = 1;
          bOnlyMolecule   = true;
          bExistRadiiInfo = false;
-         iResidueNum     = 0;        
+         iResidueNum     = 0;
       };
-      
+
       /**
        * destructor
        */
@@ -375,7 +375,7 @@ class CIO
        * @param iModPdbFormatOut file format
        */
       void writeModifiedPdb(const string& strPdbFile,const int& iModPdbFormatOut);
-                       
+
       /*
        * miscellany
        */
@@ -393,7 +393,7 @@ class CIO
       void setDelphiAtom(const bool& bSolvePB,const bool& bSurfCrgInSite,const string& strSizeFile,
                          const string& strCrgFile,const string& strPdbFile,const int& iPdbFormat,
                          const bool& bPdbUnformat, const vector<string>& strCommPDB);
-                                                 
+
       /**
        * function for reading FRC file
        * @param strFrcFile name of frc file
@@ -404,7 +404,7 @@ class CIO
       SGrid<delphi_real> readFrcFile(const string& strFrcFile,const SGrid<delphi_real>& fgOffCenter,
                                      const delphi_real& fScale);
 
-      /**
+      /** OLD OLD OLD OLD OLD OLD OLD OLD OLD
        * function for writing EPS file
        * @param iAtomNumIn number of atoms
        * @param iObjectNumIn number of objects
@@ -415,11 +415,62 @@ class CIO
        * @param vctbDielecMap vector of dielectric constants map
        * @param strEpsFile output eps file name
        */
-      void writeEpsMap(const delphi_integer& iAtomNumIn,const delphi_integer& iObjectNumIn,
-                       const delphi_integer& iGrid,const delphi_real& fScale,const SGrid<delphi_real>& fgBoxCenter,
-                       const vector< SGrid<delphi_integer> >& vctigEpsMap,const vector<bool>& vctbDielecMap,
-                       const string& strEpsFile);
-      
+      // void writeEpsMap(const delphi_integer& iAtomNumIn,const delphi_integer& iObjectNumIn,
+      //                  const delphi_integer& iGrid,const delphi_real& fScale,const SGrid<delphi_real>& fgBoxCenter,
+      //                  const vector< SGrid<delphi_integer> >& vctigEpsMap,const vector<bool>& vctbDielecMap,
+      //                  const string& strEpsFile);
+
+    /** new new new new new new new new new new
+      * function for writing EPS file for 2-dielectric model
+      * only CUBE format
+      * @param iGrid number of grid points on each direction
+      * @param repsout solvent dielctric value
+      * @param repsin  solute dielectric value
+      * @param fScale scale used for calculations
+      * @param vctbDielecMap vector of dielectric constants map
+      * @param strEpsFile output eps file name
+      */
+
+      void writeHomoEpsMap(const delphi_integer& iGrid,
+                            const delphi_real&    repsout,
+                            const delphi_real&    repsin,
+                            const delphi_real& fScale,
+                            const SGrid<delphi_real>& fgBoxCenter,
+                            const vector<bool>& vctbDielecMap,
+                            const string& strEpsFile);
+
+      /** new new new new new new new new new new
+        * function for writing EPS file for gaussian model
+        * only CUBE format
+        * @param iGrid number of grid points on each direction
+        * @param repsout solvent dielctric value
+        * @param fScale scale used for calculations
+        * @param vct_cepsmap vector of dielectric constants map
+        * @param strEpsFile output eps file name
+        */
+
+        void writeGaussEpsMap(const delphi_integer& iGrid,
+                              const delphi_real&    repsout,
+                              const delphi_real& fScale,
+                              const SGrid<delphi_real>& fgBoxCenter,
+                              const vector< SGrid<delphi_real> >& vctigEpsMap,
+                              const string& strEpsFile);
+
+      /** new new new new new new new new new new
+        * function for writing EPS file for convolution model
+        * only CUBE format
+        * @param iGrid number of grid points on each direction
+        * @param fScale scale used for calculations
+        * @param vct_cepsmap vector of dielectric constants map
+        * @param strEpsFile output eps file name
+        */
+
+        void writeConvEpsMap(const delphi_integer& iGrid,
+                              const delphi_real& fScale,
+                              const SGrid<delphi_real>& fgBoxCenter,
+                              vector<delphi_real>& vct_cepsmap,
+                              const string& strEpsFile);
+
       /*
        * for reading/writing PHI file
        */
@@ -439,7 +490,7 @@ class CIO
       /*
        * for writing SCRG file
        */
-    
+
 
 };
 

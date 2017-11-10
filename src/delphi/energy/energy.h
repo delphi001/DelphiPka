@@ -23,6 +23,8 @@
 #include "../misc/misc_grid.h"
 #include "energy_exceptions.h"
 
+#define NUMPRECISION 2
+
 using namespace std;
 
 class CDelphiEnergy:virtual public IAbstractModule
@@ -70,7 +72,7 @@ class CDelphiEnergy:virtual public IAbstractModule
       const vector< SGrid<delphi_real> >& prgfgCrgPoseA;
       const vector< SGrid<int> >& prgigGridCrgPose;
       const vector<delphi_real>& prgfGridCrg;
-      const delphi_real& fIonStrength;
+      delphi_real fIonStrength;
       const SGrid<delphi_real>& fgBoxCenter;
       const vector<bool>& prgbDielecMap;
       const vector<delphi_real>& prgfAtomEps;
@@ -93,6 +95,12 @@ class CDelphiEnergy:virtual public IAbstractModule
       const delphi_real& fTaylorCoeff4;
       const delphi_real& fTaylorCoeff5;
 
+      const char* infoString;
+      const char* timeString;
+      const char* enerString;
+      size_t MAXWIDTH;
+      size_t NUMWIDTH;
+      //ARGO: Remove (if) TRUE in the final version. Only for debugging here
       bool debug_energy;
       vector < SGridValue<delphi_real> > sout;
       SGrid<int> lim_min, lim_max;
@@ -104,6 +112,9 @@ class CDelphiEnergy:virtual public IAbstractModule
       delphi_real& ergr;
       delphi_real& ergions;
       delphi_real& ergsgaussian;
+
+      //ARGO : Convolute
+      int& iConvolute;
 
       //***************//
 
@@ -158,11 +169,14 @@ class CDelphiEnergy:virtual public IAbstractModule
          prgfGridCrg(pdc->getKey_Ref< vector<delphi_real> >("gchrg")),
          prgigGridCrgPose(pdc->getKey_constRef< vector< SGrid<int> > >("gchrgp")),
          prggvAtomicCrg(pdc->getKey_constRef< vector< SGridValue<delphi_real> > >("atmcrg")),
-         fIonStrength(pdc->getKey_constRef<delphi_real>("rionst")),
+         fIonStrength(pdc->getKey_Val<delphi_real>("rionst")),
          fgBoxCenter(pdc->getKey_constRef< SGrid<delphi_real> >("oldmid")),
          prgbDielecMap(pdc->getKey_constRef< vector<bool> >("idebmap")),
          prgfAtomEps(pdc->getKey_constRef< vector<delphi_real> >("atmeps")),
          ieBuffz(pdc->getKey_constRef< SExtrema<int> >("buffz")),
+
+	 //ARGO: Convolute
+	 iConvolute( pdc->getKey_Ref<int>("convolute")),
 
          iObjectNum(pdc->getKey_constRef<int>("nobject")),
          iAtomNum(pdc->getKey_constRef<int>("natom")),

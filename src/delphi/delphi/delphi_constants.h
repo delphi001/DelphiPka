@@ -43,7 +43,10 @@ const delphi_real fSixth =  1.6666666666666666666666666666667e-1;
 const delphi_real fZero  =  1.0e-15;
 #endif
 
-const int    iStatementNum = 51; ///< number of statements increased from 45 to 51(Gaussian MEMPOT)
+const int    iStatementNum = 57; ///< number of statements increased from 45 to 51(Gaussian MEMPOT)
+				//-> 15-feb,2016 | ARGO added two more parameters for ZETA + 1 FOR k-CLUSTERING 
+				//->ARGO UA 2016 | 3 more (57 here)
+				
 const int    iFunctionNum_FullName  = 11; ///< number of functions in full name
 const int    iFunctionNum_ShortName = 5; ///< number of functions in short name
 
@@ -141,7 +144,7 @@ typedef struct {
     string strFRCIn;
     string strFRCOut;
     SGrid<delphi_real> oldmid;
-
+    
     //-------- INTERMEDIATE
     vector<delphi_real> phimap;
     delphi_real scale1;

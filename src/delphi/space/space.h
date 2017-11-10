@@ -1,11 +1,13 @@
 #ifndef SPACE_H
 #define SPACE_H
 
+#include <complex>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <string>
 #include <memory>
+#include <valarray>
 //#include <deque>
 
 #include <cmath>      // std::abs
@@ -16,9 +18,12 @@
 #include "../io/io.h"
 #include "../interface/interface_datacontainer.h"
 #include "space_templates.h"
+#include "space_exceptions.h"
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef std::complex<double> Complex;
+typedef std::valarray<Complex> CArray;
 using namespace std;
 
 class CDelphiSpace:virtual public IAbstractModule
@@ -40,7 +45,14 @@ private:                                            // In DATA CONTAINER
     const delphi_integer& iNObject;                         // nobject
     const delphi_real&    repsout;                           // repsout
     const delphi_real&    repsin;                           // repsin
+	const delphi_real& fDebyeLength;
+	const delphi_real& fEpsOut;
+	const delphi_real& fEpsIn;
 
+    //ARGO 14-FB,2016
+    //To use for vdwSurf_file to be written as a CUBE file
+    const SGrid<delphi_real>& fgBoxCenter;                   // oldmid
+    //
     const bool& bUniformDiel;                       //
     //const bool& bVerbose;                           // removed
     const bool& bOnlyMol;                           //
@@ -54,9 +66,10 @@ private:                                            // In DATA CONTAINER
     const bool& ibem;                           //
     const int& ibctyp;
     const bool& isitsf;
+    const bool& bEpsOut;                        // only for the special case of CONVOLUTE
 
-
-
+    //----- io file names ---  Required for CONVOLUTE EpsMap
+    const string&  strEpsFile;
     //const bool& bDebug;                             //
 
     //const int& iTestGloble;                         //
@@ -108,9 +121,11 @@ private:                                            // In DATA CONTAINER
 
     vector <bool>& bDebMap_v;             //idebmap
 
+
     vector < SGrid<delphi_integer> >& iEpsMap_v; //iepsmap
     vector < SGrid<delphi_real> >& fGepsMap_v; //gepsmap
     vector < SGrid<delphi_real> >& fGepsMap2_v; //gepsmap2
+	vector < delphi_real >& fGDensityMap_v; //gaussian density map
 
     vector <delphi_integer>& iAtomMed_v;                 //iatmmed
     vector < SExtrema<delphi_real> >& sLimObject;       //limobject
@@ -145,6 +160,7 @@ private:                                            // In DATA CONTAINER
         SGrid <delphi_real> xyz;
         delphi_real charge;
         delphi_real radius;
+        string atom_resname;  //ARGO
     };
 
     delphipdb_struc * sDelPhiPDB;
@@ -154,7 +170,8 @@ private:                                            // In DATA CONTAINER
 
     //################# semi global variables in this class #########################
 
-    bool debug_space;
+    //bool debug_space = true;
+    bool debug_space ;
     delphi_integer iBoundNumsurf,extot,iall,lcb, mcb, ncb, lcb1, mcb1, ncb1;
     delphi_real radpmax,grdi, cbai, sideinter, sidemin;
     SGrid <delphi_real> mnxyz, xyzo, mxxyz;
@@ -162,10 +179,13 @@ private:                                            // In DATA CONTAINER
     SExtrema <delphi_integer> LimEps;
     delphi_integer extracrg;
 
+	//delphi_real  fEpsOut;
+	//delphi_real  fDebyeLength;
+	//delphi_real  fEpsIn;
 
-
-
-
+	delphi_real  test1,test2,test3;
+	//delphi_real  test2;
+	//delphi_real  test3;
 
     vector <delphi_integer>  iab1_v, iab2_v, icume, ast, cbn1_v, cbn2_v, cbal, icbn;
     vector <delphi_real> r0,r02,rs2;
@@ -208,9 +228,41 @@ private:                                            // In DATA CONTAINER
     SGrid <delphi_integer> *** egrid;
     //bool *** bDebMap;
     bool *** idebmap;
+
+
+    //ARGO: defining a new variable to store bools for extended vdw surface for zeta
+    bool *** zetaSurfMap;
+    int& zetaOn;
+    delphi_real& zetaDistance;
+    vector <bool>& zetaSurfMap_v;			//zetaSurfMap
+    const string&  strZetaPhiFile;			//zphinam
+    //
+
+    //ARGO UA 2016, EPSILON SMOOTHING
+    //EPS MODEL1
+    int iConvolute;
+    delphi_real *** ginit_rhomap;	//will store the initially assigned rho[in] values to obtain bubble surface
+    delphi_real ***	cepsmap;		// will be assigned corresponding EPS values based on ginit_rhomap
+    delphi_real ***  HRhomap;		// HS function map based on the binarization of cepsmap using that EPS cutoff. (Argo you know what EPS to set  the boundary).
+    delphi_real& fksigma;			// the kernal sigma. Proabbly will be used only the FFT/iFFT module.
+    vector<delphi_real>& fHRhomap_v;
+    delphi_real& fhvsd_eps;			//the EPSILON value that will be used to draw the distinction between inside and out.
+    //bool debug_convolute = false;
+    bool debug_convolute ;
+    //
+
+
+
     SGrid <delphi_integer> *** iepsmp;
     SGrid <delphi_real> *** gepsmp;
     SGrid <delphi_real> *** gepsmp2;
+
+	/**
+	* Gaussian Density Map array
+	* Stores the density of atoms on each grid point
+	* 
+	*/
+	delphi_real *** gDensityMapOnGridPoint;
 
     delphi_integer *** cbn1, *** cbn2, *** iab1, *** iab2;
     delphi_integer * iAtomMed;
@@ -218,6 +270,7 @@ private:                                            // In DATA CONTAINER
 
     SGrid <delphi_real> sgrid_temp_real;
     SGrid <delphi_integer> sgrid_temp_int;
+    SGrid <delphi_real> sgrid_rho_real;
 
 
 /*
@@ -261,6 +314,16 @@ private:                                            // In DATA CONTAINER
     void sclbp();
     void msrf();
     void crgarr();
+
+
+    //ARGO UA 2016 FFT
+    void setConvolute();
+    void Convolute ();
+    CArray gaussianKernel( int );
+    CArray fft( CArray& );
+    CArray ifft( CArray & );
+
+
 
 
     SGrid <int> int_coord( const int& a, const int& b,  const int& c);
@@ -307,7 +370,16 @@ public:
         lognl (pdc->getKey_constRef<bool>("lognl")),
         isen (pdc->getKey_constRef<bool>("isen")),
         isch (pdc->getKey_constRef<bool>("isch")),
+		fEpsOut(pdc->getKey_constRef<delphi_real>("epsout")),
+		fDebyeLength(pdc->getKey_constRef<delphi_real>("deblen")),
+		fEpsIn(pdc->getKey_constRef<delphi_real>("epsin")),
 
+        //Argo: for EPSMAP in conjunction with CONVOLUTION
+        bEpsOut(pdc->getKey_constRef<bool>("epswrt")),
+        strEpsFile(pdc->getKey_constRef<string>("epsnam")),
+        //ARGO-Putting in the reference for fgBoxCenter
+		fgBoxCenter(pdc->getKey_constRef< SGrid<delphi_real> >("oldmid")),
+		    //
         isite (pdc->getKey_constRef<bool>("isite")),
         ibem (pdc->getKey_constRef<bool>("ibem")),
         ibctyp (pdc->getKey_constRef<int>("ibctyp")),
@@ -316,7 +388,7 @@ public:
         // Lin Li : Gaussian:
         cutoff (pdc->getKey_constRef<float>("cutoff")),
         sigma (pdc->getKey_constRef<float>("sigma")),
-        inhomo (pdc->getKey_Ref<int>("inhomo")),
+        inhomo (pdc->getKey_Ref<int>("inhomo")),		//to be used for CONVOLUTE also
         srfcut (pdc->getKey_constRef<float>("srfcut")),
         iGaussian (pdc->getKey_constRef<int>("gaussian")),
 
@@ -360,9 +432,25 @@ public:
         xn1_v(pdc->getKey_Ref< vector< SGrid<delphi_real> > >("xn1")),
         xn2_v(pdc->getKey_Ref< vector< SGrid<delphi_real> > >("xn2")),
         bDebMap_v( pdc->getKey_Ref< vector< bool > >("idebmap")),
+
+        //ARGO: doing the 'pdc' thing just like its done with idebmap
+        zetaSurfMap_v( pdc->getKey_Ref< vector< bool > >("zetaSurfMap")),
+        zetaOn( pdc->getKey_Ref<int>("zetaOn")),
+        zetaDistance( pdc->getKey_Ref<delphi_real>("zetaDistance")),
+        strZetaPhiFile(pdc->getKey_constRef<string>("zphinam")),
+        //
+
+        //ARGO: doing the 'pdc' thing just like others
+	      iConvolute(pdc->getKey_Ref<int> ("convolute")),
+        fksigma( pdc->getKey_Ref<delphi_real>("kernel_sigma")),
+	      fHRhomap_v( pdc->getKey_Ref< vector<delphi_real> >("rho_map")),
+	      fhvsd_eps(pdc->getKey_Ref<delphi_real>("hvsd_epsilon")),
+        //
+
         iEpsMap_v( pdc->getKey_Ref< vector< SGrid<delphi_integer> > > ("iepsmp")),
         fGepsMap_v( pdc->getKey_Ref< vector< SGrid<delphi_real> > > ("gepsmp")),
-        fGepsMap2_v( pdc->getKey_Ref< vector< SGrid<delphi_real> > > ("gepsmp2")),
+        fGepsMap2_v( pdc->getKey_Ref< vector< SGrid<delphi_real> > > ("gepsmp2")), 
+		fGDensityMap_v(pdc->getKey_Ref< vector< delphi_real> >("gdensity")),
         iAtomMed_v(pdc->getKey_Ref< vector<delphi_integer> >("iatmmed")),
         sLimObject(pdc->getKey_Ref< vector < SExtrema<delphi_real> > >("limobject")),
         ibgrd_v(pdc->getKey_Ref< vector< SGrid<delphi_integer> > >("ibgrd")),
@@ -381,6 +469,10 @@ public:
     {
         //bDebMap_v=pdc->getKey_Ref< vector< bool > >("idebmap");
         bDebMap_v.assign(iGrid*iGrid*iGrid, true);
+
+        //ARGO
+        zetaSurfMap_v.assign(iGrid*iGrid*iGrid, true);
+
 
         //iEpsMap_v.assign(iGrid*iGrid*iGrid, {0,0,0});
 
@@ -407,13 +499,29 @@ public:
         delphi_integer *** cbn1, *** cbn2, *** iab1, *** iab2;
         */
 
+		//fEpsOuts = pdc->getKey_Val<delphi_real>("epsout");
+		//fDebyeLengths = pdc->getKey_Val<delphi_real>("deblen");
+		//fEpsIns = pdc->getKey_Val<delphi_real>("epsin");
+
+
+		
         // initialize all the pointers to be NULL:
         tmlst=NULL;
         egrid=NULL;
         idebmap=NULL;
+
+        //ARGO
+        zetaSurfMap=NULL;
+        ginit_rhomap=NULL;
+        cepsmap=NULL;
+        HRhomap=NULL;
+        //
+
+
         iepsmp=NULL;
         gepsmp=NULL;
         gepsmp2=NULL;
+		gDensityMapOnGridPoint=NULL;
 
         iab1=NULL;
         iab2=NULL;

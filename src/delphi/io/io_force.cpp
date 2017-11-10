@@ -368,6 +368,7 @@ void CIO::readForceFile(const string & strFile)
       if ('!' != strLine[0]) break; // header
    } 
 
+#ifdef VERBOSE   
    if ( 0 == strLine.find("atom__res_radius") || 0 == strLine.find("atom__resnumbc_radius_") )
       cout << "\n" << "atom radii read from file " << strFile << "\n"; 
    else if ( 0 == strLine.find("atom__res_charge") || 0 == strLine.find("atom__resnumbc_charge_") )
@@ -389,7 +390,7 @@ void CIO::readForceFile(const string & strFile)
       
       cout << strLine << endl; // print comments
    }
-
+#endif
    // determine file format 
 
    // isPK = false:
@@ -409,7 +410,9 @@ void CIO::readForceFile(const string & strFile)
       }
       else if (0 == strLine.find("atom__resnumbc_radius_")) 
       {
+#ifdef VERBOSE		  
          cout << "reading pK style radius file \n";
+#endif
          readFileInPKFormat(ifFileStream,SIZEFILE);
 
 #ifdef DEBUG_IO_SIZE
@@ -418,7 +421,9 @@ void CIO::readForceFile(const string & strFile)
       }
     
       iRadiusNum = prgas.size(); // # of entries in radius file
-      cout << "# of radius parameter records: \t\t" << iRadiusNum << "\n";      
+#ifdef DEBUG_IO_SIZE
+      cout << "# of radius parameter records: \t\t" << iRadiusNum << "\n"; 
+#endif	  
    }     
    else // 0 == strLine.find("atom__res_charge") ||  
         // 0 == strLine.find("atom__resnumbc_charge_")
@@ -433,7 +438,9 @@ void CIO::readForceFile(const string & strFile)
       }
       else if (0 == strLine.find("atom__resnumbc_charge_"))
       {
+#ifdef VERBOSE
          cout << "reading pK style charge file \n";
+#endif
          readFileInPKFormat(ifFileStream,CHARGEFILE);
 
 #ifdef DEBUG_IO_CHARGE
@@ -442,7 +449,9 @@ void CIO::readForceFile(const string & strFile)
       }
       
       iCrgNum = prgac.size(); // # of entries in charge file
-      cout << "# of charge parameter records: \t\t" << iCrgNum << "\n";         
+#ifdef VERBOSE
+      cout << "# of charge parameter records: \t\t" << iCrgNum << "\n"; 
+#endif	  
    }   
 
    ifFileStream.close();

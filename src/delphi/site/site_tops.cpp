@@ -37,7 +37,9 @@ delphi_real CSite::tops(const SGrid<delphi_real>& xxo,const SGrid<delphi_real>& 
    ifFileStream.open(strFileName.c_str());
    if (!ifFileStream.is_open()) throw CUnknownGridEngFile(strFileName);
 
+#ifdef VERBOSE   
    cout << "reading data file for analytic grid energies \n";
+#endif   
 
    for (k = 0; k < 65; k++)
       for (j = 0; j < 65; j++)

@@ -105,6 +105,18 @@ class CNoAtomObjectData : public CException
 };
 
 /**
+ * no object or atom after reading user-specified files
+ */
+class CNotReadingObjectFile : public CWarning
+{
+   public:
+      CNotReadingObjectFile()
+      {
+         cerr << "YOU ARE NOT READING FROM AN OBJECT FILE!"<<"ASSUMING HAVING ONLY MOLECULES, AND ONE MEDIUM "<<endl;
+      }
+};
+
+/**
  * no radius record for specified atom
  */
 class CUnknownRadius : public CWarning
@@ -177,5 +189,7 @@ class CReadSizeCrgFromPDB : public CWarning
               << "(CHARGE AND SIZE ARE READ FROM THE PDB FILE AS WELL) \n";
       }
 };
+
+
 
 #endif // IO_EXCEPTIONS_H_

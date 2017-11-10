@@ -1,8 +1,19 @@
 //#define DEBUG_DELPHI_SPACE
 
+//ARGO: 2016-FEB-09 --> Including headers for I/O for VDW_ssurface grids
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <boost/assign/std/vector.hpp>
+
+//
+
+
 #include "../interface/environment.h"
 #include "../delphi/delphi_constants.h"
 #include "../misc/misc_grid.h"
+
+
 
 #include "../space/space.h"
 #ifdef PARALLEL_OMP
@@ -10,12 +21,19 @@
 #endif
 
 using namespace std;
+using namespace boost::assign;
 //#####################################################################
 //ATTENTION! This file is part of epsmakmod module.
 // Do not compile separately!
 //
 // 2011-05-12 Parameters transfered via modules
 //#####################################################################
+
+/*-------------------------ZETA ZETA ZETA ----------------------------
+ A whole lot of changes have been made for the zetaSurface purposes.
+ Look for if (zetaON == 1 ) conditions and statements when you
+ need to put up a different file for zeta-calculation.
+---------------------------------------------------------------------*/
 
 void CDelphiSpace::setout()
 {
@@ -55,11 +73,18 @@ void CDelphiSpace::setout()
     delphi_real rad2a,radmax2,fRMid,radp2,radtest,radprobe;
     delphi_real radp,temp;
 
+    //argo : atom residue name
+    string atom_residue;
+    bool isProtein = false;
+    vector<string> AA;
+    AA += "ALA","ARG","ASN","ASP","ASX","CYS","GLU","GLN","GLX","GLY","HIS","HSE","HSD","ILE","LEU","LYS","MET","PHE","PRO","SER","THR","TRP","TYR","VAL";
+
+    delphi_real extendedRad,extendedRad2;
 
     if(debug_space) cout << "############ beginning of setout: ##############" << endl;
 
 #ifdef VERBOSE
-    cout << "Starting creating Van der Waals Epsilon Map: " << endl;
+    cout << " Creating Van der Waals Epsilon Map: " << endl;
 #endif
     radprobe=0; // this radprobe seems not useful.
     epsdim=iNatom+iNObject+2;
@@ -67,6 +92,15 @@ void CDelphiSpace::setout()
     radmax2=0.0;
     fRMid=float((iGrid+1)/2);
     itest2=false;
+
+
+//ARGO 15-FEB,2016 -> Taken directly from site_writeSite_cube.cpp
+	  delphi_real coeff = 0.5291772108, stepsize = 1.0/fScale;
+    SGrid<delphi_real> origin = (fgBoxCenter-stepsize*(iGrid-1)/2.0)/coeff;
+//
+
+
+
 
 
 #ifdef DEBUG_DELPHI_SPACE
@@ -80,7 +114,6 @@ void CDelphiSpace::setout()
         {
 //2011-05-13 Chaged to derive-type array sDelPhiPDB (pointers module)
             radmax2=max(radmax2,sDelPhiPDB[ix].radius);
-
         }// do
 
 #ifdef DEBUG_DELPHI_SPACE
@@ -88,10 +121,23 @@ void CDelphiSpace::setout()
 #endif // DEBUG_DELPHI_SPACE
 
 /**
- * this is probably the best way to do it,dep}//ing on which
+ * this is probably the best way to do it,depending on which
  *surf. is desired
 */
         temp=max(radprobe,fExternRadius);
+
+	//ARGO
+	if ( zetaOn == 1 ) temp=max(temp,zetaDistance);
+
+
+#ifdef VERBOSE
+	if ( temp == zetaDistance && zetaOn == 1)
+	{
+		cout << " The box size of individual atoms increased to Surface Distance" << endl;
+		cout << " ... Expect Delays ... " << endl;
+	}
+#endif
+
 
 #ifdef DEBUG_DELPHI_SPACE
         cout << "radprobe: " << radprobe << " fExternRadius: " << fExternRadius << endl;
@@ -103,9 +149,12 @@ void CDelphiSpace::setout()
         lim=1+radmax2;
         limmax = 12;
         itobig=false;
+
         if(lim>limmax) itobig=true;
         igrdc=pow((2*lim+1),3);
         ioff = new SGrid <int> [igrdc];
+
+
 
         if (!itobig)
         {
@@ -149,6 +198,8 @@ void CDelphiSpace::setout()
                 }// do
             }// do
         }// if
+
+
     }// if
     if(debug_space) cout << ibox <<": " << ioff[ibox] << idist << endl;
 
@@ -520,8 +571,11 @@ void CDelphiSpace::setout()
 /**
  * set interiors in MOLECULES
 */
-    if(itest2||itobig) cout <<"setout method 1 " << itest2 << " " << itobig << endl;
-
+//ARGO: 2016-FEB-09: modified lines here
+//ORIGINIAL: 	if(itest2||itobig) cout <<"setout method 1 " << itest2 << " " << itobig << endl;
+#ifdef VERBOSE
+    if(itest2||itobig) cout <<" setout method 1 : itest2 = " << itest2 << " and itobig = " << itobig << endl;
+#endif
     //DoATOMS:
     for( iv=1; iv<=iNatom; iv++)
     {
@@ -529,6 +583,15 @@ void CDelphiSpace::setout()
  * restore values
 */
         rad= sDelPhiPDB[iv].radius;
+
+        //ARGO: also fetch the resname of the atoms and check if its a protein residue
+        atom_residue = sDelPhiPDB[iv].atom_resname;
+        isProtein = std::find(AA.begin(), AA.end(), atom_residue) != AA.end();
+        //if ( isProtein ) cout << " --- Residue " << atom_residue << " for atom " << iv << endl;
+
+
+        isProtein = true; //for the present version 7.0 | Will remove it later
+
 
         xn=xn2[iv];
         //cout << "iv,xn1[iv],xn2[iv]: " <<iv<< xn1[iv+1] << xn2[iv+1] << endl;
@@ -541,10 +604,17 @@ void CDelphiSpace::setout()
 
 //fScale radius to grid
         rad=rad*fScale;
+        //ARGO:
+        extendedRad = rad + zetaDistance*fScale;	//ARGO -> *fscale with zetaDistance to go with other radial distance parameters (e.g. rad,radp,etc.)
+
         //rad5=pow( (rad+0.5),2);
         radp=rad+fExternRadius*fScale;
         rad=rad+radprobe*fScale;
         //rad4=pow( (rad+0.5),2);
+
+
+        //ARGO
+        extendedRad2 = extendedRad*extendedRad;
         rad2=rad*rad;
         radp2=radp*radp;
 
@@ -565,12 +635,16 @@ void CDelphiSpace::setout()
         ismax=optMax(ismax,1);
         if(itest != ismax) itest2=true;
 
+
+
+
         if (itest2||itobig)   //slow method;
         {
 //2011-05-13 Seems redundant statement
-            if(debug_space) cout << "### slow method:"  << endl;
-            if(debug_space) cout << "itest, itest2,itobig: " << itest << " " << itest2 << " " << itobig << endl;
+            if(debug_space) cout << " ### slow method:"  << endl;
+            if(debug_space) cout << " itest, itest2,itobig: " << itest << " " << itest2 << " " << itobig << endl;
             rad2a = rad2 - 0.25;
+
 #ifdef KJI
 #ifdef PARALLEL_OMP
         #pragma omp for schedule(auto)
@@ -605,9 +679,20 @@ void CDelphiSpace::setout()
                         }// if
 
                         if(distsq<radp2) idebmap[ix][iy][iz] =false;
+
+                        //ARGO: 2016-FEB-09 : if zeta is 'on' then check for that too
+                        if (zetaOn == 1 && isProtein) {
+
+                        	if ( distsq<extendedRad2 ) zetaSurfMap[ix][iy][iz] =false;
+                        }
+                        //
+
+
+
                     }// do
                 }// do
             }// do
+
 #endif // KJI
 
             for(iz=ismin.nZ; iz<=ismax.nZ; iz++)
@@ -637,10 +722,18 @@ void CDelphiSpace::setout()
                         }// if
 
                         if(distsq<radp2) idebmap[iz][iy][ix] =false;
+
+					   //ARGO: 2016-FEB-09 : if zeta is 'on' then check for that too
+					   if (zetaOn == 1 && isProtein) {
+
+							if ( distsq<extendedRad2 ) zetaSurfMap[iz][iy][ix] =false;
+						}
+
+
+
                     }// do
                 }// do
             }// do
-
 
         } //if
         else  /**faster method;*/
@@ -662,12 +755,8 @@ void CDelphiSpace::setout()
                 sqtemp[ix+15]=vtemp*vtemp;
                 rad2aavtemp[ix+15]=rad2a-vtemp;
 
-
-
-
             }// do
 
-//adjust inter-atom, different epsilon bgps+++04/2004 Walter
 
             if (iNMedia>1&&bOnlyMol)
             {
@@ -681,16 +770,15 @@ void CDelphiSpace::setout()
                     iy=ixyz.nY;
                     iz=ixyz.nZ;
                     //distsq=sq[i123.nX].nX+sq[i123.nY].nY+sq[i123.nZ].nZ;
-		    distsq = sqtemp[i123.nX+15].nX +sqtemp[i123.nY+15].nY + sqtemp[i123.nZ+15].nZ;
+                    distsq = sqtemp[i123.nX+15].nX +sqtemp[i123.nY+15].nY + sqtemp[i123.nZ+15].nZ;
                     //if (distsq<rad2aav[i123.nX].nX)
                     if (distsq<rad2aavtemp[i123.nX+15].nX)
-		    {
+                    {
                         //iac=(iEpsMap[ix][iy][iz].nX % epsdim)-1;
                         iac=(iepsmp[ix][iy][iz].nX % epsdim)-1;
 
                         if (iac==-1||iac>iNatom)
                         {
-//occhio! non so cosa fa con i pori!!
                             //iEpsMap[ix][iy][iz].nX=iv+1+iAtomMed[iv]*epsdim;
                             iepsmp[ix][iy][iz].nX=iv+1+iAtomMed[iv]*epsdim;
                         }
@@ -718,7 +806,6 @@ void CDelphiSpace::setout()
                         iac=(iepsmp[ix][iy][iz].nY % epsdim)-1;
                         if (iac==-1||iac>iNatom)
                         {
-//occhio! non so cosa fa con i pori!!
                             //iEpsMap[ix][iy][iz].nY=iv+1+iAtomMed[iv]*epsdim;
                             iepsmp[ix][iy][iz].nY=iv+1+iAtomMed[iv]*epsdim;
                         }
@@ -746,7 +833,6 @@ void CDelphiSpace::setout()
                         iac=(iepsmp[ix][iy][iz].nZ%epsdim)-1;
                         if (iac==-1||iac>iNatom)
                         {
-//occhio! non so cosa fa con i pori!!
                             //iEpsMap[ix][iy][iz].nZ=iv+1+iAtomMed[iv]*epsdim;
                             iepsmp[ix][iy][iz].nZ=iv+1+iAtomMed[iv]*epsdim;
                         }
@@ -767,8 +853,20 @@ void CDelphiSpace::setout()
                         }// if
                     }// if
 
-                    //if(distsq<radp2) bDebMap[ix][iy][iz]=false;
-                    if(distsq<radp2) idebmap[ix][iy][iz]=false;
+                    	//if(distsq<radp2) bDebMap[ix][iy][iz]=false;
+                    	if(distsq<radp2) idebmap[ix][iy][iz]=false;
+
+
+                    	//ARGO: 2016-FEB-09 : if zeta is 'on' then check for that too
+                    	if (zetaOn == 1 && isProtein) {
+
+
+                    		if ( distsq<extendedRad2 ) zetaSurfMap[ix][iy][iz] =false;
+
+                    	}
+                    	//
+
+
                 }// do
             }
             else
@@ -809,6 +907,7 @@ void CDelphiSpace::setout()
                         //cout << "ix,iy,iz,iv,iAtomMed[iv],epsdim " << ix<< " " << iy << " " << iz << " " << iv << " " << iAtomMed[iv]<< " " << epsdim << endl;
                     }// if
 
+
                     if (distsq<rad2aav[i123.nY].nY)
                     {
                         //iEpsMap[ix-1][iy-1][iz-1].nY=iv+2+iAtomMed[iv]*epsdim;
@@ -820,18 +919,40 @@ void CDelphiSpace::setout()
                         //iEpsMap[ix-1][iy-1][iz-1].nZ=iv+2+iAtomMed[iv]*epsdim;
                         iepsmp[iz][iy][ix].nZ=iv+1+iAtomMed[iv]*epsdim;
                     }// if
+
+
+
 #ifdef IJK
                     if (distsq<radp2) idebmap[ix][iy][iz]=false;
+			//ARGO: 2016-FEB-09 : if zeta is 'on' then check for that too
+                        if (zetaOn == 1 && isProtein) {
+
+                        	if ( distsq<extendedRad2 ) zetaSurfMap[ix][iy][iz] =false;
+                        }
+
+
+
+
 #endif // IJK
                     if (distsq<radp2) idebmap[iz][iy][ix]=false;
 
+					          //ARGO: 2016-FEB-09 : if zeta is 'on' then check for that too
+					          if (zetaOn == 1 && isProtein) {
 
-                }// do
+						                if ( distsq<extendedRad2 ) zetaSurfMap[iz][iy][ix]=false;
+					          }
+					//
+ 		   }// do
 
 
             }// if
         }// if
     }// do DoATOMS //end do of atoms;
+
+     //ARGO
+
+
+
 
     if (ioff != NULL)    delete [] ioff;
 
@@ -869,13 +990,20 @@ void CDelphiSpace::setout()
 
 #endif //DEBUG_DELPHI_SPACE
 
+
+
     if(false)
     {
         // testing iepsmp and idebmap:
+        //ARGO:
+        cout << "Testing iepsmp and idebmap ... " << endl;
+
         ofstream epsfile;
         ofstream debfile;
+
         epsfile.open ("epsmap_win_bastar.txt");
         debfile.open ("debmap_win_bastar.txt");
+
         for (ix=1; ix<=iGrid; ix++)
         {
             for (iy=1; iy<=iGrid; iy++)
@@ -886,6 +1014,7 @@ void CDelphiSpace::setout()
                             << setw(5) << iepsmp[iz][iy][ix].nY
                             << setw(5) << iepsmp[iz][iy][ix].nZ
                             << endl;
+
 #ifdef IJK
                     debfile << idebmap[ix][iy][iz] << endl;
 #endif // IJK
@@ -908,6 +1037,14 @@ void CDelphiSpace::setout()
         debfile.close();
 
     }
+    //ARGO
+    else {
+#ifdef VERBOSE
+    	cout << " Not Testing iepsmp and idebmap xxx " << endl;
+#endif
+    }//ARGO
+
+
 
 /*
 #ifdef DEBUG
@@ -929,11 +1066,10 @@ void CDelphiSpace::setout()
 #endif // DEBUG
 */
 #ifdef VERBOSE
-    cout <<"Ending creating Van der Waals Epsilon Map " << endl;
+    cout <<" Ending creating Van der Waals Epsilon Map " << endl;
 #endif
 
     //test_pdc->showMap("test_setout.txt");
     return;
 
 }// void setout;
-

@@ -200,7 +200,10 @@ void CDelphiSpace::sas()
     {
         edg[i]=-1;
     }
-    cout <<"# of vertices = " << nv << " # of edges = " << ne << endl;
+#ifdef VERBOSE	
+    cout <<" # of vertices             :" << setw(10) << nv << endl
+		 <<" # of edges                :" << setw(10) << ne << endl;
+#endif
     //ast=1;
     //for (i=0; i<=iNatom+1; i++)
     for (i=0; i<iNatom+1; i++)
@@ -638,9 +641,9 @@ void CDelphiSpace::sas()
     if(debug_space) cout << "### freed cbn1 ###" << endl;
     if(cbn2 != NULL) free_pt3d<delphi_integer>(cbn2,lcb+1,mcb+1,ncb+1);
 
-
-    cout <<"# of pairs = " << npr << endl;
-
+#ifdef VERBOSE
+    cout <<" # of pairs                :" << setw(10) << npr << endl;
+#endif
 
 //2011-05-26 Temporarly removed time calculations
     cbln=fRMax+radpmax;
@@ -1131,10 +1134,12 @@ END030:
         //call objvertices(nacc,xmin,xmax,side,h, (numbmol>0));
     }// if
 */
+#ifdef VERBOSE
     cout <<"# pairs analyzed (atom-atom and atom-object)= " << npr << endl;
     cout <<"# exposed pairs (atom-atom and atom-object)= " << nprx << endl;
     cout <<"no. arc points = " << nacc << endl;
     cout <<"no. surface atoms = " << nxa << " nbur = " << iNatom-nxa << endl;
+#endif	
 //if(nacc>exmax)stop 'nacc limit exceeded'
 
     extot=nacc;

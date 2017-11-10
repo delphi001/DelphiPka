@@ -73,7 +73,7 @@ void CDelphiFastSOR::setDielecBndySaltMap()
 
     if(debug_solver) cout << "##### in dbsf:  ###" << endl;
     if(debug_solver) cout << "iGaussian " << iGaussian << endl;
-    if(iGaussian == 1) bDbOut = false; //for Gaussian
+    if(iGaussian == 1 || iConvolute != 0 ) bDbOut = false; //for Gaussian or convolution
 
     if (0.0 < fIonStrength)
     {
@@ -120,7 +120,8 @@ void CDelphiFastSOR::setDielecBndySaltMap()
     //------ Due to the nature of vector in C++, realignment of idpos, db, sf1 and sf2 is unnecessary.
     vector<delphi_integer>::iterator idposEven = idpos.end();
     vector< vector<delphi_real> >::iterator dbEven = db.end();
-
+	vector<delphi_real>::iterator densityEven = gaussianBoundaryDensity.begin();	
+	vector<vector<delphi_real>>::iterator gdbEven = gaussianBoundaryDielec.begin();
 
     vector<delphi_integer>::iterator iepsvEven = iepsv.end();
 
@@ -144,8 +145,6 @@ void CDelphiFastSOR::setDielecBndySaltMap()
         iy=const_itr->nY;
         iz=const_itr->nZ;
 
-
-
         if (0 == iDirectEpsMap)
         {
             it.assign(6,0);
@@ -166,14 +165,14 @@ void CDelphiFastSOR::setDielecBndySaltMap()
 
             ieps = it[0]+it[1]+it[2]+it[3]+it[4]+it[5];
         }
-        else //Here is the key point for Gaussian:
+        else //Here is the key point for Gaussian or convolute:
         {
             ieps = 0;
             temp = 0.0;
 
             delphi_integer iIndex;
-
-            if(iGaussian == 0)
+            //ARGO modified IF-condition
+            if(iGaussian == 0 && iConvolute==0)
             {
                 iw = (iz-1)*iGrid*iGrid + (iy-1)*iGrid + (ix-1);
                 iIndex = (iepsmp+iw)->nX/iEpsDim;
@@ -204,7 +203,7 @@ void CDelphiFastSOR::setDielecBndySaltMap()
                 vecttemp[5] = prgfMediaEps[iIndex];
             }
 
-            else //Gaussian:
+            else if (iGaussian==1 || iConvolute!=0) //Gaussian OR iConvolute:
             {
                 //cout << ix << " " << iy << " " << iz << endl;
                 iw = (ix-1)*iGrid*iGrid + (iy-1)*iGrid + (iz-1);
@@ -237,15 +236,24 @@ void CDelphiFastSOR::setDielecBndySaltMap()
         deb = 0;
 
         //iw = (iz-1-1)*iGrid*iGrid + (iy-1-1)*iGrid + (ix-1);
-        //iw = (iz-1)*iGrid*iGrid + (iy-1)*iGrid + (ix-1);
-        iw = (ix-1)*iGrid*iGrid + (iy-1)*iGrid + (iz-1);
+        iw = (iz-1)*iGrid*iGrid + (iy-1)*iGrid + (ix-1);
+        //iw = (ix-1)*iGrid*iGrid + (iy-1)*iGrid + (iz-1);	
+
         if ( *(idebmap+iw) )
         {
             deb = 1;
             idbs += 1;
+
         }
 
+
+		delphi_real gridDensity = gaussianDensityMap[iw];
+		//if (gridDensity < fvdwdens) gridDensity = 0;
+
+		//if (gridDensity != 1) cout << "density = " << gridDensity << endl;
+
         vector<delphi_real> dbrow;
+		
         if (0 == iDirectEpsMap)
         {
             dbrow.push_back( rgfDielecBndyValue[it[3]][ieps][deb] );
@@ -277,7 +285,17 @@ void CDelphiFastSOR::setDielecBndySaltMap()
                 dbrow.push_back( vecttemp[5]/fDenom );
                 dbrow.push_back( vecttemp[2]/fDenom );
             }
-        }
+
+         }
+
+		vector<delphi_real> dbrow_original;
+		dbrow_original.push_back(vecttemp[3]);
+		dbrow_original.push_back(vecttemp[0]);
+		dbrow_original.push_back(vecttemp[4]);
+		dbrow_original.push_back(vecttemp[1]);
+		dbrow_original.push_back(vecttemp[5]);
+		dbrow_original.push_back(vecttemp[2]);
+
 
         iw = (iz-1)*iGrid*iGrid + (iy-1)*iGrid + (ix-1); // iw=isgrid*(k-1) + igrid*(j-1) + i
 
@@ -294,6 +312,12 @@ void CDelphiFastSOR::setDielecBndySaltMap()
             dbEven    = db.insert(dbEven,dbrow);
             dbEven++;
 
+			densityEven = gaussianBoundaryDensity.begin() + icount2a;
+			densityEven = gaussianBoundaryDensity.insert(densityEven, gridDensity);
+
+			gdbEven = gaussianBoundaryDielec.begin() + icount2a;
+			gdbEven = gaussianBoundaryDielec.insert(gdbEven, dbrow_original);
+
             icount2a += 1;
         }
         else // iw is odd
@@ -301,6 +325,8 @@ void CDelphiFastSOR::setDielecBndySaltMap()
             idpos.push_back( (iw+1)/2 );
             iepsv.push_back(ieps);
             db.push_back(dbrow);
+			gaussianBoundaryDensity.push_back(gridDensity);
+			gaussianBoundaryDielec.push_back(dbrow_original);
         }
 
         // cout << "Lin Li dbsf: ix: " << iw << " db[iw][0] " << db[iw][0] << " " << db[iw][1] << " "
@@ -324,7 +350,7 @@ void CDelphiFastSOR::setDielecBndySaltMap()
     if (bDbOut) ofDbFileStream.close();
 
 #ifdef VERBOSE
-    cout << "no. dielectric boundary points in salt = " << idbs << endl;
+    cout << " Info> Number of dielectric boundary points in salt = " << idbs << endl;
 #endif
 
     //---------- realign idpos and db,compressing to contingous space
@@ -409,7 +435,7 @@ void CDelphiFastSOR::setDielecBndySaltMap()
 
 #ifdef DEBUG_DELPHI_SOLVER_MKDBSF
     {
-        string strTestFile = "test_mkdbsf.dat";
+        string strTestFile = "test_mkdbsf_"+to_string(inhomo)+".dat";
         ofstream ofTestStream(strTestFile.c_str());
         ofTestStream << boolalpha;
         ofTestStream << fixed << setprecision(7);

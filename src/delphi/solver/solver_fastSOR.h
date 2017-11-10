@@ -58,12 +58,17 @@ private:                                            // In DATA CONTAINER
     const bool&    bIonsEng;                         // logions
     const int&     iGaussian;                        // Gaussian
     const int&     inhomo;                           // inhomo
+
+    //----- set for CONVOLUTION MODEL
+    int& iConvolute;
+    delphi_real& fksigma;
+
     //----- set by DelPhi
     const delphi_real&    fEpsOut;                   // epsout
     const delphi_real&    fDebyeLength;              // deblen
     const delphi_real&    fScale;                    // scale
     const delphi_real&    fEpsIn;                    // epsin
-    const delphi_real&    fIonStrength;              // rionst
+          delphi_real     fIonStrength;              // rionst
     const int&     iDirectEpsMap;                    // idirectalg
     const delphi_real&    fEPKT;                     // epkt
     const SGrid<delphi_real>& fgBoxCenter;           // oldmid
@@ -73,6 +78,7 @@ private:                                            // In DATA CONTAINER
     const delphi_real&    fTaylorCoeff4;             // chi4
     const delphi_real&    fTaylorCoeff5;             // chi5
     const bool&           uniformdiel;               //uniformdiel for Gaussian
+	const delphi_real&    fsrfcut;                    //gaussian surface cutoff
     //----- set by IO class
     const delphi_integer& iMediaNum;                        // nmedia
     const delphi_integer& iObjectNum;                       // nobject
@@ -94,6 +100,7 @@ private:                                            // In DATA CONTAINER
     const vector<delphi_real>& prgfAtomEps;                 // atmeps(nqass)
     const vector< SGridValue<delphi_real> >& prggvCrgedAtom;// atmcrg(nqass)
     //const vector< SGrid<delphi_real> >& prgfgSurfCrgA;    // scspos(ibnum)
+	const vector<delphi_real>& gaussianDensityMap;       // gaussianDensityMap(igrid,igrid,igrid)
 
     //++++++++++++++++ reference to read-and-write variables from data container +++++++++++++++//
     delphi_integer& iGrid;                                  // igrid (modified in setFocusBndy)
@@ -131,6 +138,9 @@ private:                                            // In DATA CONTAINER
     const int     nyran;                             // nyran
     bool debug_solver;
     int phiintype;                                   // for focusing
+    const delphi_real&    repsout;                           // repsout
+    const delphi_real&    repsin;                           // repsin
+	delphi_real    fsrfdens;  //Gaussian *sollution* density corresponding to the srfcut dielectricsonstant (denssolution = 1- densprotein)
     //+++++++++++++++++++++++++++++ local variables in this class ++++++++++++++++++++++++++++++//
     //------ Using either std:vector or std:deque we can construct idpos, db etc. w/o realignment
     delphi_integer iDielecBndyEven;                         // icount2a
@@ -144,6 +154,29 @@ private:                                            // In DATA CONTAINER
     vector<delphi_real> prgfCrgValA;                        // qval(icount1b)
     vector<delphi_real> prgfCrgValG;                        // gval(icount1b)
 
+	//======Used in the Gaussian Salt nonliear Iterator
+	vector<delphi_real> gaussianChargeMap;                  // gaussianChargeMap(nCharge)
+
+	vector<delphi_real> gaussianDensityMap1;                  // gaussianDensityMap1(halfGrid)
+	vector<delphi_real> gaussianDensityMap2;                  // gaussianDensityMap2(halfGrid)
+	vector< vector<delphi_real> > gaussianSaltDielec;       // gaussianSaltDielec[igrid,igrid,igrid][6]
+	vector< vector<delphi_real> > gaussianSaltDielec1;       // gaussianSaltDielec[igrid,igrid,igrid][6]
+	vector< vector<delphi_real> > gaussianSaltDielec2;       // gaussianSaltDielec[igrid,igrid,igrid][6]
+	vector<delphi_real> gaussianNonlinearMap1;               // gaussianNonlinearMap1(halfGrid)
+	vector<delphi_real> gaussianNonlinearMap2;				 // gaussianNonlinearMap1(halfGrid)
+	vector<delphi_real> gaussianSaltEnergyPenaltyMap1;               // gaussianSaltEnergyPenaltyMap1(halfGrid)
+	vector<delphi_real> gaussianSaltEnergyPenaltyMap2;               // gaussianSaltEnergyPenaltyMap2(halfGrid)
+
+	vector< delphi_real > gaussianBoundaryDensity;       // gaussianBoundaryDielec[nBound]
+	vector< vector<delphi_real> > gaussianBoundaryDielec;       // gaussianBoundaryDielec[nBound][6]
+	vector< delphi_real > gaussianChargeDensity;       // gaussianBoundaryDielec[nCharge]
+	vector< vector<delphi_real> > gaussianChargeDielec;       // gaussianBoundaryDielec[nCharge][6]
+
+	vector< delphi_real >gaussianBoundaryNonlinear;      // gaussianBoundaryNonlinear1(nBound)
+	//vector< delphi_real >gaussianBoundaryNonlinear2;      // gaussianBoundaryNonlinear2(nBound)
+	vector< delphi_real >gaussianChargeNonlinear;      // gaussianChargeNonlinear1(nCharge)
+	//vector< delphi_real >gaussianChargeNonlinear2;      // gaussianChargeNonlinear2(nCharge)
+
     delphi_real fSpec;                                      // spec
     vector<delphi_integer> ibndx,ibndy,ibndz;
     delphi_integer idif1x,idif2x,inc1xa,inc1xb,inc2xa,inc2xb;
@@ -151,20 +184,25 @@ private:                                            // In DATA CONTAINER
     delphi_integer idif1z,idif2z,inc1za,inc1zb,inc2za,inc2zb;
     vector<delphi_integer> sta1,sta2,fi1,fi2;
     delphi_integer lat1,lat2,long1,long2;
-    vector<delphi_real> phimap1,phimap2;
+    vector<delphi_real> phimap1,phimap2,phimap3;
     vector<delphi_real> bndx1,bndx2,bndx3,bndx4;
     vector<delphi_real> qmap1,qmap2;
     vector<delphi_real> debmap1,debmap2;
     delphi_real om1,om2,om3,om4,sixth;
 
+    const char * infoString = " Info> ";
+    const char * timeString = " Time> ";
+    const char * bndcString = " Bndc> ";
+    size_t MAXWIDTH;
+
 #ifdef MCCE
     SMCCE* pmcce;
 #endif
-    
+
 #ifdef PRIME
     SPrime* pPrime;
 #endif
-    
+
     void setDielecBndySaltMap(); // subroutine mkdbsf()
 
     void setCrg(); // subroutine setcrg()
@@ -197,7 +235,13 @@ private:                                            // In DATA CONTAINER
 
     shared_ptr<IDataContainer> solver_pdc;
 
+	delphi_real calcExpSolvE(delphi_real);
+	delphi_real calcSinh(delphi_real);
+	delphi_real calcPhiMinusSinh(delphi_real);
+	delphi_real calcExp(delphi_real);
+
 public:
+
     CDelphiFastSOR(shared_ptr<IDataContainer> pdc,shared_ptr<CTimer> pt):
 /*********************************************************************************************
  *                                                                                           *
@@ -228,6 +272,8 @@ public:
         bLogPotential(pdc->getKey_constRef<bool>("ipoten")),
         bManualRelaxParam(pdc->getKey_constRef<bool>("imanual")),
         phiintype(pdc->getKey_constRef<int>("phiintype")),
+        repsout (pdc->getKey_constRef<delphi_real>("repsout")),
+        repsin (pdc->getKey_constRef<delphi_real>("repsin")),
         //----- io file names
         strEpsFile(pdc->getKey_constRef<string>("epsnam")),
         strPhiiFile(pdc->getKey_constRef<string>("phiinam")),
@@ -238,12 +284,21 @@ public:
         bIonsEng(pdc->getKey_constRef<bool>("logions")),
         iGaussian(pdc->getKey_constRef<int>("gaussian")),
         inhomo(pdc->getKey_constRef<int>("inhomo")),
+		fsrfcut(pdc->getKey_constRef<float>("srfcut")),
+
+		      //----- set for CONVOLUTION MODEL
+		    fksigma(pdc->getKey_Ref<delphi_real>("kernel_sigma")),
+		    iConvolute(pdc->getKey_Ref<int>("convolute")),
+
+		//---------- set for Gaussian Salt by space class
+		gaussianDensityMap(pdc->getKey_constRef<vector<delphi_real>>("gdensity")),
+
         //----- set by DelPhi
         fEpsOut(pdc->getKey_constRef<delphi_real>("epsout")),
         fDebyeLength(pdc->getKey_constRef<delphi_real>("deblen")),
         fScale(pdc->getKey_constRef<delphi_real>("scale")),
         fEpsIn(pdc->getKey_constRef<delphi_real>("epsin")),
-        fIonStrength(pdc->getKey_constRef<delphi_real>("rionst")),
+        fIonStrength(pdc->getKey_Val<delphi_real>("rionst")),
         iDirectEpsMap(pdc->getKey_constRef<int>("idirectalg")),
         fEPKT(pdc->getKey_constRef<delphi_real>("epkt")),
         fgBoxCenter(pdc->getKey_constRef< SGrid<delphi_real> >("oldmid")),
@@ -327,7 +382,7 @@ public:
         prgfPhiMap.assign(iGrid*iGrid*iGrid,0.0);
         qmap1.assign(iHalfGridNum,0.0);
         qmap2.assign(iHalfGridNum,0.0);
-
+		fsrfdens = (fsrfcut-repsin)/(repsout-repsin);
         solver_pdc=pdc;
     };
 
@@ -347,7 +402,7 @@ public:
         pmcce = mcce_data;
     }
 #endif
-    
+
 #ifdef PRIME
     void getPRIME(shared_ptr<SPrime> param)
     {

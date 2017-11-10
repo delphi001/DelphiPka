@@ -8,6 +8,7 @@
 #define CEXCEPTIONS_H_
 
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -41,13 +42,13 @@ class CException
 class CWarning // Program continues its run with warnings
 {
    private:
-
+                                                                                  
    public:
       static int iWarningNum;
       
       CWarning()
       {
-         iWarningNum++;     
+         iWarningNum++;
       
          cerr << "   " << "\033[1;34m" << "[WARNING #" << iWarningNum << "] ";
       }
