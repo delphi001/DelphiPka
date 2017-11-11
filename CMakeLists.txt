@@ -17,6 +17,31 @@ SET(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmessage-length=0")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
+set(HEADER_FILES
+        src/delphi/delphi/delphi_constants.h
+        src/delphi/delphi/delphi_data.h
+        src/delphi/delphi/delphi_datamarshal.h
+        src/delphi/delphi/delphi_exceptions.h
+        src/delphi/energy/energy.h
+        src/delphi/energy/energy_exceptions.h
+        src/delphi/interface/environment.h
+        src/delphi/interface/exceptions.h
+        src/delphi/interface/interface_exceptions.h
+        src/delphi/io/io.h
+        src/delphi/io/io_datatype.h
+        src/delphi/io/io_exceptions.h
+        src/delphi/misc/misc_grid.h
+        src/delphi/site/site.h
+        src/delphi/site/site_exceptions.h
+        src/delphi/solver/solver_exceptions.h
+        src/delphi/solver/solver_fastSOR.h
+        src/delphi/space/space.h
+        src/delphi/space/space_exceptions.h
+        src/delphi/space/space_templates.h
+        src/delphiPKa/data_store.h
+        src/delphiPKa/prime_environment.h
+        )
+
 set(SOURCE_FILES
         src/delphi/app/app_primepka.cpp
         src/delphi/delphi/delphi_data_flash.cpp
@@ -70,7 +95,6 @@ set(SOURCE_FILES
         src/delphi/solver/solver_fastSOR_setcrg.cpp
         src/delphi/solver/solver_fastSOR_validateInput.cpp
         src/delphi/solver/solver_fastSOR_run.cpp
-        src/delphi/energy/energy.h
         src/delphi/energy/energy_clb.cpp
         src/delphi/energy/energy_clbmedia.cpp
         src/delphi/energy/energy_clbnonl.cpp
@@ -108,8 +132,9 @@ set(SOURCE_FILES
         src/delphiPKa/titration2.cpp
         src/delphiPKa/titration_misc.cpp
         src/delphiPKa/readparam.cpp
-        src/delphiPKa/topology_import.cpp)
+        src/delphiPKa/topology_import.cpp
+        )
 
-add_executable(DelphiPka ${SOURCE_FILES})
+add_executable(DelphiPka ${HEADER_FILES} ${SOURCE_FILES})
 
 target_link_libraries(DelphiPka gsl gslcblas)
