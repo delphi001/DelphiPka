@@ -284,7 +284,7 @@ public:
         bIonsEng(pdc->getKey_constRef<bool>("logions")),
         iGaussian(pdc->getKey_constRef<int>("gaussian")),
         inhomo(pdc->getKey_constRef<int>("inhomo")),
-		fsrfcut(pdc->getKey_constRef<float>("srfcut")),
+		fsrfcut(pdc->getKey_constRef<delphi_real>("srfcut")),
 
 		      //----- set for CONVOLUTION MODEL
 		    fksigma(pdc->getKey_Ref<delphi_real>("kernel_sigma")),

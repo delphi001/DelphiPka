@@ -62,6 +62,7 @@ void CEnergy :: run()
     param->ionrad      = ionrad;
     param->fMaxc       = maxc;
     param->salt        = salt;
+    param->fSrfcut     = fSrfcut;
     param->bCommFrc    = true;
     param->bSolvEng    = false;
     
