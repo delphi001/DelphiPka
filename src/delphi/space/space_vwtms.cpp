@@ -4,7 +4,7 @@
 #include "../space/space.h"
 
 //ARGO 12-FEB,2016
-#include <fstream>;
+#include <fstream>
 
 //ARGO: 2016-FEB-09
 /* Snippet of code meant to find the find boudary points on the zeta-surface

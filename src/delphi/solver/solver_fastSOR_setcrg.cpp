@@ -300,7 +300,6 @@ void CDelphiFastSOR::setCrg()
 					vecttemp[0]= gepsmp2[iw].nX;
                     temp+=gepsmp2[iw].nY;
 					vecttemp[1] = gepsmp2[iw].nY;
-					gepsmp2[iw].nX;
                     temp+=gepsmp2[iw].nZ;
 					vecttemp[2] = gepsmp2[iw].nZ;
                     iw = (ix-1-1)*iGrid*iGrid + (iy-1)*iGrid + (iz-1);

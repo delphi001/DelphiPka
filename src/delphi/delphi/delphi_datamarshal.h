@@ -1996,7 +1996,7 @@ class CDelphiDataMarshal:virtual public IDataMarshal
        * - Description: \n
        *
        */
-      float fCutoff;
+       delphi_real fCutoff;
 
        /**
        * - F95 var.: sigma
@@ -2020,7 +2020,7 @@ class CDelphiDataMarshal:virtual public IDataMarshal
        * - Description: \n
        *
        */
-      float fSrfcut;
+       delphi_real fSrfcut;
 
       /**
        * - F95 var.: Gaussian

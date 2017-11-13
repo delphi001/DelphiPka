@@ -618,5 +618,6 @@ delphi_real CDelphiFastSOR::calcExp(delphi_real x)
 	delphi_real x4 = x2*x2;
 	delphi_real x5 = x2*x3;
 	delphi_real result= 1 + x + ( x2 / 2 ) + ( x3 / 6 ) + ( x4 / 24 ) + ( x5 / 120 );
+    return result;
 }
 
