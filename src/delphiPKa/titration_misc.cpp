@@ -13,13 +13,13 @@
 
 void CTitration2 :: linearReg()
 {
-    int i, j, n;
+    size_t i, j, n;
     float fPKA;
     float fVal1, fMin, fMax;
     double c0, c1, cov00, cov01, cov11, sumsq; // c1 is slope, c0 is intercept
     
-    deque<double> vecX,vecY;
-    
+    deque<float> vecX,vecY;
+    vector<size_t> pH_index;
     
     ofstream pkaOuptut;
     pkaOuptut.open("pKa.csv");
@@ -37,20 +37,28 @@ void CTitration2 :: linearReg()
             if(fVal1 < fMin)    fMin = fVal1;
             
             if( fVal1>=0.1 && fVal1<=0.9) {
-                vecX.push_back(j);
+                pH_index.push_back(j);
+                vecX.push_back(pH_initial + j * pH_step);
                 vecY.push_back(fVal1);
             }
         }
         
-        if(vecX.size() == 0) {
+        if(vecX.empty()) {
             if(fMax < 0.1)    fPKA = -1;
             if(fMin > 0.9)    fPKA = 15;
         }
         
         else {
             
-            if(vecX.front() != 0 ) { vecY.push_front(vec2dProb[i][vecX.front()-1]); vecX.push_front(vecX.front()-1); }
-            if(vecX.back()  != 14) { vecY.push_back(vec2dProb[i][vecX.back() + 1]); vecX.push_back(vecX.back() + 1); }
+            if(vecX.front() != pH_initial ) {
+                vecY.push_front(vec2dProb[i][pH_index.front() - 1]);
+                vecX.push_front(vecX.front() - pH_step);
+            }
+
+            if(vecX.back()  != pH_end) {
+                vecY.push_back(vec2dProb[i][pH_index.back() + 1]);
+                vecX.push_back(vecX.back() + pH_step);
+            }
             
             n = vecX.size();
             double x[n], y[n];
@@ -99,6 +107,7 @@ void CTitration2 :: linearReg()
         
         vecX.clear();
         vecY.clear();
+        pH_index.clear();
     }
     
 }
