@@ -2,7 +2,7 @@
 CC=mpic++
 
 ## The Target Executable to Make 
-TARGET=delphiPKa
+TARGET=bin/delphiPKa
 
 ## The Compiler Options to Add
 CFLAGS=-O3 -g3 -c -fmessage-length=0 -std=c++11
