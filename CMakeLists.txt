@@ -15,7 +15,7 @@ SET(CMAKE_CXX_FLAGS_DEBUG "-g3")
 SET(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmessage-length=0")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
 set(HEADER_FILES
         src/delphi/delphi/delphi_constants.h

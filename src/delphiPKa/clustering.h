@@ -19,53 +19,52 @@
 #include "prime_environment.h"
 #include "global_type.h"
 #include "data_store.h"
+
 using namespace std;
 
 class CClustering {
 private:
-    
+
     /* From Data_STORE */
-    
-    const vector<PDBFORM>& newPDB;
-    
-    int& n_cluster;
-    bool& bClusterAuto;
-    vector<vector<int> >& vecCluster;
-    vector<vector<string> >& vecClusterChID;
-    
+
+    const vector<PDBFORM> &newPDB;
+
+    int                     &n_cluster;
+    bool                    &bClusterAuto;
+    vector<vector<int> >    &vecCluster;
+    vector<vector<string> > &vecClusterChID;
+
     /* END */
-    
+
     vector<PDBFORM> vecPDB;
-    
+
     float randf(float m); // generate random float number
-    
+
     float dist2(PDBFORM a, PDBFORM b); // calculate the distance of two atoms
-    
+
     int nearest(PDBFORM pt, vector<PDBFORM> cent, int n_cluster, float *d2); // find the nearest centroid
-    
-    vector<PDBFORM> centdetect(vector<PDBFORM>& pts, int len, int n_cent); // find the center of the current cluster
-    
-    void kmeanpp(vector<PDBFORM>& pts, int len, vector<PDBFORM> cent, int n_cent); // k-Mean algorithm
-    
-    void checkcluster(vector<PDBFORM>& pts, int len, int n_cluster); // check if the cluster reached convergence
-    
+
+    vector<PDBFORM> centdetect(vector<PDBFORM> &pts, int len, int n_cent); // find the center of the current cluster
+
+    void kmeanpp(vector<PDBFORM> &pts, int len, vector<PDBFORM> cent, int n_cent); // k-Mean algorithm
+
+    void checkcluster(vector<PDBFORM> &pts, int len, int n_cluster); // check if the cluster reached convergence
+
     void importcenter();
-    
+
 public:
     CClustering(shared_ptr<DATA_STORE> pData) :
-    
-    newPDB(pData->newPDB),
-    n_cluster(pData->n_cluster),
-    bClusterAuto(pData->bClusterAuto),
-    vecCluster(pData->vecCluster),
-    vecClusterChID(pData->vecClusterChID)
-    
-    {};
-    
+
+            newPDB(pData->newPDB),
+            n_cluster(pData->n_cluster),
+            bClusterAuto(pData->bClusterAuto),
+            vecCluster(pData->vecCluster),
+            vecClusterChID(pData->vecClusterChID) {};
+
     void run();
-    
+
     ~CClustering() {};
-    
+
 };
 
 #endif // CLUSTERING_H_

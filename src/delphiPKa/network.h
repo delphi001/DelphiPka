@@ -18,44 +18,44 @@
 #include "prime_environment.h"
 #include "global_type.h"
 #include "data_store.h"
+
 using namespace std;
 
 class CNetwork {
 private:
-    
+
     /* From Data_STORE */
-    
-    float& clusterThreshold;
-    
-    const vector<PDBFORM>& newPDB;
-    
-    vector<vector<int> >& vecCluster;
-    vector<vector<string> >& vecClusterChID;
-    
-    
+
+    float &clusterThreshold;
+
+    const vector<PDBFORM> &newPDB;
+
+    vector<vector<int> >    &vecCluster;
+    vector<vector<string> > &vecClusterChID;
+
+
     /* END */
-    
+
     vector<PDBFORM> vecPDB;
-    
+
     void importcenter();
-    
+
     void grouping();
-    
+
     float dist2(PDBFORM a, PDBFORM b);
-    
-    
+
+
 public:
     CNetwork(shared_ptr<DATA_STORE> pData) :
-    
-    newPDB(pData->newPDB),
-    vecCluster(pData->vecCluster),
-    vecClusterChID(pData->vecClusterChID),
-    clusterThreshold(pData->clusterThreshold)
-    {};
-    
+
+            newPDB(pData->newPDB),
+            vecCluster(pData->vecCluster),
+            vecClusterChID(pData->vecClusterChID),
+            clusterThreshold(pData->clusterThreshold) {};
+
     void run();
-    
-    
+
+
     ~CNetwork() {}
 };
 
