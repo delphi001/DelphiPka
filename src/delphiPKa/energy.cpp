@@ -583,8 +583,10 @@ void CEnergy::run() {
                 string sign;
                 string resnam = newPDB[vecIonRes[i][0]].res_name;
 
-                if (resnam == "GLU" || resnam == "ASP") sign                                                      = "-";
-                if (resnam == "ARG" || resnam == "HIS" || resnam == "LYS" || resnam == "A" || resnam == "C") sign = "+";
+                if (resnam == "GLU" || resnam == "ASP")
+                    sign = "-";
+                if (resnam == "ARG" || resnam == "HIS" || resnam == "LYS" || resnam == "A" || resnam == "C")
+                    sign = "+";
 
                 ergsOutput << newPDB[vecIonRes[i][0]].res_name + sign + newPDB[vecIonRes[i][0]].chain_id;
                 ergsOutput << setfill('0') << setw(4) << newPDB[vecIonRes[i][0]].res_num;

@@ -34,10 +34,10 @@ sp3_paint2(const nVECTOR &Vector0, const nVECTOR &Vector1, const nVECTOR &Vector
     normVector02        = optNorm(Vector2 - Vector0);
     normBisectVector304 = optNorm(-(normVector01 + normVector02));
     normVector102       = optNorm(optCross(normVector01, normVector02));
-    Vector3             =
-            Vector0 + ((normBisectVector304 * cos(semiAngle) + normVector102 * sin(semiAngle)) * BondLenth_03);
-    Vector4             =
-            Vector0 + ((normBisectVector304 * cos(semiAngle) - normVector102 * sin(semiAngle)) * BondLenth_03);
+    Vector3             = Vector0 +
+                          ((normBisectVector304 * cos(semiAngle) + normVector102 * sin(semiAngle)) * BondLenth_03);
+    Vector4             = Vector0 +
+                          ((normBisectVector304 * cos(semiAngle) - normVector102 * sin(semiAngle)) * BondLenth_03);
 }
 
 
@@ -55,18 +55,27 @@ sp3_paint3(const nVECTOR &Vector0, const nVECTOR &Vector1, const nVECTOR &Vector
     normVector01_012 = optNorm(optCross(normVector10, normVector012));
 
     phi     = TorsionAngle_3012 - PI / 2.0;
-    Vector3 = Vector0 + (normVector012 * cos(phi) * sin(theta) + normVector01_012 * sin(phi) * sin(theta) +
-                         normVector10 * cos(theta)) * BondLenth_03;
+    Vector3 = Vector0 +
+              (normVector012 * cos(phi) * sin(theta) +
+               normVector01_012 * sin(phi) * sin(theta) +
+               normVector10 * cos(theta)
+              ) * BondLenth_03;
 
 
     phi     = TorsionAngle_3012 + PI / 6.0;
-    Vector4 = Vector0 + (normVector012 * cos(phi) * sin(theta) + normVector01_012 * sin(phi) * sin(theta) +
-                         normVector10 * cos(theta)) * BondLenth_03;
+    Vector4 = Vector0 +
+              (normVector012 * cos(phi) * sin(theta) +
+               normVector01_012 * sin(phi) * sin(theta) +
+               normVector10 * cos(theta)
+              ) * BondLenth_03;
 
 
     phi     = TorsionAngle_3012 + PI * 5. / 6.;
-    Vector5 = Vector0 + (normVector012 * cos(phi) * sin(theta) + normVector01_012 * sin(phi) * sin(theta) +
-                         normVector10 * cos(theta)) * BondLenth_03;
+    Vector5 = Vector0 +
+              (normVector012 * cos(phi) * sin(theta) +
+               normVector01_012 * sin(phi) * sin(theta) +
+               normVector10 * cos(theta)
+              ) * BondLenth_03;
 
 }
 
@@ -99,11 +108,17 @@ sp2_paint2(const nVECTOR &Vector0, const nVECTOR &Vector1, const nVECTOR &Vector
     theta = PI - BondAngle_103;
 
     phi     = TorsionAngle_3012 - PI / 2.0;
-    Vector3 = Vector0 + (normVector012 * cos(phi) * sin(theta) + normVector01_012 * sin(phi) * sin(theta) +
-                         normVector10 * cos(theta)) * BondLenth_03;
+    Vector3 = Vector0 +
+              (normVector012 * cos(phi) * sin(theta) +
+               normVector01_012 * sin(phi) * sin(theta) +
+               normVector10 * cos(theta)
+              ) * BondLenth_03;
 
     phi     = TorsionAngle_3012 + PI / 2.0;
-    Vector4 = Vector0 + (normVector012 * cos(phi) * sin(theta) + normVector01_012 * sin(phi) * sin(theta) +
-                         normVector10 * cos(theta)) * BondLenth_03;
+    Vector4 = Vector0 +
+              (normVector012 * cos(phi) * sin(theta) +
+               normVector01_012 * sin(phi) * sin(theta) +
+               normVector10 * cos(theta)
+              ) * BondLenth_03;
 
 }

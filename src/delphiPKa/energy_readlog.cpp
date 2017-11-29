@@ -116,4 +116,3 @@ void CEnergy::readFromFile() {
 #endif
 
 }
-

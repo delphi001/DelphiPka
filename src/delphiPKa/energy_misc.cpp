@@ -288,10 +288,12 @@ void CEnergy::charge(bool &bNeutral) {
  */
 
 bool CEnergy::runFocus(shared_ptr<SPrime> param, SGrid<double> &center1) {
-    bool   bCenterReset = 0;
     int    len1, halflen1, len0, halflen0;
-    int    gsize0       = param->igrid1, gsize1 = 65;
-    double scale0       = param->scale1, scale1;
+    bool   bCenterReset = false;
+    int    gsize0       = param->igrid1;
+    int    gsize1       = 65;
+    double scale0       = param->scale1;
+    double scale1;
     double dist_l, dist_r;
 
 
@@ -332,7 +334,7 @@ bool CEnergy::runFocus(shared_ptr<SPrime> param, SGrid<double> &center1) {
     cout << "Z0 : " << z_min0 << " " << z_max0 << endl;
 #endif
 
-    len1 = (gsize1 - 1) / scale1;
+    len1     = (gsize1 - 1) / scale1;
     halflen1 = len1 / 2;
 
     double x_min1 = center1.nX - halflen1;
@@ -565,7 +567,11 @@ void CEnergy::updateGridPotential(shared_ptr<SPrime> param) {
         } else {
             resInBox[i] = true;
         }
-        //        cout << newPDB[i].res_name << " " << newPDB[i].res_num <<" " << newPDB[i].atom_name <<  " " << resInBox[i] << endl;
+//        cout << newPDB[i].res_name << " "
+//             << newPDB[i].res_num << " "
+//             << newPDB[i].atom_name << " "
+//             << resInBox[i]
+//             << endl;
     }
 
 #ifdef PRIME_DEBUG
@@ -582,5 +588,3 @@ void CEnergy::updateGridPotential(shared_ptr<SPrime> param) {
     }
 
 }
-
-

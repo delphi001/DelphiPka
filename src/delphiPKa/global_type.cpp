@@ -208,4 +208,3 @@ string key_to_hashmapQR(const PDBFORM &inPDB) {
     string strtmp = inPDB.res_name + " " + inPDB.atom_name;
     return strtmp;
 }
-

@@ -81,7 +81,7 @@ void CPlaceHydrogen::run() {
         } else {  // when the case is not N(nitrogen), the search scope is in the same residue;
 
 
-            Vector0 = it_pdb->coord;
+            Vector0         = it_pdb->coord;
             found_bond_num  = 0;
             num_of_H_to_add = 0;
             string tpl_keyword = it_pdb->res_name + " " + it_pdb->atom_name;
@@ -225,19 +225,30 @@ void CPlaceHydrogen::run() {
 
 
             if (value_found.orbital == "sp2" && found_bond_num == 1) { //
-                pdb_search_key = it_pdb->chain_id + " " + to_string(it_pdb->res_num) + " " + value_found.bondatom1;
-                Vector1        = mapPDB.find(pdb_search_key)->second.coord;
+                pdb_search_key = it_pdb->chain_id + " " +
+                                 to_string(it_pdb->res_num) + " " +
+                                 value_found.bondatom1;
+
+                Vector1 = mapPDB.find(pdb_search_key)->second.coord;
 
                 string next_key;
-                next_key = it_pdb->res_name + " " + mapPDB.find(pdb_search_key)->second.atom_name;
+                next_key = it_pdb->res_name + " " +
+                           mapPDB.find(pdb_search_key)->second.atom_name;
+
                 if (map.find(next_key)->second.bondatom3 == it_pdb->atom_name) {
-                    pdb_search_key = it_pdb->chain_id + " " + to_string(it_pdb->res_num) + " " +
+                    pdb_search_key = it_pdb->chain_id + " " +
+                                     to_string(it_pdb->res_num) + " " +
                                      map.find(next_key)->second.bondatom2;
-                    Vector2        = mapPDB.find(pdb_search_key)->second.coord;
+
+                    Vector2 = mapPDB.find(pdb_search_key)->second.coord;
+
                 } else if (map.find(next_key)->second.bondatom2 == it_pdb->atom_name) {
-                    pdb_search_key = it_pdb->chain_id + " " + to_string(it_pdb->res_num) + " " +
+                    pdb_search_key = it_pdb->chain_id + " " +
+                                     to_string(it_pdb->res_num) + " " +
                                      map.find(next_key)->second.bondatom1;
-                    Vector2        = mapPDB.find(pdb_search_key)->second.coord;
+
+                    Vector2 = mapPDB.find(pdb_search_key)->second.coord;
+
                 }
 
                 sp2_paint2(Vector0, Vector1, Vector2, Vector3, Vector4, BondLength, BondAngle_sp2, TorsionAngle_sp2);

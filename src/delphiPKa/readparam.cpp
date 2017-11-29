@@ -71,51 +71,50 @@ void CReadParam::run() {
                     if (strtmp2 == "AUTO") {
                         bClusterAuto = true;
                         n_cluster    = 0;
-                    }
-                    else {
+                    } else {
                         bClusterAuto = false;
-                        n_cluster = stoi(strtmp2);
+                        n_cluster    = stoi(strtmp2);
                     }
                 }
 
                 if (strtmp1 == "HETATM in PQR format") {
-                    strtmp                                       = strtmp2;
+                    strtmp = strtmp2;
                     if (toupper(strtmp2[0]) == 'T') bHETATMinPQR = true;
                     else if (toupper(strtmp2[0]) == 'F') bHETATMinPQR = false;
                 }
 
                 if (strtmp1 == "Remove HETATM") {
-                    strtmp                                        = strtmp2;
+                    strtmp = strtmp2;
                     if (toupper(strtmp2[0]) == 'T') bRemoveHETATM = true;
                     else if (toupper(strtmp2[0]) == 'F') bRemoveHETATM = false;
                 }
 
                 if (strtmp1 == "Remove water molecule") {
-                    strtmp                                       = strtmp2;
+                    strtmp = strtmp2;
                     if (toupper(strtmp2[0]) == 'T') bRemoveWater = true;
                     else if (toupper(strtmp2[0]) == 'F') bRemoveWater = false;
                 }
 
                 if (strtmp1 == "Do Protonation") {
-                    strtmp                                    = strtmp2;
+                    strtmp = strtmp2;
                     if (toupper(strtmp2[0]) == 'T') bDoProton = true;
                     else if (toupper(strtmp2[0]) == 'F') bDoProton = false;
                 }
 
                 if (strtmp1 == "Do Energy Calculation") {
-                    strtmp                                    = strtmp2;
+                    strtmp = strtmp2;
                     if (toupper(strtmp2[0]) == 'T') bDoEnergy = true;
                     else if (toupper(strtmp2[0]) == 'F') bDoEnergy = false;
                 }
 
                 if (strtmp1 == "Do pKa's  Calculation") {
-                    strtmp                                 = strtmp2;
+                    strtmp = strtmp2;
                     if (toupper(strtmp2[0]) == 'T') bDoPka = true;
                     else if (toupper(strtmp2[0]) == 'F') bDoPka = false;
                 }
 
                 if (strtmp1 == "Output PQR file (With Topology)") {
-                    strtmp                                      = strtmp2;
+                    strtmp = strtmp2;
                     if (toupper(strtmp2[0]) == 'T') bOutPQRtopo = true;
                     else if (toupper(strtmp2[0]) == 'F') bOutPQRtopo = false;
                 }
