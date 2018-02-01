@@ -246,7 +246,7 @@ void runDelphi(shared_ptr<SPrime> param)
 #ifdef DELPHI_OUTPUT
         param->ntimes++;
 #endif
-        remove(&delphi_ntime[0]);
+        //remove(&delphi_ntime[0]);
     } // ---------- end of try block
     catch (CException&)
     {
