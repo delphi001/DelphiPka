@@ -637,7 +637,7 @@ void CEnergy::run() {
 
         ergsOutput.close();
 
-        remove("delphi_progress.txt");
+        //remove("delphi_progress.txt");
 
 #ifdef MPI_PARALLEL
     }
