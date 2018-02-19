@@ -88,6 +88,7 @@ HD1   ASN   1.0
 HD2   ASN   1.0
 HD21  ASN   1.0
 HD22  ASN   1.0
+
 N     AS0   1.5    ! aspartate neutral
 CA    AS0   2.0
 HN    AS0   1.0
@@ -104,6 +105,7 @@ OD1   AS0   1.4
 HD1   AS0   1.0
 OD2   AS0   1.4
 HD2   AS0   1.0
+
 N     ASP   1.5    ! aspartate charged
 CA    ASP   2.0
 HN    ASP   1.0
@@ -117,9 +119,10 @@ HB2   ASP   0.0
 HB3   ASP   0.0
 CG    ASP   1.7
 OD1   ASP   1.4
-HD1   ASP   1.0
+HD1   ASP   0.0
 OD2   ASP   1.4
-HD2   ASP   1.0
+HD2   ASP   0.0
+
 N     CYS   1.5
 CA    CYS   2.0
 HN    CYS   1.0
@@ -157,6 +160,7 @@ HB1   CY-   0.0
 HB2   CY-   0.0
 HB3   CY-   0.0
 SG    CY-   1.85
+
 N     GL0   1.5            ! neutral glutamic
 CA    GL0   2.0
 HN    GL0   1.0
@@ -176,6 +180,7 @@ OE1   GL0   1.4
 HE2   GL0   1.0
 OE2   GL0   1.4
 HE2   GL0   1.0
+
 N     GLU   1.5           ! charged glutamic
 CA    GLU   2.0
 HN    GLU   1.0
@@ -192,9 +197,10 @@ HG1   GLU   0.0
 HG2   GLU   0.0
 CD    GLU   1.7
 OE1   GLU   1.4
-HE1   GLU   1.0
+HE1   GLU   0.0
 OE2   GLU   1.4
-HE2   GLU   1.0
+HE2   GLU   0.0
+
 N     GLN   1.5
 CA    GLN   2.0
 HN    GLN   1.0

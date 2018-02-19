@@ -64,6 +64,8 @@ CB    ASP   1.500
 CG    ASP   1.500
 OD1   ASP   1.050
 OD2   ASP   1.050
+HD1   ASP   0.000
+HD2   ASP   0.000
 C     ASP   1.500
 O     ASP   1.050
 
@@ -74,6 +76,7 @@ CB    AS0   1.500
 CG    AS0   1.500
 OD1   AS0   1.050
 OD2   AS0   1.050
+HD1   AS0   0.400
 HD2   AS0   0.400
 C     AS0   1.500
 O     AS0   1.050
@@ -116,6 +119,8 @@ CG    GLU   1.500
 CD    GLU   1.500
 OE1   GLU   1.050
 OE2   GLU   1.050
+HE1   GLU   0.000
+HE2   GLU   0.000
 C     GLU   1.500
 O     GLU   1.050
 
@@ -127,6 +132,7 @@ CG    GL0   1.500
 CD    GL0   1.500
 OE1   GL0   1.050
 OE2   GL0   1.050
+HE1   GL0   0.400
 HE2   GL0   0.400
 C     GL0   1.500
 O     GL0   1.050
