@@ -550,6 +550,7 @@ CH2   TRP   1.9080
 HH2   TRP   1.4590
 C     TRP   1.9080
 O     TRP   1.6612
+
 N     TYR   1.8240
 H     TYR   0.6000
 CA    TYR   1.9080
@@ -571,9 +572,35 @@ CE2   TYR   1.9080
 HE2   TYR   1.4590
 CZ    TYR   1.9080
 OH    TYR   1.7210
-HH    TYR   0.6000  !HH    TYR   0.0001
+HH    TYR   0.0000  !HH    TYR   0.0001
 C     TYR   1.9080
 O     TYR   1.6612
+
+N     TY0   1.8240
+H     TY0   0.6000
+CA    TY0   1.9080
+HA    TY0   1.3870
+CB    TY0   1.9080
+1HB   TY0   1.4870
+HB1   TY0   1.4870
+HB2   TY0   1.4870
+2HB   TY0   1.4870
+HB3   TY0   1.4870
+CG    TY0   1.9080
+CD1   TY0   1.9080
+HD1   TY0   1.4590
+CD2   TY0   1.9080
+HD2   TY0   1.4590
+CE1   TY0   1.9080
+HE1   TY0   1.4590
+CE2   TY0   1.9080
+HE2   TY0   1.4590
+CZ    TY0   1.9080
+OH    TY0   1.7210
+HH    TY0   0.6000  !HH    TYR   0.0001
+C     TY0   1.9080
+O     TY0   1.6612
+
 N     VAL   1.8240
 H     VAL   0.6000
 CA    VAL   1.9080

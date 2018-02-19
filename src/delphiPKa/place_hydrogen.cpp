@@ -340,6 +340,7 @@ void CPlaceHydrogen::output_newPDB() {
         if (bOutput_neutral == true) {
             if (it_pdb->res_name == "ASP") key = "AS0 " + it_pdb->atom_name;
             if (it_pdb->res_name == "GLU") key = "GL0 " + it_pdb->atom_name;
+            if (it_pdb->res_name == "TYR") key = "TY0 " + it_pdb->atom_name;
             if (it_pdb->res_name == "HIS") key = "HI0 " + it_pdb->atom_name;
             if (it_pdb->res_name == "ARG") key = "AR0 " + it_pdb->atom_name;
             if (it_pdb->res_name == "LYS") key = "LY0 " + it_pdb->atom_name;
@@ -388,6 +389,7 @@ void CPlaceHydrogen::output_newPDB() {
             it_pdb->res_name == "ARG" ||
             it_pdb->res_name == "ASP" ||
             it_pdb->res_name == "GLU" ||
+            it_pdb->res_name == "TYR" ||
             it_pdb->res_name == "A" ||
             it_pdb->res_name == "C" ||
             it_pdb->res_name == "DA" ||

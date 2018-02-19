@@ -164,7 +164,7 @@ void CTitration::run() {
 
                             float pkaref = pkamap.find(resnam)->second;
 
-                            if (resnam == "GLU" || resnam == "ASP") bAcid = true; else bAcid = false;
+                            if (resnam == "GLU" || resnam == "ASP" || resnam == "TYR") bAcid = true; else bAcid = false;
 
                             if (bAcid) {
                                 if (fPH < pkaref) { m2 = vecPair[i][k].res2 * 2 + 1; }

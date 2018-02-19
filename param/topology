@@ -687,7 +687,9 @@ $  DT   H73  s     SD   C7
 * PKA   CTR    3.60
 * PKA   CT0    0.00
 * PKA   NTR    8.00
-* PKA   NT0    0.00  
+* PKA   NT0    0.00
+* PKA   TYR    10.40
+* PKA   TY0    0.00
 * PKA     A    3.80
 * PKA     C    4.35
 * PKA    DA    4.10
