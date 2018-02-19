@@ -201,12 +201,15 @@ void CTitration2::output_PQR() {
 
         ///////////  retrieve the charge and size information from hashmap crgmap and sizmap and output pqr format  ///////
 
+        int iCounter;
         if (itr->bIonizable) {
             for (int i = 0; i < vec2dProb.size(); i++) {
                 if (newPDB[vecIonRes[i][0]].res_name == itr->res_name &&
                     newPDB[vecIonRes[i][0]].res_num == itr->res_num &&
                     newPDB[vecIonRes[i][0]].chain_id == itr->chain_id) {
-                    fProb = vec2dProb[i][fGivenPhVal];
+                    // fProb = vec2dProb[i][fGivenPhVal];
+                    iCounter = (fGivenPhVal - pH_initial ) / pH_step;
+                    fProb = vec2dProb[i][iCounter];
 
                 }
             }
