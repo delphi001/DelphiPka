@@ -338,9 +338,28 @@ CE2   TYR   1.500
 HE2   TYR   0.400
 CZ    TYR   1.500
 OH    TYR   1.050
-HH    TYR   0.400
+HH    TYR   0.000
 C     TYR   1.500
 O     TYR   1.050
+
+N     TY0   1.100
+H     TY0   0.400
+CA    TY0   1.500
+CB    TY0   1.500
+CG    TY0   1.500
+CD1   TY0   1.500
+HD1   TY0   0.400
+CD2   TY0   1.500
+HD2   TY0   0.400
+CE1   TY0   1.500
+HE1   TY0   0.400
+CE2   TY0   1.500
+HE2   TY0   0.400
+CZ    TY0   1.500
+OH    TY0   1.050
+HH    TY0   0.400
+C     TY0   1.500
+O     TY0   1.050
 
 N     VAL   1.100
 H     VAL   0.400
