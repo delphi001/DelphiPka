@@ -5,8 +5,8 @@
 ##
 
 PDB file name                      : sample.pdb
-Charge parameter                   : param/parseres.crg
-Radius parameter                   : param/parseres.siz
+Charge parameter                   : param/amber.crg
+Radius parameter                   : param/amber.siz
 Topology parameter                 : param/topology
 
 # By default HETATM is deleted. If user need HETATM for ligand/ion binding
@@ -22,7 +22,7 @@ Do pKa's  Calculation              : T
 
 # 2nd and 3rd options can create PQR format at user-given pH value
 Output PQR file (With Topology)    : T
-Output PQR file (With pKa result)  : F
+Output PQR file (With pKa result)  : T
 At given pH Value                  : 7.0
 
 # Parameters for Gaussian function in DelPhi
