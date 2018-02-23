@@ -296,10 +296,20 @@ H     THR   0.400
 CA    THR   1.500
 CB    THR   1.500
 OG1   THR   1.050
-HG1   THR   0.400
+HG1   THR   0.000
 CG2   THR   1.500
 C     THR   1.500
 O     THR   1.050
+
+N     TH0   1.100
+H     TH0   0.400
+CA    TH0   1.500
+CB    TH0   1.500
+OG1   TH0   1.050
+HG1   TH0   0.400
+CG2   TH0   1.500
+C     TH0   1.500
+O     TH0   1.050
 
 N     TRP   1.100
 H     TRP   0.400

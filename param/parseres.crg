@@ -490,6 +490,7 @@ HB2   SER       0.000
 OG    SER      -0.490
 HG    SER       0.490
 HT    SER       0.490
+
 N     THR      -0.400
 CA    THR      -0.000
 HN    THR       0.400
@@ -500,14 +501,34 @@ O     THR      -0.550
 CB    THR       0.000
 HB    THR       0.000
 HB1   THR       0.000
-OG1   THR      -0.490
-HG1   THR       0.490
-CG2   THR       0.000
+OG1   THR      -0.745
+HG1   THR       0.000
+CG2   THR      -0.255
 HG2   THR       0.000
 HG21  THR       0.000
 HG22  THR       0.000
 HG23  THR       0.000
 HT    THR       0.490
+
+N     TH0      -0.400
+CA    TH0      -0.000
+HN    TH0       0.400
+H     TH0       0.400
+HA    TH0       0.000
+C     TH0       0.550
+O     TH0      -0.550
+CB    TH0       0.000
+HB    TH0       0.000
+HB1   TH0       0.000
+OG1   TH0      -0.490
+HG1   TH0       0.490
+CG2   TH0       0.000
+HG2   TH0       0.000
+HG21  TH0       0.000
+HG22  TH0       0.000
+HG23  TH0       0.000
+HT    TH0       0.490
+
 N     TRP      -0.400
 CA    TRP      -0.000
 HN    TRP       0.400

@@ -453,6 +453,7 @@ HB2   SER   0.0
 HB3   SER   0.0
 OG    SER   1.4
 HG    SER   1.0
+
 N     THR   1.5
 CA    THR   2.0
 HN    THR   1.0
@@ -463,12 +464,30 @@ O     THR   1.4
 CB    THR   2.0
 HB    THR   0.0
 OG1   THR   1.4
-HG1   THR   1.0
+HG1   THR   0.0
 CG2   THR   2.0
 HG2   THR   0.0
 HG21  THR   0.0
 HG22  THR   0.0
 HG23  THR   0.0
+
+N     TH0   1.5
+CA    TH0   2.0
+HN    TH0   1.0
+H     TH0   1.0
+HA    TH0   0.0
+C     TH0   1.7
+O     TH0   1.4
+CB    TH0   2.0
+HB    TH0   0.0
+OG1   TH0   1.4
+HG1   TH0   1.0
+CG2   TH0   2.0
+HG2   TH0   0.0
+HG21  TH0   0.0
+HG22  TH0   0.0
+HG23  TH0   0.0
+
 N     TRP   1.5
 CA    TRP   2.0
 HN    TRP   1.0
