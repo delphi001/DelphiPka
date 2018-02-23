@@ -287,9 +287,18 @@ H     SER   0.400
 CA    SER   1.500
 CB    SER   1.500
 OG    SER   1.050
-HG    SER   0.400
+HG    SER   0.000
 C     SER   1.500
 O     SER   1.050
+
+N     SE0   1.100
+H     SE0   0.400
+CA    SE0   1.500
+CB    SE0   1.500
+OG    SE0   1.050
+HG    SE0   0.400
+C     SE0   1.500
+O     SE0   1.050
 
 N     THR   1.100
 H     THR   0.400

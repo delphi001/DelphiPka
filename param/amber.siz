@@ -492,6 +492,7 @@ HG2   PRO   1.4870
 HG3   PRO   1.4870
 C     PRO   1.9080
 O     PRO   1.6612
+
 N     SER   1.8240
 H     SER   0.6000
 CA    SER   1.9080
@@ -503,9 +504,24 @@ HB2   SER   1.3870
 2HB   SER   1.3870
 HB3   SER   1.3870
 OG    SER   1.7210
-HG    SER   0.6000 !HG    SER   0.0001
+HG    SER   0.0000 !HG    SER   0.0001
 C     SER   1.9080
 O     SER   1.6612
+
+N     SE0   1.8240
+H     SE0   0.6000
+CA    SE0   1.9080
+HA    SE0   1.3870
+CB    SE0   1.9080
+1HB   SE0   1.3870
+HB1   SE0   1.3870
+HB2   SE0   1.3870
+2HB   SE0   1.3870
+HB3   SE0   1.3870
+OG    SE0   1.7210
+HG    SE0   0.6000 !HG    SER   0.0001
+C     SE0   1.9080
+O     SE0   1.6612
 
 N     THR   1.8240
 H     THR   0.6000

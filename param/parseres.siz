@@ -440,6 +440,7 @@ HB2   PRO   0.0
 CG    PRO   2.0
 HG1   PRO   0.0
 HG2   PRO   0.0
+
 N     SER   1.5
 CA    SER   2.0
 HN    SER   1.0
@@ -452,7 +453,21 @@ HB1   SER   0.0
 HB2   SER   0.0
 HB3   SER   0.0
 OG    SER   1.4
-HG    SER   1.0
+HG    SER   0.0
+
+N     SE0   1.5
+CA    SE0   2.0
+HN    SE0   1.0
+H     SE0   1.0
+HA    SE0   0.0
+C     SE0   1.7
+O     SE0   1.4
+CB    SE0   2.0
+HB1   SE0   0.0
+HB2   SE0   0.0
+HB3   SE0   0.0
+OG    SE0   1.4
+HG    SE0   1.0
 
 N     THR   1.5
 CA    THR   2.0
