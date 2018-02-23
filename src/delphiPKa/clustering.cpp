@@ -26,6 +26,10 @@ void CClustering::importcenter() {
                 vecPDB.push_back(newPDB[i]);
             } else if (newPDB[i].res_name == "TYR" && newPDB[i].atom_name == "OH") {      // originally OH
                 vecPDB.push_back(newPDB[i]);
+            } else if (newPDB[i].res_name == "THR" && newPDB[i].atom_name == "OG1") {
+                vecPDB.push_back(newPDB[i]);
+            } else if (newPDB[i].res_name == "SER" && newPDB[i].atom_name == "OG") {
+                vecPDB.push_back(newPDB[i]);
             } else if (newPDB[i].res_name == "GLU" && newPDB[i].atom_name == "OE1") {     // originally CD
                 vecPDB.push_back(newPDB[i]);
             } else if (newPDB[i].res_name == "HIS" && newPDB[i].atom_name == "NE2") {      // originally CG

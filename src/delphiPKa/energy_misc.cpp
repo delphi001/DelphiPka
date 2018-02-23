@@ -157,6 +157,26 @@ void CEnergy::charge(bool &bNeutral) {
 
                         fCrg = 0.0000;
                     }
+                } else if (newPDB[i].res_name == "THR") {
+                    key = "TH0 " + newPDB[i].atom_name;
+                    if (crgmap.find(key) != crgmap.end()) {
+                        fCrg = crgmap.find(key)->second;
+                    } else {
+                        cout << "The charge for atom " << newPDB[i].atom_name << " in residue TH0 " << newPDB[i].res_num
+                             << " is not found. The charge will be set to 0.0 " << endl;
+
+                        fCrg = 0.0000;
+                    }
+                } else if (newPDB[i].res_name == "SER") {
+                    key = "SE0 " + newPDB[i].atom_name;
+                    if (crgmap.find(key) != crgmap.end()) {
+                        fCrg = crgmap.find(key)->second;
+                    } else {
+                        cout << "The charge for atom " << newPDB[i].atom_name << " in residue SE0 " << newPDB[i].res_num
+                             << " is not found. The charge will be set to 0.0 " << endl;
+
+                        fCrg = 0.0000;
+                    }
                 } else if (newPDB[i].res_name == "HIS") {
                     key = "HI0 " + newPDB[i].atom_name;
                     if (crgmap.find(key) != crgmap.end()) {

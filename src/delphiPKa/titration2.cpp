@@ -227,7 +227,7 @@ void CTitration2::run() {
 
                             float pkaref = pkamap.find(resnam)->second;
 
-                            if (resnam == "GLU" || resnam == "ASP" || resnam == "TYR") bAcid = true; else bAcid = false;
+                            if (resnam == "GLU" || resnam == "ASP" || resnam == "TYR" || resnam == "THR" || resnam == "SER") bAcid = true; else bAcid = false;
 
                             if (bAcid) {
                                 if (fPH < pkaref) { m2 = vecPair[i][k].res2 * 2 + 1; }
@@ -383,7 +383,9 @@ void CTitration2::run() {
                         sign = 1;
                     else if (newPDB[vecIonRes[j][0]].res_name == "ASP" ||
                              newPDB[vecIonRes[j][0]].res_name == "GLU" ||
-                             newPDB[vecIonRes[j][0]].res_name == "TYR")
+                             newPDB[vecIonRes[j][0]].res_name == "TYR" ||
+                             newPDB[vecIonRes[j][0]].res_name == "THR" ||
+                             newPDB[vecIonRes[j][0]].res_name == "SER")
                         sign = -1;
                     total_netCrg += vec2dProb[j][i] * sign;
                 }
