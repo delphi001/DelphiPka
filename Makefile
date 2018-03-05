@@ -129,7 +129,7 @@ $(TARGET): $(OBJECTS)
 	@echo '	'
 	@echo 'Building target: $@'
 	@echo 'Invoking: C++ Linker'
-	$(CC) $(LDFLAGS) $(LIB) $(INCLUDE) $(OBJECTS) -o $@
+	$(CC) $(LIB) $(INCLUDE) $(OBJECTS) $(LDFLAGS) -o $@
 	@echo 'Finished building target: $@'
 	@echo '	'
 
