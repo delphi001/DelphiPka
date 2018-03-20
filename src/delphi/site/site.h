@@ -13,6 +13,7 @@
 #include <fstream>
 #include <memory>
 #include <cstdio>
+#include <vector>
 
 #include "../interface/interface_datacontainer.h"
 #include "../misc/misc_timer.h"
@@ -22,6 +23,8 @@
 #include "site_exceptions.h"
 
 using namespace std;
+
+typedef vector<delphi_real> potentials;
 
 class CSite:public CIO
 {
@@ -48,6 +51,8 @@ class CSite:public CIO
       const string&  strFrciFile;                       // frcinam
       const string&  strFrcFile;                        // frcnam
       const string&  strPhiFile;                        // phinam
+      const string&  strZetaPhiFile;			//zphinam
+      
       //----- set by functions
       const bool&    bAtomInSite;                       // isita
       const bool&    bSaltInSite;                       // isiti
@@ -55,6 +60,8 @@ class CSite:public CIO
       const bool&    bPotentialInSite;                  // isitpot
       const int&     iPhiFormatOut;                     // phifrm
       const bool&    bBiosystemOut;                     // ibios
+      const bool&    bZetaPhiOut;			//zetaPhi file to be written or not
+      
       //----- set by DelPhi
       const delphi_integer& iNatom;
       const delphi_real&    fIonStrength;                      // rionst
@@ -101,6 +108,7 @@ class CSite:public CIO
       int&           iFrcFormatOut;                     // frcfrm
       delphi_real&          fScale;                            // scale
       vector<delphi_real>&  prgfPhiMap;                        // phimap
+
 #ifdef PRIME
     
       const vector<string>& strCommFRCIn;
@@ -113,7 +121,12 @@ class CSite:public CIO
        *                                                                                           *
        ********************************************************************************************/
       delphi_real *** phimap;
-
+      
+      //ARGO
+      //bool *** zetaPhiMap;
+      int& kclusters;
+      
+      
       vector< SGrid<delphi_real> > rforceeps1();
 
       vector< SGrid<delphi_real> > rforce();
@@ -139,8 +152,11 @@ class CSite:public CIO
       void writePhiMap(const int& formatflag,vector<delphi_real>& phimap4,ofstream& ofFileStream);
 
       void expand(const int& mgrid, vector<delphi_real>& phimapIn);
+      
+      //ARGO-FOR zphi FILE OUTPUT
+      void writeZetaPhiFile();
 
-
+      delphi_real meanPotential(potentials& );
 
    public:
 
@@ -173,6 +189,7 @@ class CSite:public CIO
          strFrciFile(pdc->getKey_constRef<string>("frcinam")),
          strFrcFile(pdc->getKey_constRef<string>("frcnam")),
          strPhiFile(pdc->getKey_constRef<string>("phinam")),
+         strZetaPhiFile(pdc->getKey_constRef<string>("zphinam")),
          //----- set by functions
          bAtomInSite(pdc->getKey_constRef<bool>("isita")),
          bSaltInSite(pdc->getKey_constRef<bool>("isiti")),
@@ -180,6 +197,7 @@ class CSite:public CIO
          bPotentialInSite(pdc->getKey_constRef<bool>("isitpot")),
          iPhiFormatOut(pdc->getKey_constRef<int>("phifrm")),
          bBiosystemOut(pdc->getKey_constRef<bool>("ibios")),
+         bZetaPhiOut(pdc->getKey_constRef<bool>("zphi_out")),
          //----- set by DelPhi
          iNatom (pdc->getKey_constRef<delphi_integer>("natom")),
          fIonStrength(pdc->getKey_constRef<delphi_real>("rionst")),
@@ -205,6 +223,11 @@ class CSite:public CIO
          prgigBndyGrid(pdc->getKey_constRef< vector< SGrid<delphi_integer> > >("ibgrd")),
          prgfAtomEps(pdc->getKey_constRef< vector<delphi_real> >("atmeps")),
          prgiAtNdx(pdc->getKey_constRef< vector<delphi_integer> >("atndx")),
+	
+         //ARGO 12-FEB,2016
+	 //zetaSurfMap_v2(pdc->getKey_Ref< vector<bool> >("zetaSurfMap")),
+         //ARGO AUG-13, 2016 for k--cluster based averaging of surface potential
+	 kclusters(pdc->getKey_Ref<int>("Kcluster_num")),
 
          //----- set by Solver class
          iDielecBndySum(pdc->getKey_constRef<delphi_integer>("icount2b")),

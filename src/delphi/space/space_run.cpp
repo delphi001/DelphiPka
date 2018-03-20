@@ -2,19 +2,17 @@
  * Space_Run.cpp
  *
  */
-
+#include <complex>
 #include "space.h"
+#include <boost/lexical_cast.hpp>
 
 void CDelphiSpace::run()
 {
 
     debug_space=false; //debug_space=true will print a lot of debug information
+    const char* infoString = " Info> ";
+
     if(debug_space) cout << "############### run in Space module.... ##################" << endl;
-
-
-
-
-
 
     //cout << "###: cutoff: " << cutoff << endl;
     //cout << "###: sigma: " << sigma << endl;
@@ -59,6 +57,11 @@ void CDelphiSpace::run()
     sgrid_temp_int.nY=0;
     sgrid_temp_int.nZ=0;
 
+    //ARGO UA 2016
+    sgrid_rho_real.nX = 0;
+    sgrid_rho_real.nY = 0;
+    sgrid_rho_real.nZ = 0;
+
     //iEpsMap=pdc->getKey_Ptr < SGrid <delphi_integer> > ( "iepsmp",iGrid,iGrid,iGrid);
 
     //##### navigate iepsmp and idebmap, xn1,xn2,fRadProb: ##########
@@ -83,15 +86,65 @@ void CDelphiSpace::run()
         }
     }
 
+
+    //ARGO
+
+	get_pt3d <bool> (zetaSurfMap,iGrid+1,iGrid+1,iGrid+1);
+
+	//######### initialize zetaSurfMap: #########
+	for (ix=1; ix<=iGrid; ix++)
+	{
+		for (iy=1; iy<=iGrid; iy++)
+		{
+			for (iz=1; iz<=iGrid; iz++)
+			{
+
+				zetaSurfMap[ix][iy][iz]=true;
+			}
+		}
+	}
+
+    //
+
+    //ARGO
+    if ( iConvolute != 0)
+    {
+		get_pt3d <delphi_real> (ginit_rhomap,iGrid+1,iGrid+1,iGrid+1);
+			//######### initialize ginit_rhomap: #########
+		for (ix=1; ix<=iGrid; ix++)
+		{
+			for (iy=1; iy<=iGrid; iy++)
+			{
+				for (iz=1; iz<=iGrid; iz++)
+				{
+
+					ginit_rhomap[ix][iy][iz]=0.0;
+
+				}
+			}
+		}
+    }
+	//
+
+
     //Move_index_3d <SGrid <delphi_integer> > (iepsmp,iEpsMap,iGrid,iGrid,iGrid);
-    if(iGaussian==0)
+    if(iGaussian==0 && iConvolute == 0)
     {
         get_pt3d <SGrid <delphi_integer> > (iepsmp,iGrid+1,iGrid+1,iGrid+1);
     }
-    else
+    else if ( iGaussian==1 && iConvolute == 0)
     {
         get_pt3d <SGrid <delphi_real> > (gepsmp,iGrid+1,iGrid+1,iGrid+1);
         get_pt3d <SGrid <delphi_real> > (gepsmp2,iGrid+1,iGrid+1,iGrid+1);
+		get_pt3d <delphi_real>(gDensityMapOnGridPoint, iGrid+1, iGrid+1, iGrid+1);
+    }
+    else if ( iGaussian==0 && iConvolute != 0)
+    {
+        get_pt3d <SGrid <delphi_real> > (gepsmp2,iGrid+1,iGrid+1,iGrid+1);
+		get_pt3d <delphi_real>(gDensityMapOnGridPoint, iGrid + 1, iGrid + 1, iGrid + 1);
+        get_pt3d <delphi_real> (HRhomap,iGrid+1,iGrid+1,iGrid+1);
+        get_pt3d <delphi_real> (cepsmap,iGrid+1,iGrid+1,iGrid+1);
+
     }
 
     if(iGaussian==1&&inhomo==0&&logs) //for 2nd Gaussian run
@@ -111,6 +164,24 @@ void CDelphiSpace::run()
                 }
             }
         }
+    }
+
+    if(iConvolute!=0 && inhomo==0 && logs)
+    {
+      //ARGO - Please keep these snippets in the file
+      // Will be importantwhile debugging CONVOLUTE MODEL
+      if ( debug_space) cout << infoString << "Reassigning values to HRhomap from previous run" << endl;
+    	for(i=1; i<=iGrid; i++)
+  		{
+  			for(j=1; j<=iGrid; j++)
+  			{
+  				for(k=1; k<=iGrid; k++)
+  				{
+
+  					HRhomap[i][j][k]=fHRhomap_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+k-1];
+  				}
+  			}
+  		}
     }
 
     xn1=&xn1_v[-1];
@@ -198,6 +269,7 @@ void CDelphiSpace::run()
         sDelPhiPDB[i+1].radius=delphipdb[i].getRadius();
         sDelPhiPDB[i+1].xyz=delphipdb[i].getPose();
         sDelPhiPDB[i+1].charge=delphipdb[i].getCharge();
+        sDelPhiPDB[i+1].atom_resname=delphipdb[i].getAtResname(); //Argo
 
     }
 //######## from qdiff4v:  ########
@@ -236,10 +308,13 @@ void CDelphiSpace::run()
             {
                 if ( optORLT(chgpos[ic],xl) || optORGT(chgpos[ic],xr) )
                 {
+					#ifdef VERBOSE
                     if (crgatn[ic]<0)
                     {
+
                         cout << "!WARNING: distribution " << -crgatn[ic] << "outside the box" << endl;
-                    }
+
+					}
                     else
                     {
                         if (crgatn[ic]>iNatom)
@@ -252,6 +327,7 @@ void CDelphiSpace::run()
                             //if(debug_space) cout << "ico: " << ico  << endl;
                         }// if
                     }// if
+					#endif
                     ico=1;
                 }// if
             }// do
@@ -305,18 +381,25 @@ void CDelphiSpace::run()
     */
 
     //######### initialize iepsmp: #########
-    if(iGaussian==0)
+
+    if(iGaussian==0 && iConvolute == 0)
     {
         iEpsMap_v.assign(iGrid*iGrid*iGrid, sgrid_temp_int);
     }
-    else
+    else if (iGaussian==1 && iConvolute == 0)
     {
         fGepsMap_v.assign(iGrid*iGrid*iGrid, sgrid_temp_real);
         fGepsMap2_v.assign(iGrid*iGrid*iGrid, sgrid_temp_real);
     }
+    else if (iGaussian == 0 && iConvolute != 0)
+    {
+    	fGepsMap2_v.assign(iGrid*iGrid*iGrid, sgrid_rho_real);
+		fGDensityMap_v.assign(iGrid*iGrid*iGrid, 0);
+    	fHRhomap_v.assign(iGrid*iGrid*iGrid,0);
+    }
 
 
-    if(iGaussian==0)
+    if(iGaussian==0 && iConvolute == 0)
     {
         for(i=1; i<=iGrid; i++)
         {
@@ -326,11 +409,12 @@ void CDelphiSpace::run()
                 for(k=1; k<=iGrid; k++)
                 {
                     iEpsMap_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+k-1]=iepsmp[i][j][k];
+
                 }
             }
         }
     }
-    else
+    else if (iGaussian==1 && iConvolute == 0)
     {
         for(i=1; i<=iGrid; i++)
         {
@@ -341,11 +425,106 @@ void CDelphiSpace::run()
                 {
                     fGepsMap2_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+k-1]=gepsmp2[i][j][k];
                     fGepsMap_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+k-1]=gepsmp[i][j][k];
+										
                 }
             }
         }
     }
+    else if ( iGaussian == 0 && iConvolute != 0)
+    {
+    	for(i=1; i<=iGrid; i++)
+		{
+			//for(i=1;i<=iGrid;i++){
+			for(j=1; j<=iGrid; j++)
+			{
+				for(k=1; k<=iGrid; k++)
+				{
+					fGepsMap2_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+k-1]=gepsmp2[i][j][k];
+					fHRhomap_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+k-1] = HRhomap[i][j][k];
 
+				}//k
+			}//j
+		}//i
+
+    	if (debug_convolute) cout << "Putting the 3D values into corresponding vectors" << endl;
+    }
+
+	// Gaussian Density Map
+	if (!( (iGaussian == 1 || iConvolute != 0 ) && inhomo == 0 && logs))
+	{
+		fGDensityMap_v.assign(iGrid*iGrid*iGrid, 0.0);
+
+		if (fIonStrenth > fZero)
+		{
+			if (iGaussian != 0)
+			{
+				for (i = 1; i <= iGrid; i++)
+				{
+					//for(i=1;i<=iGrid;i++){
+					for (j = 1; j <= iGrid; j++)
+					{
+						for (k = 1; k <= iGrid; k++)
+						{
+							fGDensityMap_v[(k - 1)*iGrid*iGrid + (j - 1)*iGrid + (i - 1)] = gDensityMapOnGridPoint[i][j][k];
+						}
+					}
+				}
+			}
+
+			else if (iConvolute != 0)
+			{
+				for (i = 1; i <= iGrid; i++)
+				{
+					//for(i=1;i<=iGrid;i++){
+					for (j = 1; j <= iGrid; j++)
+					{
+						for (k = 1; k <= iGrid; k++)
+						{
+							fGDensityMap_v[(k - 1)*iGrid*iGrid + (j - 1)*iGrid + (i - 1)] = 1 - HRhomap[i][j][k];
+						}
+					}
+				}
+			}
+
+			else
+			{
+				for (i = 1; i <= iGrid; i++)
+				{
+					//for(i=1;i<=iGrid;i++){
+					for (j = 1; j <= iGrid; j++)
+					{
+						for (k = 1; k <= iGrid; k++)
+						{
+							if (!idebmap[i][j][k]) fGDensityMap_v[(k - 1)*iGrid*iGrid + (j - 1)*iGrid + (i - 1)] = 1.0;
+						}
+					}
+				}
+			}
+		}
+	}
+
+    //ARGO checking gepsmp2 value using the corresponding vector
+    if (debug_convolute && iConvolute!= 0 )
+    {
+    	int fx = 0.5*(iGrid-1);
+//    	std::string gepsFileName = "gepsmp2_inh.dat";
+    	std::string gepsFileName = "gepsmp2_inh" + boost::lexical_cast<string>(inhomo) + ".dat";
+    	ofstream g_out(gepsFileName);
+
+  		for (j = 1; j <= iGrid; j++) {
+  			for (k = 1; k <= iGrid; k++) {
+
+  				g_out << j << "\t" << k << "\t"  << gepsmp2[fx][j][k].nZ << endl;
+
+  			}
+  			g_out << " " << endl;
+  		  }
+
+	      g_out.close();
+      }
+
+
+    if ( debug_convolute) cout << "Final reallocation for BDEBMAPS"  << endl;
     for(i=1; i<=iGrid; i++)
     {
         //for(i=1;i<=iGrid;i++){
@@ -353,10 +532,15 @@ void CDelphiSpace::run()
         {
             for(k=1; k<=iGrid; k++)
             {
+//ARGO commented the ifdef in original. Place ifdef-KJI later
 #ifdef IKJ
                 bDebMap_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+(k-1)]=idebmap[k][j][i];
+                if ( zetaOn == 1 ) zetaSurfMap_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+(k-1)]=zetaSurfMap[k][j][i];	                //ARGO
+
 #endif // IKJ
+
                 bDebMap_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+(k-1)]=idebmap[i][j][k];
+                if ( zetaOn == 1 ) zetaSurfMap_v[(i-1)*iGrid*iGrid+(j-1)*iGrid+(k-1)]=zetaSurfMap[i][j][k];                //ARGO
 
             }
         }
@@ -369,6 +553,15 @@ void CDelphiSpace::run()
     if(idebmap != NULL) free_pt3d(idebmap,iGrid+1,iGrid+1,iGrid+1);
     if(gepsmp != NULL) free_pt3d(gepsmp,iGrid+1,iGrid+1,iGrid+1);
     if(gepsmp2 != NULL) free_pt3d(gepsmp2,iGrid+1,iGrid+1,iGrid+1);
+	if (gDensityMapOnGridPoint != NULL) free_pt3d(gDensityMapOnGridPoint, iGrid + 1, iGrid + 1, iGrid + 1);
+	
+    //ARGO
+    if(zetaSurfMap != NULL) free_pt3d(zetaSurfMap,iGrid+1,iGrid+1,iGrid+1);
+
+    //ARGO UA @ 2016
+    if(ginit_rhomap != NULL) free_pt3d(ginit_rhomap,iGrid+1,iGrid+1,iGrid+1);
+    if(cepsmap != NULL) free_pt3d(cepsmap,iGrid+1,iGrid+1,iGrid+1);
+    if(HRhomap != NULL) free_pt3d(HRhomap,iGrid+1,iGrid+1,iGrid+1);
 
     // free_pt3d_p <bool> (idebmap,iGrid+1,iGrid+1);
 
@@ -377,5 +570,5 @@ void CDelphiSpace::run()
     //cout << "gepsmp2[6][7][8]:" << gepsmp2[5][7][8] << endl;
     if(debug_space) cout << "#### going out of space_run... ####" <<endl;
 
+    cout << endl;
 }
-

@@ -6,154 +6,184 @@
  */
 
 #include "delphi_datamarshal.h"
+#include <boost/lexical_cast.hpp>
 
 //-----------------------------------------------------------------------//
 void CDelphiDataMarshal::showParameters() const
 {
-   cout << fixed; // set the floatfield format flag for the str stream to fixed
 
+   cout << fixed; // set the floatfield format flag for the str stream to fixed
    cout << "   " << endl;
-   
-   if (1 < iMediaNum) 
+
+   size_t MAXWIDTH=45;
+   std::string time_string = " Time>";
+
+
+#ifdef VERBOSE
+   if (1 < iMediaNum)
    {
       cout << "Attention, many dielectrics! Not all the surface charges are facing the solution!!" << endl;
    }
-    
+#endif
 
-    
-   cout << "Direct mapping of epsilon: (0/1)(n/y)   " << iDirectEpsMap << endl;
-  
-   cout << "time to read in and/or assign rad/chrg = "; pTimer->showElapse();
+   cout << time_string << left << setw(MAXWIDTH) << " Time to read in and/or assign rad/chrg" << ":"; pTimer->showElapse();
+   cout << endl;
 
+   cout << left << setw(MAXWIDTH) << " Direct mapping of epsilon" << " : " << (iDirectEpsMap?"1/Y":"0/N") << endl;
 
-    
    if (1000000 < fDebyeLength)
    {
       delphi_real fDebyeNum = (100.0/fPercentageFill-1.0)*fMaxDimension/fDebyeLength;
-      cout << "Debye Lengths contained in the finite diff. box" << fDebyeNum << endl;
+#ifdef VERBOSE
+      cout << left << setw(MAXWIDTH) << " Debye Lengths contained in the finite diff. box" << " : " << fDebyeNum << endl;
+#endif
    }
 
 
-    
-   cout << "grid size                  :" << right << setw(10) << iGrid << endl;
-   cout << "percent of box to be filled:" << right << setw(10) << fPercentageFill << endl;
-   cout << "scale,in grids/A :" << right << setw(10) << fScale << endl;
-   cout << "xmin,xmax     (A):" << right << setw(10) << gfMinCoordinate.nX << " " << right << setw(10) << gfMaxCoordinate.nX << endl;
-   cout << "ymin,ymax     (A):" << right << setw(10) << gfMinCoordinate.nY << " " << right << setw(10) << gfMaxCoordinate.nY << endl;
-   cout << "zmin,zmax     (A):" << right << setw(10) << gfMinCoordinate.nZ << " " << right << setw(10) << gfMaxCoordinate.nZ << endl;
-   cout << "x,y,z range   (A):" << right << setw(10) << gfCoordinateRange.nX << " "
+//#ifdef VERBOSE
+   cout << left << setw(MAXWIDTH) << " Grid size" << " : " << iGrid << endl;
+   cout << left << setw(MAXWIDTH) << " Percent of box occupied" << " : " << fPercentageFill << endl;
+   cout << left << setw(MAXWIDTH) << " Scale,in grids (1/A)" << " : " << setw(10) << fScale << endl;
+   cout << left << setw(MAXWIDTH) << " xmin,xmax (A)"   << " : " << gfMinCoordinate.nX << " " << right << setw(10) << gfMaxCoordinate.nX << endl;
+   cout << left << setw(MAXWIDTH) << " ymin,ymax (A)"   << " : " << gfMinCoordinate.nY << " " << right << setw(10) << gfMaxCoordinate.nY << endl;
+   cout << left << setw(MAXWIDTH) << " zmin,zmax (A)"   << " : " << gfMinCoordinate.nZ << " " << right << setw(10) << gfMaxCoordinate.nZ << endl;
+   cout << left << setw(MAXWIDTH) << " x,y,z range (A)" << " : " << gfCoordinateRange.nX << " "
                                 << right << setw(10) << gfCoordinateRange.nY << " "
                                 << right << setw(10) << gfCoordinateRange.nZ << endl;
-   cout << "system geometric center in (A):" << right << setw(10) << gfGeometricCenter.nX << " "
+   cout << left << setw(MAXWIDTH) << " System geometric center (A)" << " : " << gfGeometricCenter.nX << " "
                                              << right << setw(10) << gfGeometricCenter.nY << " "
                                              << right << setw(10) << gfGeometricCenter.nZ << endl;
-   cout << "grid box is centered in (A)   :" << right << setw(10) << gfBoxCenter.nX << " "
+   cout << left << setw(MAXWIDTH) << " Grid box is centered (A)" << " : " << gfBoxCenter.nX << " "
                                              << right << setw(10) << gfBoxCenter.nY << " "
                                              << right << setw(10) << gfBoxCenter.nZ << endl;
-   cout << "object centre offset (gu)     :" << right << setw(10) << gfOffCenter.nX << " "
+   cout << left << setw(MAXWIDTH) << " Object centre offset (gu)" << " : " << gfOffCenter.nX << " "
                                              << right << setw(10) << gfOffCenter.nY << " "
                                              << right << setw(10) << gfOffCenter.nZ  << endl;
+//#endif
 
 
-    
    if (bSolvePB)
    {
-      cout << "outer dielectric              :" << right << setw(10) << fExDielec << endl;
-    
+//#ifdef VERBOSE
+      cout << left << setw(MAXWIDTH) << " Outer dielectric" << " : " << fExDielec << endl;
+//#endif
       for (delphi_integer i = 1; i <= iMediaNum; i++)
       {
          delphi_real fEspInMedium = vctfMediaEps[i]*fEPKT;
-         
+
          if (1.0 > fEspInMedium) throw CInvalidEpsInMedium(i);
-         
-         cout << "dielectric in medium number " << i << " :" 
-              << right << setw(10) << fEspInMedium << endl;    
+
+         std::string dielec_info = " Dielectric in Medium " + boost::lexical_cast<std::string>(i);
+         cout << left << setw(MAXWIDTH) << dielec_info << " : " << fEspInMedium << endl;
+
       }
 
 
-       
-      cout << "first kind salt concentration (M)   :" << right << setw(10) << vctfSalt[0] << endl;
-      cout << "valences salt 1 are        " << left << setw(5) << vctiValence1[0] << "and" << right << setw(5) << vctiValence1[1] << endl;
-           
-      cout << "second kind salt concentration (M)   :" << right << setw(10) << vctfSalt[1] << endl;
-      cout << "valences salt 2 are        "  << left << setw(5) << vctiValence2[0] << "and" << right << setw(5) << vctiValence2[1] << endl;
-      cout << "ionic strength (M)         :" << right << setw(10) << fIonStrength << endl;
-      cout << "debye length (A)           :" << right << setw(10) << fDebyeLength << endl;
-      cout << "absolute temperature (K)   :" << right << setw(10) << fTemper      << endl;
-      cout << "ion exclusion radius (A)   :" << right << setw(10) << fIonRadius   << endl;
-      cout << "probe radius facing water(A:" << right << setw(10) << vctfProbeRadius[0] << endl;
-      cout << "probe radius, internal (A) :" << right << setw(10) << vctfProbeRadius[1] << endl;
+// #ifdef VERBOSE
+
+      cout << left << setw(MAXWIDTH) << " First kind salt [C] (M) " << " : " << vctfSalt[0] << endl;
+      cout << left << setw(MAXWIDTH) << " Valences salt 1 are"      << " : " << vctiValence1[0] <<  right << setw(10) << vctiValence1[1] << endl;
+
+		if(vctfSalt[1]!=0.0f) {
+			cout << left << setw(MAXWIDTH) << " Second kind salt [C] (M) " << " : " << vctfSalt[1] << endl;
+			cout << left << setw(MAXWIDTH) << " Valences salt 2 are"       << " : " << vctiValence2[0] <<  right << setw(10) << vctiValence2[1] << endl;
+		}
+      cout << left << setw(MAXWIDTH) << " Ionic strength (M)"        << " : " << fIonStrength << endl;
+      cout << left << setw(MAXWIDTH) << " Debye length (A)"          << " : " << fDebyeLength << endl;
+      cout << left << setw(MAXWIDTH) << " Absolute temperature (K)"  << " : " << fTemper      << endl;
+      cout << left << setw(MAXWIDTH) << " Ion exclusion [r] (A)"    << " : " << fIonRadius   << endl;
+      cout << left << setw(MAXWIDTH) << " Probe[r] facing water (A)" << " : " << vctfProbeRadius[0] << endl;
+      cout << left << setw(MAXWIDTH) << " Probe[r] internal (A)" << " : " << vctfProbeRadius[1] << endl;
+// #endif
 
 
-       
       switch (iBndyType)
       {
-         case 1: cout << "boundary conditions        :     zero\n";         break;
-         case 2: cout << "boundary conditions        :     dipolar\n";      break;
-         case 3: cout << "boundary conditions        :     focussing\n";    break;
-         case 4: cout << "boundary conditions        :     coulombic\n";    break;
-         case 5: cout << "boundary conditions        :     Voltage Drop\n"; break;
+         case 1: cout << left << setw(MAXWIDTH) << " Boundary conditions" << " : " << "ZERO\n";         break;
+         case 2: cout << left << setw(MAXWIDTH) << " Boundary conditions" << " : " << "DIPOLAR\n";      break;
+         case 3: cout << left << setw(MAXWIDTH) << " Boundary conditions" << " : " << "FOCUSSING\n";    break;
+         case 4: cout << left << setw(MAXWIDTH) << " Boundary conditions" << " : " << "COULOMBIC\n";    break;
+         case 5: cout << left << setw(MAXWIDTH) << " Boundary conditions" << " : " << "VOLTAGE DROP\n"; break;
       }
-       
 
+      //cout << "Gaussian space module     :" << right << setw(10) << (iGaussian?"ON":"OFF") << endl;
 
-      cout << "x,y,z periodic bc. and volt. drop flags :" << right << setw(6) << vctbPeriodicBndy[0] << right << setw(6) << vctbPeriodicBndy[1]
+#ifdef VERBOSE
+      cout << left << setw(MAXWIDTH) << " x,y,z PBC. and volt drop" << " : " << vctbPeriodicBndy[0] << right << setw(6) << vctbPeriodicBndy[1]
                                                           << right << setw(6) << vctbPeriodicBndy[2] << right << setw(6) << vctbPeriodicBndy[3]
-														                << right << setw(6) << vctbPeriodicBndy[4] << right << setw(6) << vctbPeriodicBndy[5] << endl;
-    
+														                              << right << setw(6) << vctbPeriodicBndy[4] << right << setw(6) << vctbPeriodicBndy[5] << endl;
 
-       
+
+
       if (vctbPeriodicBndy[3] || vctbPeriodicBndy[4] || vctbPeriodicBndy[5])
-         cout << "Voltage drops along x,y,z :" << right << setw(10) << gfPotentialDrop.nX << right << setw(10) << gfPotentialDrop.nY << right << setw(10) << gfPotentialDrop.nZ << endl;
-    
+         cout << left << setw(MAXWIDTH) << " Voltage drops along x,y,z" << " : " << gfPotentialDrop.nX
+                                                                                 << right << setw(10) << gfPotentialDrop.nY
+                                                                                 << right << setw(10) << gfPotentialDrop.nZ << endl;
+#endif
       if (bAutoConverge)
       {
          if (0.0 < fGridConverge)
-            cout << "convergence by grid energy :" << right << setw(10) << fGridConverge << " kt\n";
+            cout << left << setw(MAXWIDTH) << " Convergence by grid energy" << " : " << fGridConverge << " kt\n";
          else
-            cout << "# of linear iterations     : automatic\n";        
+            cout << left << setw(MAXWIDTH) << " # of linear iterations" << " : " << "Automatic\n";
       }
       else
-         cout << "# of linear iterations     :" << right << setw(10) << iLinIterateNum << endl;
-      
+         cout << left << setw(MAXWIDTH) << " # of linear iterations" << " : " << iLinIterateNum << endl;
+
       if (0.0 < fRmsc || 0.0 < fMaxc)
       {
-         cout << "convergence by rms  change :" << right << setw(10) << fRmsc << " kt\n";
-         cout << "convergence by max  change :" << right << setw(10) << fMaxc << " kt\n"; 
+         cout << left << setw(MAXWIDTH) << " Convergence by rms change" << " : " << scientific << fRmsc << " kT\n";
+         cout << left << setw(MAXWIDTH) << " Convergence by max change" << " : " << scientific << fMaxc << " kT\n";
       }
-      
+
       if (fZero > fIonStrength && 0 < iNonIterateNum)
-         cout << "ionic strength=0 ==> only linear iterations \n";
+         cout << left << setw(MAXWIDTH) << " Ionic strength=0 ==> only linear iterations \n";
       else
       {
-         cout << "# of non-linear iterations :" << right << setw(6) << iNonIterateNum << endl;
-         cout << "non-linear energy calculat.:" << right << setw(6) << bNonlinearEng << endl;
-         cout << "manual relaxation parameter:" << right << setw(6) << bManualRelaxParam << endl;
-      }   
-      
-      cout << "ionic direct energy contribution:" << right << setw(6) << bIonsEng << endl;
-      cout << "concentration map output   :" << right << setw(6) << bOutCrgDensity << endl;
-      cout << "spherical charge distbn.   :" << right << setw(6) << bCrgInterplateType << endl;
-      cout << "INSIGHT format output      :" << right << setw(6) << bBiosystemOut << endl;
-      cout << "ionic direct energy contribution:" << right << setw(6) << bSiteOut << endl;
+         cout << left << setw(MAXWIDTH) << " # of non-linear iterations" << " : " << iNonIterateNum << endl;
+         cout << left << setw(MAXWIDTH) << " Non-linear energy calc."    << " : " << bNonlinearEng << endl;
+         cout << left << setw(MAXWIDTH) << " Manual relaxation para."    << " : " << bManualRelaxParam << endl;
+      }
+
+      cout << left << setw(MAXWIDTH) << " GAUSSIAN module" <<  " : " << (iGaussian?"ON":"OFF") << endl;
+      if ( iGaussian ) cout << left << setw(MAXWIDTH) << " GAUSSIAN sigma" <<  " : " << fSigma << endl;
+      if ( iGaussian ) cout << left << setw(MAXWIDTH) << " GAUSSIAN surface cut off" <<  " : " << fSrfcut << endl;
+
+      cout << left << setw(MAXWIDTH) << " CONVOLUTE module" << " : " << (iConvolute?"ON":"OFF") << endl;
+      if ( iConvolute ) cout << left << setw(MAXWIDTH) << " CONVOLUTE kernel sigma"      <<  " : " << fksigma << endl;
+      if ( iConvolute ) cout << left << setw(MAXWIDTH) << " CONVOLUTE heavyside epsilon" <<  " : " << fhvsd_eps << endl;
+
+      cout << left << setw(MAXWIDTH) << " Surface potential calculations" << " : " << (zetaOn?"ON":"OFF") << endl;
+      if ( zetaOn ) cout << left << setw(MAXWIDTH) << " Surface requested at distance (A)"      <<  " : " << zetaDistance << endl;
+
+
+      cout << endl;
+
+#ifdef VERBOSE
+      cout << left << setw(MAXWIDTH) << " Ionic direct energy"      << " : " << bIonsEng << endl;
+      cout << left << setw(MAXWIDTH) << " Concentration map output" << " : " << bOutCrgDensity << endl;
+      cout << left << setw(MAXWIDTH) << " Spherical charge distbn." << " : " << bCrgInterplateType << endl;
+      cout << left << setw(MAXWIDTH) << " INSIGHT format output"    << " : " << bBiosystemOut << endl;
+      cout << left << setw(MAXWIDTH) << " Ionic direct energy"      << " : " << bSiteOut << endl;
+#endif
    } // ---------- end of if (bSolvePB)
-   
-   cout << "modified atom file output     : " << right << setw(6) << bModPdbOut << endl; 
-   cout << "map file label                : " << rgcFileMap << endl;
-   
-   if (bPdbUnformatIn)  cout << " set to read  unformatted pdb file\n";
-   if (bUnformatPdbOut) cout << " set to write unformatted pdb file\n";   
-   if (bFrcUnformatIn)  cout << " set to read  unformatted frc.pdb file\n";
-   if (bUnformatFrcOut) cout << " set to write unformatted frc.pdb file\n";
-   if (!bLogGraph)      cout << " convergence graph turned off\n";
-   if (!bLogPotential)  cout << " potential listings turned off\n";   
-   
+#ifdef VERBOSE
+   cout << left << setw(MAXWIDTH) << " Modified atom file output" << " : " << bModPdbOut << endl;
+   cout << left << setw(MAXWIDTH) << " Map file label"            << " : " << rgcFileMap << endl;
+
+   if (bPdbUnformatIn)  cout << " Set to read  unformatted pdb file\n";
+   if (bUnformatPdbOut) cout << " Set to write unformatted pdb file\n";
+   if (bFrcUnformatIn)  cout << " Set to read  unformatted frc.pdb file\n";
+   if (bUnformatFrcOut) cout << " Set to write unformatted frc.pdb file\n";
+   if (!bLogGraph)      cout << " Convergence graph turned off\n";
+   if (!bLogPotential)  cout << " Potential listings turned off\n";
+
    if (10 != iIterateInterval || 1 != iConvergeFract)
    {
-      cout << "convergence test interval is every" << right << setw(6) << iIterateInterval << " loops \n";
-      cout << "testing" << right << setw(6) << 100/iConvergeFract << "% \n";      
+      cout << " Convergence test interval is every" << right << setw(6) << iIterateInterval << " loops \n";
+      cout << " Testing" << right << setw(6) << 100/iConvergeFract << "% \n";
    }
 
    cout << endl;
+#endif
 }
-

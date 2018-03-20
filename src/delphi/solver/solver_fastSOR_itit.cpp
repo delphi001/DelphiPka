@@ -7,6 +7,7 @@
 
 #include "solver_fastSOR.h"
 
+
 void CDelphiFastSOR::itit()
 {
     delphi_real rmsch,rmsch2,rmxch,rmxch2;
@@ -16,13 +17,18 @@ void CDelphiFastSOR::itit()
     delphi_real maxres = (fRmsc>fMaxc)?fRmsc:fMaxc;
     maxres = (maxres>fGridConverge)?maxres:fGridConverge;
     vector<delphi_real> rmsl(nxran,0.0),rmaxl(nxran,0.0);
+    string strLine60 = " ----------------------------------------------------------------";
 
     //int flag_itr; //Lin: for debugging
 
-#ifdef VERBOSE
-    if (0.0 < fGridConverge) cout << "  rms-change     max change    grid energy    #iterations" << endl;
-    else                     cout << "  rms-change     max change       #iterations" << endl;
-#endif
+//#ifdef VERBOSE
+    cout << strLine60  << endl;
+    if (0.0 < fGridConverge) cout << "      " << " rms-change   max change    grid energy    #iterations" << endl;
+    else                     cout << "      " << " rms-change   max change       #iterations" << endl;
+    cout << strLine60  << endl;
+//#endif
+//   cout << "Lin itit 1: phimap1[0]: " << phimap1[0]  << endl; //Lin Test 2016/04
+//   cout << "Lin itit 1: phimap2[0]: " << phimap2[0]  << endl; //Lin Test 2016/04
 
 
     if (0 == iConvergeFract)
@@ -34,6 +40,47 @@ void CDelphiFastSOR::itit()
     if (iIterateInterval > iLinIterateNum) iIterateInterval = iLinIterateNum;
 
     initOddEvenItr(1); // forWhom = 1
+  // cout << "Lin itit 2: phimap1[0]: " << phimap1[0]  << endl; //Lin Test 2016/04
+  // cout << "Lin itit 2: phimap2[0]: " << phimap2[0]  << endl; //Lin Test 2016/04
+
+	if (iGaussian != 0 ||  iConvolute != 0)
+	{
+		//for linear iteration, the pure non-linear part equals to zero 
+		gaussianBoundaryNonlinear.assign(iDielecBndyOdd, 0.0);
+		gaussianChargeNonlinear.assign(iCrgedGridSum, 0.0);
+
+		//for linear iteration, there is no ion. Thus we won't need a density here
+		//if(fabs(fIonStrength)<fZero) gaussianBoundaryDensity.assign(iDielecBndyOdd, 1.0);
+
+	}
+
+	if (debug_solver)
+	{
+		cout << "gaussianBoundaryDielec.size= " << gaussianBoundaryDielec.size() << endl;
+		cout << "gaussianBoundaryDensity.size= " << gaussianBoundaryDensity.size() << endl;
+		cout << "gaussianChargeDielec.size= " << gaussianChargeDielec.size() << endl;
+		cout << "gaussianChargeDensity.size= " << gaussianChargeDensity.size() << endl;
+		cout << "iDielecBndyEven= " << iDielecBndyEven << endl;
+		cout << "iDielecBndyOdd= " << iDielecBndyOdd << endl;
+		cout << "iCrgedGridSum= " << iCrgedGridSum << endl;
+	}
+
+	int i = 0;
+	for (vector<vector<delphi_real>>::iterator it = gaussianBoundaryDielec.begin(); it != gaussianBoundaryDielec.end(); ++it)
+	{
+		/*cout << "gdb " << i << "  " << (*it)[0] << "  " << (*it)[1] << "  " << (*it)[2] << "  " << (*it)[3] << "  " << (*it)[4] << "  " << (*it)[5] << endl;
+		delphi_real sum = (*it)[0] + (*it)[1] + (*it)[2] + (*it)[3] + (*it)[4] + (*it)[5];
+		cout << "db- calc " << i << "  " << (prgfBndyDielec[i][0]+fSixth)*sum << "  " << (prgfBndyDielec[i][1] + fSixth)*sum
+			<< "  " << (prgfBndyDielec[i][2] + fSixth)*sum << "  " << (prgfBndyDielec[i][3] + fSixth)*sum
+			<< "  " << (prgfBndyDielec[i][4] + fSixth)*sum << "  " << (prgfBndyDielec[i][5] + fSixth)*sum << endl;
+
+		cout << "db- orig " << i << "  " << prgfBndyDielec[i][0] << "  " << prgfBndyDielec[i][1]
+			<< "  " << prgfBndyDielec[i][2] << "  " << prgfBndyDielec[i][3] 
+			<< "  " << prgfBndyDielec[i][4] << "  " << prgfBndyDielec[i][5] << endl;
+		i++;*/
+	}
+		
+
 
 #ifdef DEBUG_DELPHI_SOLVER_ITIT
     {
@@ -107,6 +154,8 @@ void CDelphiFastSOR::itit()
 
         ofTestStream.close();
     }
+
+
 #endif // DEBUG_DELPHI_SOLVER_ITIT
 
     //solver_pdc->showMap("test_delphicpp_itit0.dat");
@@ -161,6 +210,7 @@ void CDelphiFastSOR::itit()
 
             sixth = sixth*om4;
         }
+
 
 #ifdef DEBUG_DELPHI_SOLVER_ITIT
         if (1 == itr)
@@ -314,13 +364,14 @@ void CDelphiFastSOR::itit()
             rmsch2  = rmsch;
             rmxch2  = rmxch;
 
-#ifdef VERBOSE
+//#ifdef VERBOSE
             if (0.0 < fGridConverge)
-                cout << scientific << rmsch2 << "  "  << rmxch2 << "  " << grden << "  at  " << setw(5) << left << itr << " iterations\n";
+                cout << "        " << scientific << rmsch2 << "  "  << rmxch2 << "  " << grden << "  at  " << setw(5) << left << itr << " iterations\n";
             else
-                cout << scientific << rmsch2 << "  "  << rmxch2 << "  at  " << setw(5) << left << itr << " iterations\n";
+                cout << "        " << scientific << rmsch2 << "  "  << rmxch2 << "  at  " << setw(5) << left << itr << " iterations\n";
                 //cout << scientific << "grid: " << flag_itr << " " << rmsch2 << "  "  << rmxch2 << "  at  " << setw(5) << left << itr << " iterations\n";
-#endif
+//#endif
+
 
             if (fRmsc > rmsch || fMaxc > rmxch) ires = 1;
 
@@ -372,8 +423,31 @@ void CDelphiFastSOR::itit()
     }
     while(true);
 
+    //Argo: Printing the last rms-change of the iteration
+    //Needed for GAUSSIAN or CONVOLUTION runs since many were found to diverge
+    cout << strLine60  << endl;
+    cout << infoString << "Iteration ended with final rms-change of " << scientific << rmsch2 << endl;
+    if ( rmsch2 > fMaxc)
+    {
+      //cout << " WARNING !!! Run probably DIVERGED" << endl;
+      //cout << " WARNING !!! Final rms-change is " << rmsch2 << " greater than " << fMaxc << endl;
+      //cout << " WARNING !!! Try increasing the scale or lower the maxc value or both" << endl;
+	  stringstream str_Diverged;
+	  str_Diverged << "Run probably DIVERGED! Final rms-change is " << rmsch2 << " greater than " << fMaxc << endl;
+	  str_Diverged << "             Try increasing the scale or lower the maxc value or both" << endl;
+	  CDiverged  warn_div(str_Diverged);
+    }
+    else
+    {
+      cout << infoString << "Run converged in the provided limits" << endl;
+    }
+//   cout << "Lin itit 10: phimap1[0]: " << phimap1[0]  << endl; //Lin Test 2016/04
+//   cout << "Lin itit 10: phimap2[0]: " << phimap2[0]  << endl; //Lin Test 2016/04
+
+//    cout << "Lin itit10: prgfPhiMap[0]: " << prgfPhiMap[0]  << endl; //Lin Test 2016/04
     postItr(rmaxl,rmsl);
 
+//    cout << "Lin itit11: prgfPhiMap[0]: " << prgfPhiMap[0]  << endl; //Lin Test 2016/04
     /*
      * code phimap corner, for use in transference from irises to convex and via versa
      */
@@ -410,4 +484,5 @@ void CDelphiFastSOR::itit()
         ofTestStream.close();
     }
 #endif // DEBUG_DELPHI_SOLVER_ITIT
+
 }

@@ -1902,6 +1902,91 @@ class CDelphiDataMarshal:virtual public IDataMarshal
        *
        */
       vector<delphi_real> vctfAtomEps;
+      
+      //------------------------- Zeta Potential (Under surface) --------- //
+      /**
+       * Just an attempt to produce a surface at a distance from the protein
+       * Will add the zeta-distance to the vdw radii of the atoms
+       * nothing else
+       * 2016-FEB-09
+       */
+       
+      
+      //----------------------SURFACE MODULE ------------ //
+      //------------------------- ARGO ------------------ //
+      vector<bool> vctZetaSurfMap;
+      
+      //ARGO 12-FEB,2016
+      /**
+       *To check if zeta potential calculations are turned on/off
+       * Default = 0 (off)
+       * parameter: zeta
+       */
+      int zetaOn;
+      
+      
+      /**
+       * The distance (in A) where the potentials are sought.
+       * User choses this distance and it might not be the zeta-distance as such
+       */
+      delphi_real zetaDistance;
+      
+      /**
+       * Should the output be written to zphi file.
+       * If zetaOn=1 then YES
+       * 17 FEB 2016
+       */
+      bool bZetaPhiOut;
+      
+      /**
+       * The name of the ZPHI file
+       * 17 FEB 2016
+       */
+      string strZetaPhiFile;
+      
+      /**
+       * Number of clusters 
+       * this value will be tested and then optimized for later use
+       * An integer input
+       * FOR LATER ADDITION TO THE SURFACE MODULE
+       */
+      int iKclusters;
+
+      //------------------------- Convolution 1 --------- //
+      //------------------------- ARGO ------------------ //
+      /**
+       * UA 2016
+       */
+       
+     /* Flag to initiate the Convolute mode for Delphi
+      * Developed at UA@2016
+      * -DEFAULT = 0
+      */
+      int iConvolute;
+      
+      /* The value of the sigma for the GAUSSIAN kernel to be used for convolution.
+       * The kernel is different for the atom density packing
+       */
+      delphi_real fksigma;
+      
+      /*
+       * The EPSILON value that would be used to determine the the location
+       * of HEAVYSIDE function for convolution.
+       *
+       */    
+      delphi_real fhvsd_eps;
+      
+      /*
+       * Vector that stores the Hrhomap *** values
+       * Assigned Rho[out] values in first space run
+       * Previously assigned values used for the second space run
+       */
+      vector< delphi_real > vctgfHRhomap;
+     
+
+
+      
+      
 
       //------------------------ Gaussian & MEMPOT -----------------------//
       //Lin Li: this is for Gaussian and MEMPOT options
@@ -1911,7 +1996,7 @@ class CDelphiDataMarshal:virtual public IDataMarshal
        * - Description: \n
        *
        */
-      float fCutoff;
+       delphi_real fCutoff;
 
        /**
        * - F95 var.: sigma
@@ -1935,7 +2020,7 @@ class CDelphiDataMarshal:virtual public IDataMarshal
        * - Description: \n
        *
        */
-      float fSrfcut;
+       delphi_real fSrfcut;
 
       /**
        * - F95 var.: Gaussian
@@ -1944,6 +2029,22 @@ class CDelphiDataMarshal:virtual public IDataMarshal
        *
        */
       int iGaussian;
+
+	  /**
+	  * - F95 var.: N/A
+	  * - Default : 0
+	  * - Description: \n
+	  *
+	  */
+	  int iGaussianDensity;
+
+	  /**
+	  * - F95 var.: N/A
+	  * - Default : 0
+	  * - Description: \n
+	  *
+	  */
+	  int iGaussianEnergy;
 
       /**
        * - F95 var.: gepsmp(igrid,igrid,igrid)
@@ -1979,6 +2080,14 @@ class CDelphiDataMarshal:virtual public IDataMarshal
        *
        */
       float fRadipz;
+
+	  //--------------------------- Gaussian Salt -----------------------//
+
+	  /**
+	  * Vector saves the salt solution density for each grid point
+	  */
+
+	  vector<delphi_real> gaussianSoluteDensity;
 
       //------------------------------ Solver ---------------------------//
 

@@ -65,7 +65,7 @@ void CDelphiSpace::setGaussian()
     delphi_real peak,pi,den,distance2,sigmatime,radsq; //sigma=sigma*radius. peak=4/(3*pi**0.5*sigma**3)
 
     if(debug_space)cout << "######## start Gaussian: #########" << endl;
-    eps_diff=1.2;
+    eps_diff=1.05;
     //coeff=0.5291772108;
     //stepsize=1.0/fScale;
     //origin=(cOldMid-stepsize*(iGrid-1)/2)/coeff;
@@ -92,6 +92,9 @@ void CDelphiSpace::setGaussian()
                     gepsmp[i][j][k].nX=0.0;
                     gepsmp[i][j][k].nY=0.0;
                     gepsmp[i][j][k].nZ=0.0;
+
+					//Initialize Gaussian Salt density array to zeros
+					gDensityMapOnGridPoint[i][j][k] = 0.0;
                 }
             }
         }
@@ -200,8 +203,9 @@ void CDelphiSpace::setGaussian()
          * set interiors in MOLECULES
         */
 
+#ifdef VERBOSE
         if(itest2||itobig) cout <<"setout method 1 " << itest2 << " " << itobig << endl;
-
+#endif
 //DoATOMS:
         for( iv=1; iv<=iNatom; iv++)
         {
@@ -322,6 +326,9 @@ void CDelphiSpace::setGaussian()
                             }// if
 
                             if(distsq<radp2) idebmap[iz][iy][ix] =false;
+
+							//Gaussian Salt for slow method is under developing....
+
                         }// do
                     }// do
                 }// do
@@ -374,7 +381,6 @@ void CDelphiSpace::setGaussian()
 
                             if (iac==-1||iac>iNatom)
                             {
-//occhio! non so cosa fa con i pori!!
                                 //iEpsMap[ix][iy][iz].nX=iv+1+iAtomMed[iv]*epsdim;
                                 iepsmp[ix][iy][iz].nX=iv+1+iAtomMed[iv]*epsdim;
                             }
@@ -402,7 +408,6 @@ void CDelphiSpace::setGaussian()
                             iac=(iepsmp[ix][iy][iz].nY % epsdim)-1;
                             if (iac==-1||iac>iNatom)
                             {
-//occhio! non so cosa fa con i pori!!
                                 //iEpsMap[ix][iy][iz].nY=iv+1+iAtomMed[iv]*epsdim;
                                 iepsmp[ix][iy][iz].nY=iv+1+iAtomMed[iv]*epsdim;
                             }
@@ -430,7 +435,6 @@ void CDelphiSpace::setGaussian()
                             iac=(iepsmp[ix][iy][iz].nZ%epsdim)-1;
                             if (iac==-1||iac>iNatom)
                             {
-//occhio! non so cosa fa con i pori!!
                                 //iEpsMap[ix][iy][iz].nZ=iv+1+iAtomMed[iv]*epsdim;
                                 iepsmp[ix][iy][iz].nZ=iv+1+iAtomMed[iv]*epsdim;
                             }
@@ -453,6 +457,13 @@ void CDelphiSpace::setGaussian()
 
                         //if(distsq<radp2) bDebMap[ix][iy][iz]=false;
                         if(distsq<radp2) idebmap[ix][iy][iz]=false;
+
+						//Gaussian salt concentration
+						if (distsq < radp2)
+						{
+							//there may or may not be salt inside the atoms, lol
+						}
+
                     }// do
                 }
                 else
@@ -534,6 +545,15 @@ void CDelphiSpace::setGaussian()
                             gepsmp[ix][iy][iz].nZ=1-(1-gepsmp[ix][iy][iz].nZ)*(1-den);
 
                         }// if
+
+						//Section for Gaussian salt concentration
+						//The concentrations are recorded for each grid point
+						if (distsq < radtest)
+						{
+							den = exp(-(distsq / (sigma*sigma*radsq)));
+							gDensityMapOnGridPoint[ix][iy][iz] = 1 - (1 - gDensityMapOnGridPoint[ix][iy][iz])*(1 - den);
+						}
+
 #ifdef IJK
                         if (distsq<radp2) idebmap[ix][iy][iz]=false;
 #endif // IJK
@@ -577,6 +597,10 @@ void CDelphiSpace::setGaussian()
 
 
 // cout << << "bDebug: srfcut << inhomo:" << srfcut << inhomo
+
+	delphi_real temp_fDebFct= fEpsOut / (fDebyeLength*fScale*fDebyeLength*fScale);
+
+	//Calculate Gaussian eps and fDebFct used for Gaussian Salt
     for(ix=1; ix<=iGrid; ix++)
     {
         for(iy=1; iy<=iGrid; iy++)
@@ -599,6 +623,22 @@ void CDelphiSpace::setGaussian()
                 {
                     gepsmp2[ix][iy][iz].nZ=80.0;
                 }//if
+
+				//Gaussian salt concentration
+				if (gDensityMapOnGridPoint[ix][iy][iz]<0.02)
+				{
+					//density cut off 0.02
+					gDensityMapOnGridPoint[ix][iy][iz] = 0;
+				}
+
+				//Gaussian salt density + protein density = 1
+				gDensityMapOnGridPoint[ix][iy][iz] = 1 - gDensityMapOnGridPoint[ix][iy][iz];
+				
+				//Ion concentration = density * bulk conc
+				//gDensityMapOnGridPoint[ix][iy][iz] *= temp_fDebFct;
+
+
+
 //################### }// for this epsout in protein different than in water######
             }//do
         }//do
@@ -773,7 +813,7 @@ void CDelphiSpace::setGaussian()
 
         // -------density file: --------
         ofstream densfile;
-        densfile.open ("cube_density.txt");
+        densfile.open ("cube_density"+to_string(inhomo)+".txt");
 
         densfile << "qdiffxs4 with an improved surfacing routine" << endl;
         densfile << "Gaussian cube format phimap" << endl;
@@ -803,7 +843,8 @@ void CDelphiSpace::setGaussian()
         //-------epsilon file: --------
 
         ofstream epsfile;
-        epsfile.open ("cube_eps.txt");
+        epsfile.open ("cube_eps" + to_string(inhomo) + ".txt");
+
 
         epsfile << "qdiffxs4 with an improved surfacing routine" << endl;
         epsfile << "Gaussian cube format phimap" << endl;

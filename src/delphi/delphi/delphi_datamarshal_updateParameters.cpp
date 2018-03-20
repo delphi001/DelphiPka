@@ -102,11 +102,15 @@ void CDelphiDataMarshal::updateParameters()
     * the same tests have been implemented in class CIO. However, here users may make mistakes in parameter file to
     * require wrong format of the files. So check again to reset format flags.
     */
+   /*
+    * LinLi: 2016_07_13 This format check is really unneccessary. It cause problem when there is only one atom 
+    *
+    */
+   
    string strASCI = "1234567890 .-+#,$asdfghjklzxcvbnmqwertyuiopASDFGHJKLZXCVBNMQWERTYUIOP)(}{][/";
 
    ifstream ifFileHandle;
    char cTestChar[80];
-
    if (!bPdbUnformatIn) // PDB file
    {
       ifFileHandle.open(strPdbFile.c_str());
@@ -116,18 +120,25 @@ void CDelphiDataMarshal::updateParameters()
       ifFileHandle.read(cTestChar,80);
 
       int iCount = 0;
-
+/*
       for (int i = 0; i < 80; i++)
       {
          if (string::npos == strASCI.find(cTestChar[i]) ) iCount += 1;
+         //cout << "Lin Li: i: " << i << " string::npos " << string::npos << endl;  
+         //cout << "Lin Li: i: " << i << " cTestChar[i] " << cTestChar[i] << endl;  
+         //cout << "Lin Li: i: " << i << " strASCI " << strASCI << endl;  
+         //cout << "Lin Li: i: " << i << " strASCI.find(cTestChar[i]) " << strASCI.find(cTestChar[i]) << endl << endl;  
+         
       }
 
       if (10 < iCount) // unformatted PDB
       {
-         bPdbUnformatIn = true;
+         //bPdbUnformatIn = true;
+         //LinLi: 2016_07_13 Here I comment out the line, because when there is one atom, it crashes.
+         //cout << "LIN LI: iCount " <<  iCount <<  endl;
          CToUnformattedFile warning(strPdbFile,strASCI);
       }
-
+*/
       ifFileHandle.close();
    }
 
@@ -149,6 +160,7 @@ void CDelphiDataMarshal::updateParameters()
       if (10 < iCount) // unformatted FRC
       {
          CToUnformattedFile warning(strFrcFile,strASCI);
+         //cout << "LIN LI: iCount " <<  iCount <<  endl;
          bFrcUnformatIn = true;
       }
 
@@ -212,7 +224,7 @@ void CDelphiDataMarshal::updateParameters()
 #endif
 
       //cout << "## iAtomNum: " << iAtomNum << endl;
-      if (0 == iAtomNum) throw CNoAtomsInMolecule(i);
+      if (-1 > iAtomNum) throw CNoAtomsInMolecule(i);
 
       SGrid<delphi_real> gMinCoord = vctapAtomPdb[0].getPose();
       SGrid<delphi_real> gMaxCoord = vctapAtomPdb[0].getPose();
@@ -256,12 +268,12 @@ void CDelphiDataMarshal::updateParameters()
       {
          if (fZero > abs(gfOffCenter.nX-999.0))
          {
-            cout << "modifying midpoints using frc input file \n";
+            //cout << "modifying midpoints using frc input file \n";
             gfBoxCenter = pIO->readFrcFile(strFrciFile,gfOffCenter,fScale);
          }
          else
          {
-            cout << "modifying midpoints using fort.27 \n";
+            //cout << "modifying midpoints using fort.27 \n";
             gfBoxCenter = pIO->readFrcFile(strCentFile,gfOffCenter,fScale);
          }
       } // ---------- end of if (fZero > abs(gfOffCenter-999.0) || fZero > abs(gfOffCenter-777.0))

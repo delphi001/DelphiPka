@@ -19,9 +19,10 @@ void CSite::phicon()
 
    if (0.0 < fIonStrength)
    {
+#ifdef VERBOSE	   
       cout << "\nconverting potentials to \n";
       cout << "net charge concentrations...\n\n";
-
+#endif
       /*
        * if nonlinear equation is used then use the exponential form, otherwise use the linear form
        * use same number of terms in expansion of sinh as for iteration in itit.f

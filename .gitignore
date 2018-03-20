@@ -38,4 +38,5 @@
 cmake-build-debug/
 
 #bin
-bin/
+bin/*
+!bin/README

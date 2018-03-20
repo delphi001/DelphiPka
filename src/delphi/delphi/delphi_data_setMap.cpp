@@ -62,6 +62,12 @@ void CDelphiData::setMap()
    myData["ergsgaussian"]= pddm->fErgsgaussian;
    myData["radipz"]      = pddm->fRadipz;
 
+   //-------------------Gaussian Salt----------------------------//
+   myData["gdensity"] = pddm->gaussianSoluteDensity;
+   myData["gdtype"] = pddm->iGaussianDensity;
+   myData["getype"] = pddm->iGaussianEnergy;
+   
+
 
    //-------------------------- io file names ------------------------//
    //myData["prmnam"]    = pddm->strParamFile[0]; // (not to be mapped)
@@ -79,6 +85,8 @@ void CDelphiData::setMap()
    myData["srfnam"]      = pddm->strGraspFile;
    myData["nrgnam"]      = pddm->strEnergyFile;
    myData["scrgnam"]     = pddm->strScrgFile;
+   myData["zphinam"]	 = pddm->strZetaPhiFile;	//ARGO for ZPHI output file :: ZETA
+   
    //myData["centnam"]   = pddm->strCentFile; // renamed to be fort.27 (not to be mapped)
    //----------------------- set by functions ------------------------//
    /*
@@ -119,6 +127,7 @@ void CDelphiData::setMap()
    myData["isen"]        = pddm->bSurfEngOut;
    myData["isch"]        = pddm->bSurfCrgOut;
    myData["scrgfrm"]     = pddm->iSurfCrgFormatOut;
+   myData["zphi_out"]	 = pddm->bZetaPhiOut;	//zeta
 
    /*
     * set by ENERGY function
@@ -210,6 +219,25 @@ void CDelphiData::setMap()
    myData["ibnum"]       = pddm->iBndyGridNum;
    myData["iepsmp"]      = pddm->vctgiEpsMap;      // std::vector< SGrid<delphi_integer> >
    myData["idebmap"]     = pddm->vctbDielecMap;    // std::vector<bool>
+   
+   //ARGO: For zeta surface map
+   myData["zetaSurfMap"] = pddm->vctZetaSurfMap;    // std::vector<bool>
+   myData["zetaOn"]      = pddm->zetaOn;
+   myData["zetaDistance"]= pddm->zetaDistance;
+   myData["Kcluster_num"]= pddm->iKclusters;
+   
+   //
+   
+   //ARGO: UA 2016
+   // Convolution Model 1
+   myData["convolute"]       = pddm->iConvolute;    // std::vector<bool>
+   myData["kernel_sigma"]    = pddm->fksigma;
+   myData["rho_map"]		 = pddm->vctgfHRhomap;
+   myData["hvsd_epsilon"]	 = pddm->fhvsd_eps;
+   
+
+   //
+   
    myData["ibgrd"]       = pddm->vctgiBndyGrid;    // std::vector< SGrid<delphi_integer> >
    myData["nqgrd"]       = pddm->iCrg2GridNum;
    myData["chrgv2"]      = pddm->vctgvfCrg2Grid;   // std::vector< SGridValue<delphi_real> >

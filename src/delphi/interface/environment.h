@@ -30,10 +30,10 @@
 /**
  * flag to embed delphicpp in mcce
  */
-//#define MCCE
+// #define MCCE
 
 /**
- * flag to embed delphicpp in DelPhiPKa
+ * flag to embed delphicpp in PrimePKA
  */
 #define PRIME
 

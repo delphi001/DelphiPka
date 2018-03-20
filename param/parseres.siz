@@ -88,6 +88,7 @@ HD1   ASN   1.0
 HD2   ASN   1.0
 HD21  ASN   1.0
 HD22  ASN   1.0
+
 N     AS0   1.5    ! aspartate neutral
 CA    AS0   2.0
 HN    AS0   1.0
@@ -104,6 +105,7 @@ OD1   AS0   1.4
 HD1   AS0   1.0
 OD2   AS0   1.4
 HD2   AS0   1.0
+
 N     ASP   1.5    ! aspartate charged
 CA    ASP   2.0
 HN    ASP   1.0
@@ -117,9 +119,10 @@ HB2   ASP   0.0
 HB3   ASP   0.0
 CG    ASP   1.7
 OD1   ASP   1.4
-HD1   ASP   1.0
+HD1   ASP   0.0
 OD2   ASP   1.4
-HD2   ASP   1.0
+HD2   ASP   0.0
+
 N     CYS   1.5
 CA    CYS   2.0
 HN    CYS   1.0
@@ -157,6 +160,7 @@ HB1   CY-   0.0
 HB2   CY-   0.0
 HB3   CY-   0.0
 SG    CY-   1.85
+
 N     GL0   1.5            ! neutral glutamic
 CA    GL0   2.0
 HN    GL0   1.0
@@ -176,6 +180,7 @@ OE1   GL0   1.4
 HE2   GL0   1.0
 OE2   GL0   1.4
 HE2   GL0   1.0
+
 N     GLU   1.5           ! charged glutamic
 CA    GLU   2.0
 HN    GLU   1.0
@@ -192,9 +197,10 @@ HG1   GLU   0.0
 HG2   GLU   0.0
 CD    GLU   1.7
 OE1   GLU   1.4
-HE1   GLU   1.0
+HE1   GLU   0.0
 OE2   GLU   1.4
-HE2   GLU   1.0
+HE2   GLU   0.0
+
 N     GLN   1.5
 CA    GLN   2.0
 HN    GLN   1.0
@@ -434,6 +440,7 @@ HB2   PRO   0.0
 CG    PRO   2.0
 HG1   PRO   0.0
 HG2   PRO   0.0
+
 N     SER   1.5
 CA    SER   2.0
 HN    SER   1.0
@@ -446,7 +453,22 @@ HB1   SER   0.0
 HB2   SER   0.0
 HB3   SER   0.0
 OG    SER   1.4
-HG    SER   1.0
+HG    SER   0.0
+
+N     SE0   1.5
+CA    SE0   2.0
+HN    SE0   1.0
+H     SE0   1.0
+HA    SE0   0.0
+C     SE0   1.7
+O     SE0   1.4
+CB    SE0   2.0
+HB1   SE0   0.0
+HB2   SE0   0.0
+HB3   SE0   0.0
+OG    SE0   1.4
+HG    SE0   1.0
+
 N     THR   1.5
 CA    THR   2.0
 HN    THR   1.0
@@ -457,12 +479,30 @@ O     THR   1.4
 CB    THR   2.0
 HB    THR   0.0
 OG1   THR   1.4
-HG1   THR   1.0
+HG1   THR   0.0
 CG2   THR   2.0
 HG2   THR   0.0
 HG21  THR   0.0
 HG22  THR   0.0
 HG23  THR   0.0
+
+N     TH0   1.5
+CA    TH0   2.0
+HN    TH0   1.0
+H     TH0   1.0
+HA    TH0   0.0
+C     TH0   1.7
+O     TH0   1.4
+CB    TH0   2.0
+HB    TH0   0.0
+OG1   TH0   1.4
+HG1   TH0   1.0
+CG2   TH0   2.0
+HG2   TH0   0.0
+HG21  TH0   0.0
+HG22  TH0   0.0
+HG23  TH0   0.0
+
 N     TRP   1.5
 CA    TRP   2.0
 HN    TRP   1.0
@@ -489,6 +529,31 @@ CH2   TRP   1.7
 HH2   TRP   1.0
 CZ2   TRP   1.7
 HZ2   TRP   1.0
+
+N     TY0   1.5
+CA    TY0   2.0
+HN    TY0   1.0
+H     TY0   1.0
+HA    TY0   0.0
+C     TY0   1.7
+O     TY0   1.4
+CB    TY0   2.0
+HB1   TY0   0.0
+HB2   TY0   0.0
+HB3   TY0   0.0
+CG    TY0   1.7
+CD1   TY0   1.7
+HD1   TY0   1.0
+CE1   TY0   1.7
+HE1   TY0   1.0
+CZ    TY0   1.7
+OH    TY0   1.4
+HH    TY0   1.0
+CE2   TY0   1.7
+HE2   TY0   1.0
+CD2   TY0   1.7
+HD2   TY0   1.0
+
 N     TYR   1.5
 CA    TYR   2.0
 HN    TYR   1.0
@@ -507,33 +572,12 @@ CE1   TYR   1.7
 HE1   TYR   1.0
 CZ    TYR   1.7
 OH    TYR   1.4
-HH    TYR   1.0
+HH    TYR   0.0
 CE2   TYR   1.7
 HE2   TYR   1.0
 CD2   TYR   1.7
 HD2   TYR   1.0
-N     TY-   1.5
-CA    TY-   2.0
-HN    TY-   1.0
-H     TY-   1.0
-HA    TY-   0.0
-C     TY-   1.7
-O     TY-   1.4
-CB    TY-   2.0
-HB1   TY-   0.0
-HB2   TY-   0.0
-HB3   TY-   0.0
-CG    TY-   1.7
-CD1   TY-   1.7
-HD1   TY-   1.0
-CE1   TY-   1.7
-HE1   TY-   1.0
-CZ    TY-   1.7
-OH    TY-   1.4
-CE2   TY-   1.7
-HE2   TY-   1.0
-CD2   TY-   1.7
-HD2   TY-   1.0
+
 N     VAL   1.5
 CA    VAL   2.0
 HN    VAL   1.0

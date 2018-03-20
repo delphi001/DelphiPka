@@ -39,7 +39,7 @@ string CIO::removeSpace(const string& strLine)
     return strNewLine;
 }
 
-//-----------------------------------------------------------------------//
+//-- 2016_05_08 Lin Li: this function doesn't work well. This function is unneccessary -----------------------------------//
 bool CIO::checkFileFormat(const string& strFile)
 {
    bool bIsFormatted = true; // initially assume formatted file
@@ -74,9 +74,9 @@ void CIO::setDelphiAtom(const bool& bSolvePB, const bool& bSurfCrgInSite, const 
    int    iFound  = -1;
    delphi_real   fValue  = 0.0; // radius or charge
    string strAtInf,strSub0,strSub1,strAtom,strResidue,strResidueNum,strChain; 
-
+#ifdef VERBOSE
    cout << "\nassigning charges and radii... \n\n";
-
+#endif
    /*
     * only standard PDB requires to read charge and size from separate files. Otherwise, charges and sizes are already
     * included in the input PDB file.

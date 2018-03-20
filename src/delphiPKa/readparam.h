@@ -22,88 +22,90 @@
 
 class CReadParam {
 private:
-    
+
     /* From Data_STORE */
-    
-    string& paramfile;
-    string& pdbname;
-    string& parameter_input;
-    string& siz_file;
-    string& crg_file;
-    string& HofGLU;
-    string& HofASP;
-    
-    bool& bHETATMinPQR;
-    bool& bClusterAuto;
-    bool& bRemoveHETATM;
-    bool& bRemoveWater;
-    bool& bOutPQRtopo;
-    bool& bOutPQRpka;
-    
-    bool& bDoProton;
-    bool& bDoEnergy;
-    bool& bDoPka;
-    int& n_cluster;
-    int& iGaussian;
-    float& fSigma;
-    float& fSrfcut;
-    float& indi;
-    float& exdi;
-    float& ionrad;
-    float& prbrad;
-    float& maxc;
-    float& clusterThreshold;
-    float& fGivenPhVal;
-    
-    float& pH_initial;
-    float& pH_end;
-    float& pH_step;
-    
+
+    string &paramfile;
+    string &pdbname;
+    string &parameter_input;
+    string &siz_file;
+    string &crg_file;
+    string &HofGLU;
+    string &HofASP;
+
+    bool &bHETATMinPQR;
+    bool &bClusterAuto;
+    bool &bRemoveHETATM;
+    bool &bRemoveWater;
+    bool &bOutPQRtopo;
+    bool &bOutPQRpka;
+
+    bool  &bDoProton;
+    bool  &bDoEnergy;
+    bool  &bDoPka;
+    int   &n_cluster;
+    int   &iGaussian;
+    float &fSigma;
+    float &fSrfcut;
+    float &indi;
+    float &exdi;
+    float &ionrad;
+    float &prbrad;
+    float &maxc;
+    float &clusterThreshold;
+    float &fGivenPhVal;
+
+    float &pH_initial;
+    float &pH_end;
+    float &pH_step;
+
+    float &salt;
+    bool  &bCalMoreRes;
+
     /*  END */
-    
+
     string line;
-    
+
 public:
-    
+
     CReadParam(shared_ptr<DATA_STORE> pData) :
-    paramfile(pData->paramfile),
-    pdbname(pData->pdb_input),
-    parameter_input(pData->parameter_input),
-    siz_file(pData->siz_file),
-    crg_file(pData->crg_file),
-    HofGLU(pData->HofGLU),
-    HofASP(pData->HofASP),
-    iGaussian(pData->iGaussian),
-    fSigma(pData->fSigma),
-    fSrfcut(pData->fSrfcut),
-    indi(pData->indi),
-    exdi(pData->exdi),
-    ionrad(pData->ionrad),
-    prbrad(pData->prbrad),
-    maxc(pData->maxc),
-    clusterThreshold(pData->clusterThreshold),
-    fGivenPhVal(pData->fGivenPhVal),
-    bHETATMinPQR(pData->bHETATMinPQR),
-    bRemoveHETATM(pData->bRemoveHETATM),
-    bRemoveWater(pData->bRemoveWater),
-    bOutPQRtopo(pData->bOutPQRtopo),
-    bOutPQRpka(pData->bOutPQRpka),
-    bClusterAuto(pData->bClusterAuto),
-    bDoProton(pData->bDoProton),
-    bDoEnergy(pData->bDoEnergy),
-    bDoPka(pData->bDoPka),
-    n_cluster(pData->n_cluster),
-    pH_initial(pData->pH_initial),
-    pH_end(pData->pH_end),
-    pH_step(pData->pH_step)
-    
-    
-    {};
-    
+            paramfile(pData->paramfile),
+            pdbname(pData->pdb_input),
+            parameter_input(pData->parameter_input),
+            siz_file(pData->siz_file),
+            crg_file(pData->crg_file),
+            HofGLU(pData->HofGLU),
+            HofASP(pData->HofASP),
+            iGaussian(pData->iGaussian),
+            fSigma(pData->fSigma),
+            fSrfcut(pData->fSrfcut),
+            indi(pData->indi),
+            exdi(pData->exdi),
+            ionrad(pData->ionrad),
+            prbrad(pData->prbrad),
+            maxc(pData->maxc),
+            clusterThreshold(pData->clusterThreshold),
+            fGivenPhVal(pData->fGivenPhVal),
+            bHETATMinPQR(pData->bHETATMinPQR),
+            bRemoveHETATM(pData->bRemoveHETATM),
+            bRemoveWater(pData->bRemoveWater),
+            bOutPQRtopo(pData->bOutPQRtopo),
+            bOutPQRpka(pData->bOutPQRpka),
+            bClusterAuto(pData->bClusterAuto),
+            bDoProton(pData->bDoProton),
+            bDoEnergy(pData->bDoEnergy),
+            bDoPka(pData->bDoPka),
+            n_cluster(pData->n_cluster),
+            pH_initial(pData->pH_initial),
+            pH_end(pData->pH_end),
+            pH_step(pData->pH_step),
+            salt(pData->salt),
+            bCalMoreRes(pData->bCalMoreRes){};
+
     void run();
-    
-    ~CReadParam(){};
-    
+
+    ~CReadParam() {};
+
 };
 
 #endif // READPARAM__

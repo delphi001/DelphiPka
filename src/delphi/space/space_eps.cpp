@@ -44,8 +44,9 @@ void CDelphiSpace::epsmak()
         sLimGridUnit[i].nMin=(sLimObject[i].nMin-cOldMid)*fScale+fRMid;
         sLimGridUnit[i].nMax=(sLimObject[i].nMax-cOldMid)*fScale+fRMid;
     }
-
-    if(bUniformDiel)
+	
+    //ARGO: make it work only for HOMO models
+    if(bUniformDiel && iConvolute==0)
     {
         cout << "not going to calculate boundary elements since" << endl;
         cout << "uniform dielectric" << endl;
@@ -67,6 +68,7 @@ void CDelphiSpace::epsmak()
 /**
  * find global limits IN GRID UNITS, both, molecule and objects, are considered
 */
+#ifdef VERBOSE
     if(iNObject > 1)
     {
         for(i=1; i<=iNObject-1; i++)
@@ -74,6 +76,7 @@ void CDelphiSpace::epsmak()
             cout << "to be finished using SGrid <float> operations:" << endl;
         }
     }
+#endif //what's the point of this? Zhe Jia 09-05-2016	
     fRMaxTemp=rdmx;
 
 
@@ -113,19 +116,27 @@ void CDelphiSpace::epsmak()
  *The new algorithm should be able to handle all scales; still
  *remains to be tested (Sri Apr 95)
 */
-    if(iGaussian==0)
+    if(iGaussian==0 && iConvolute==0)
     {
-        if(debug_space) cout << "go to setout..." << endl;
-        setout();
+
+		if(debug_space) cout << "go to setout..." << endl;
+		setout();
+        
+    } 
+    else if (iGaussian != 0 && iConvolute==0)
+    {
+		if(debug_space) cout << "go to setgaussian..." << endl;
+		setGaussian();
     }
-    else
+    else if ( iGaussian == 0 && iConvolute != 0)
     {
-        if(debug_space) cout << "go to setgaussian..." << endl;
-        setGaussian();
+		if(debug_space) cout << "go to setconvolute..." << endl;
+		setConvolute();
     }
 
 
-    if(iGaussian==0)
+
+    if(iGaussian==0 && iConvolute==0)
     {
         if(debug_space) cout <<"going to VdwToMs..." << endl;
 

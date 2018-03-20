@@ -96,5 +96,14 @@ class CSmallRelaxParam : public CWarning
       }
 };
 
+class CDiverged : public CWarning
+{
+   public:
+   CDiverged(const stringstream & sin)
+      {
+         cerr << sin.str();
+      }
+};
+
 
 #endif /* SOLVER_EXCEPTIONS_H_ */

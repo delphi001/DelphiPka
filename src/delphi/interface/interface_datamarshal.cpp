@@ -51,7 +51,7 @@ bool IDataMarshal::getBiomodel(const string &strLineNoSpace)
 
    if (bNoBiomodel || bNoSolver)
    {
-      CNoBiomodel warning(strBioModel,strNumSolver);
+      //CNoBiomodel warning(strBioModel,strNumSolver);
 
       bNoBiomodel = false; bNoSolver = false;
 
@@ -71,7 +71,7 @@ bool IDataMarshal::getQinclude(const string &strLineNoSpace)
 
     string strFileName = strLineNoSpace.substr(9,pos-10);
 
-    cout << "QINCLUDE found - reading file " << strFileName.c_str() << endl;
+   // cout << "QINCLUDE found - reading file " << strFileName.c_str() << endl;
 
     this->read(strFileName);
 

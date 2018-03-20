@@ -16,7 +16,7 @@ void CDelphiEnergy::energy_nonl(delphi_real& fEnergy_Nonlinear, int& iGridOutput
 	delphi_real dhi1, dhi2, dhi3, dhi4, dhi5, fCarica_Temp, fPhi, c;
 	SGridValue<delphi_real> fGridValue_Temp;
 
-	fEnergy_Solvation=0.0; 
+	fEnergy_Solvation=0.0;
 	fEnergy_Osmetic=0.0;
 
 	goff = (iGrid + 1.0) / 2.0;
@@ -88,11 +88,10 @@ void CDelphiEnergy::energy_nonl(delphi_real& fEnergy_Nonlinear, int& iGridOutput
 	iGridOutput = sout.size();
 
 
-	cout << " rho*phi/2 term in solution       :               " << setw(8) << right << -fEnergy_Solvation << "  kt" << endl;
-	cout << " osmotic pressure term            :               " << setw(8) << right << -fEnergy_Osmetic << "  kt" << endl;
+	cout << enerString << left << setw(MAXWIDTH) << "rho*phi/2 term in solution" << " : " << setw(NUMWIDTH) << right << -fEnergy_Solvation << " kT" << endl;
+	cout << enerString << left << setw(MAXWIDTH) << "Osmotic pressure term" << " : " << setw(NUMWIDTH) << right << -fEnergy_Osmetic << " kT" << endl;
 
 
 	fEnergy_Nonlinear = fEnergy_Nonlinear + fEnergy_Osmetic +fEnergy_Solvation;
 
 }
-

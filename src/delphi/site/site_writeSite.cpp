@@ -202,30 +202,42 @@ void CSite::writeSite(const int& iisitsf)
    bool ifrm2 = false, iqass = true;
    ifstream ifFileStream;
    vector<bool> residsf(iResidueNum,false);
-
+#ifdef VERBOSE
    if (!(isitmd || isitpot)) cout << "\nwriting potentials at given sites...\n";
-
+#endif
+   //cout << "LIN LI writeSite 1 : iself " << iself <<"   isitpot: " << isitpot << "  bCommFRCIn:" << bCommFRCIn << endl;
    if (iself)
    {
+#ifdef VERBOSE
       cout << "using the current pdb file\n";
+#endif	  
       ifrm2 = true; iqass = false;
    }
    else
    {
       if (!isitpot)
       {
+
+   //cout << "LIN LI writeSite 2 : iself " << iself <<"   isitpot: " << isitpot << "  bCommFRCIn:" << bCommFRCIn << endl;
           if (!bCommFRCIn) {
               ifFileStream.open(strFrciFile.c_str()); // just inquire whether the file exists or not
+   //cout << "LIN LI writeSite 3 ifFileStream.is_open(): " << ifFileStream.is_open() << endl;
               if (!ifFileStream.is_open())
               {
+   //cout << "LIN LI writeSite 4 : iself " << iself <<"   isitpot: " << isitpot << "  bCommFRCIn:" << bCommFRCIn << endl;
                   CUnknownInFrcFile warning(strFrciFile);
                   ifFileStream.close();
                   return;
               }
               else
               {
+#ifdef VERBOSE				  
                   cout << "coordinates, etc for potential output read from file " << strFrciFile << endl;
-                  ifrm2 = checkFileFormat(strFrciFile);
+#endif				  
+   //cout << "LIN LI writeSite 5 checkFileFormat(strFrciFile): " << checkFileFormat(strFrciFile) << " strFrciFile: " << strFrciFile << endl;
+                  //ifrm2 = checkFileFormat(strFrciFile);
+		//2016_05_08 Lin Li:	checkFileFormat is unneccessary and it doesn't work.
+		  ifrm2 = true; 
               }
               
               ifFileStream.close();
@@ -234,8 +246,10 @@ void CSite::writeSite(const int& iisitsf)
    }
 
    //----- if unformatted may not contain all the info needed for all options, i.e atom info
+      //cout << "LIN LI out: ifrm2 " << ifrm2 <<"   isita: " << isita << "  bCommFRCIn:" << bCommFRCIn << endl;
    if (!ifrm2 && isita && !bCommFRCIn)
    {
+      cout << "LIN LI in: ifrm2 " << ifrm2 <<"   isita: " << isita << "  bCommFRCIn:" << bCommFRCIn << endl;
       CNoAtomInfo warning(strFrciFile);
       isita = false; iqass = false;
    }
@@ -263,7 +277,9 @@ void CSite::writeSite(const int& iisitsf)
       }
       else
       {
+#ifdef VERBOSE		  
          cout << "coordinates, etc for potential output read from file " << strFrciFile << endl;
+#endif		 
          while (!ifFileStream15.eof()) // loop D302
          {
             getline(ifFileStream15,strLine);
@@ -284,9 +300,9 @@ void CSite::writeSite(const int& iisitsf)
    if (ofrm) ofFileStream.open(strFrcFile.c_str());
 #endif
    if(!(ofrm || isitmd || isitpot)) ofFileStream.open(strFrcFile.c_str(),ios::binary);
-
+#ifdef VERBOSE
    if (!isitmd && !isitpot) cout << "potentials written to file " << strFrcFile << endl << endl;
-
+#endif
    if (ofrm)
    {
 #ifndef PRIME
@@ -353,6 +369,7 @@ void CSite::writeSite(const int& iisitsf)
 
    nnatom = 0; chrgv = 0.0; goff = ((delphi_real)iGrid+1.0)/2.0; etot = 0.0; phirt = 0.0; phict =0.0;
 
+   //cout << "Lin Li test: isitpot: " << isitpot << " isitp: " << isitp << " isitap: " << isitap << endl; 
    if (isitpot)
    {
       CSitePhiError warning;
@@ -474,27 +491,27 @@ void CSite::writeSite(const int& iisitsf)
             SGrid<delphi_real> xt;
 
             xt = xn; xt.nX += rads;
-            vphi = interpl(iGrid,phimap,xt);
+            vphi = tricubicInterpl(iGrid,phimap,xt);
             aphi = vphi;
 
             xt = xn; xt.nX -= rads;
-            vphi = interpl(iGrid,phimap,xt);
+            vphi = tricubicInterpl(iGrid,phimap,xt);
             aphi += vphi;
 
             xt = xn; xt.nY += rads;
-            vphi = interpl(iGrid,phimap,xt);
+            vphi = tricubicInterpl(iGrid,phimap,xt);
             aphi += vphi;
 
             xt = xn; xt.nY -= rads;
-            vphi = interpl(iGrid,phimap,xt);
+            vphi = tricubicInterpl(iGrid,phimap,xt);
             aphi += vphi;
 
             xt = xn; xt.nZ += rads;
-            vphi = interpl(iGrid,phimap,xt);
+            vphi = tricubicInterpl(iGrid,phimap,xt);
             aphi += vphi;
 
             xt = xn; xt.nZ -= rads;
-            vphi = interpl(iGrid,phimap,xt);
+            vphi = tricubicInterpl(iGrid,phimap,xt);
             aphi += vphi;
 
             aphi = aphi/6.0;
@@ -502,7 +519,21 @@ void CSite::writeSite(const int& iisitsf)
 
          if (isitp || isiti || (isitap && fZero > abs(chrgv)))
          {
-            vphi = interpl(iGrid,phimap,xn);
+            vphi = tricubicInterpl(iGrid,phimap,xn);
+            //vphi = tricubicInterpl(iGrid,phimap,xn); // test Lin Li test
+            //cout << "Lin Li test: iGrid: " << iGrid << " vphi: " << vphi << " xn: " <<  xn << endl; 
+            //delphi_real p[4]={143.2846,113.7093,94.3843,80.7234};
+            //delphi_real p[4]={-9,-1,1,9};
+            //delphi_real p[4][4]={{-9,-1,1,9},{-9,-1,1,9},{-9,-1,1,9},{-9,-1,1,9}};
+            //cout << "Lin Li: p= {143.2846,113.7093,94.3843,80.7234}" << endl;
+            //cout << "Lin Li: p= {-9,-1,1,9}" << endl;
+            //for (delphi_real x=0;x<1;x+=0.1)
+            //{
+               //cout << "Lin Li test: cubicInterpl(p," << x << "): " << cubicInterpl(p,x) << endl;
+            //   cout << "Lin Li test: bicubicInterpl(p," << x << ",0.1): " << bicubicInterpl(p,x,0.1) << endl;
+            //}
+
+
             if (isitap && fZero > abs(chrgv)) aphi = vphi;
             if (isitp) { etot += chrgv*vphi; phiv = vphi; }
 
@@ -526,18 +557,20 @@ void CSite::writeSite(const int& iisitsf)
 
          if (isitdeb) // it calculates the fraction of closest grid points that are in solution
          {
+#ifdef VERBOSE			 
             cout << "Calculating Debye Fraction\n";
+#endif			
             debyefraction = boolinterpl(iGrid,prgbDielecMap,xn);
          }
 
          if (isitf)
-         {
-            xn.nX += 1.0;               fu.nX = interpl(iGrid,phimap,xn);
-            xn.nX -= 2.0;               fl.nX = interpl(iGrid,phimap,xn);
-            xn.nX += 1.0; xn.nY += 1.0; fu.nY = interpl(iGrid,phimap,xn);
-            xn.nY -= 2.0;               fl.nY = interpl(iGrid,phimap,xn);
-            xn.nY += 1.0; xn.nZ += 1.0; fu.nZ = interpl(iGrid,phimap,xn);
-            xn.nZ -= 2.0;               fl.nZ = interpl(iGrid,phimap,xn);
+         {  
+            xn.nX += 1.0;               fu.nX = tricubicInterpl(iGrid,phimap,xn);
+            xn.nX -= 2.0;               fl.nX = tricubicInterpl(iGrid,phimap,xn);
+            xn.nX += 1.0; xn.nY += 1.0; fu.nY = tricubicInterpl(iGrid,phimap,xn);
+            xn.nY -= 2.0;               fl.nY = tricubicInterpl(iGrid,phimap,xn);
+            xn.nY += 1.0; xn.nZ += 1.0; fu.nZ = tricubicInterpl(iGrid,phimap,xn);
+            xn.nZ -= 2.0;               fl.nZ = tricubicInterpl(iGrid,phimap,xn);
             xn.nZ += 1.0;
             fxyz = (fl-fu)*0.5*fScale; // the electric field is opposite the potential gradient so I change the sign
          }
@@ -577,7 +610,9 @@ void CSite::writeSite(const int& iisitsf)
                }
 
                temp = 0.0;
+#ifdef VERBOSE			   
                cout << "Writing sold(1:30) and temp \n";
+#endif			   
                for (delphi_integer i = 0; i < 30; i++)
                {
                   temp += sold[i];
@@ -621,7 +656,7 @@ void CSite::writeSite(const int& iisitsf)
                /*
                 * find the grid potentials..
                 */
-               phiv = interpl(iGrid,phimap,xn);
+               phiv = tricubicInterpl(iGrid,phimap,xn);
 
                string strFileName7 = "extra.dat";
                ofstream ofFileSteam7;
@@ -820,9 +855,11 @@ void CSite::writeSite(const int& iisitsf)
          if (isitmd)
          {
             vtemp = rxyz + cxyz;
+#ifdef VERBOSE			
             cout << "atom: " << nnatom << " rx= " << rxyz.nX << " cx= " << cxyz.nX << " tx= " << vtemp.nX << endl;
             cout << "atom: " << nnatom << " ry= " << rxyz.nY << " cy= " << cxyz.nY << " ty= " << vtemp.nY << endl;
             cout << "atom: " << nnatom << " rz= " << rxyz.nZ << " cz= " << cxyz.nZ << " tz= " << vtemp.nZ << endl;
+#endif			
          }
 
          if (isitt)
@@ -868,12 +905,12 @@ void CSite::writeSite(const int& iisitsf)
             xo = prgfgSurfCrgA[jj]+rgfProbeRadius[0]*prgfgSurfCrgE[jj];
             xn = (xo-fgBoxCenter)*fScale+goff;
 
-            xn.nX += 1.0;               fu.nX = interpl(iGrid,phimap,xn);
-            xn.nX -= 2.0;               fu.nX = interpl(iGrid,phimap,xn);
-            xn.nX += 1.0; xn.nY += 1.0; fu.nY = interpl(iGrid,phimap,xn);
-            xn.nY -= 2.0;               fu.nY = interpl(iGrid,phimap,xn);
-            xn.nY += 1.0; xn.nZ += 1.0; fu.nZ = interpl(iGrid,phimap,xn);
-            xn.nZ -= 2.0;               fu.nZ = interpl(iGrid,phimap,xn);
+            xn.nX += 1.0;               fu.nX = tricubicInterpl(iGrid,phimap,xn);
+            xn.nX -= 2.0;               fu.nX = tricubicInterpl(iGrid,phimap,xn);
+            xn.nX += 1.0; xn.nY += 1.0; fu.nY = tricubicInterpl(iGrid,phimap,xn);
+            xn.nY -= 2.0;               fu.nY = tricubicInterpl(iGrid,phimap,xn);
+            xn.nY += 1.0; xn.nZ += 1.0; fu.nZ = tricubicInterpl(iGrid,phimap,xn);
+            xn.nZ -= 2.0;               fu.nZ = tricubicInterpl(iGrid,phimap,xn);
             xn.nZ += 1.0;
 
             fxyz = fl - fu;

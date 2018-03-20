@@ -83,17 +83,24 @@ void CDelphiFastSOR::initOddEvenItr(const int& forWhom)
    for (ip = 0; ip < iHalfGridNum; ip++)
    {
       iq = ip*2;
-        //cout << "ip,iq: " << ip << " " << iq <<endl;
-      if (prgfPhiMap.size() > iq)
+        // cout << "ip,iq: " << ip << " " << iq <<endl;
+        // cout << "Lin initial 1.2: " << prgfPhiMap.size() << " " << iq << endl;
+      if (prgfPhiMap.size() > iq){
          phimap1.push_back(prgfPhiMap[iq]);
+         //phimap1[ip]=prgfPhiMap[iq];
+	// if(iq == 0) cout << "Lin  initial 1.5: " << prgfPhiMap[iq] << " " << phimap1[0] << " " << phimap1.size() << endl;
+       }
       else
          phimap1.push_back(0.0);
 
       if (prgfPhiMap.size() > iq+1)
-         phimap2.push_back(prgfPhiMap[iq+1]);
+        phimap2.push_back(prgfPhiMap[iq+1]);
+       //phimap2[ip]=prgfPhiMap[iq+1];
       else
          phimap2.push_back(0.0);
    }
+
+
 
     //for (int ii=1;ii<=phimap2.size();ii++)
     //for (int ii=1;ii<=700;ii++)
@@ -103,6 +110,7 @@ void CDelphiFastSOR::initOddEvenItr(const int& forWhom)
    /*
     * setup vectors for restoring x boundary values
     */
+
    star = (iGrid+1)/2; iq = iGrid*(iGrid+1)/2-iGrid+1; fin = (iGrid*(iGrid-1)-2)/2;
    for(ip = 0; ip < fin-star+1; ip++)
    {
@@ -149,5 +157,7 @@ void CDelphiFastSOR::initOddEvenItr(const int& forWhom)
    }
 
    om1 = 1.0 - om2;
+//   cout << "Lin initial 10: phimap1[0]: " << phimap1[0]  << endl; //Lin Test 2016/04
+//   cout << "Lin initial 10: phimap2[0]: " << phimap2[0]  << endl; //Lin Test 2016/04
 
 }

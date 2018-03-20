@@ -53,7 +53,7 @@ void CDelphiSpace::msrf()
         {
             for(i=1; i<=iGrid; i++)
             {
-//cambiato da mod a div, mi dovrebbe servire solo il mezzo
+//changed from div mod, it should only serve the means
                 //egrid[i][j][k]=iEpsMap[i][j][k]/epsdim;
                 egrid[i][j][k]=iepsmp[i][j][k]/epsdim;
             }// do
@@ -108,7 +108,9 @@ void CDelphiSpace::msrf()
     vert.assign(mxvtx+1, sgrid_temp_real);
 
     //print*,'mxtri,mxvtx=',mxtri,mxvtx
+#ifdef VERBOSE	
     cout << "mxtri,mxvtx= " << " " << mxtri << " " << mxvtx << endl;
+#endif	
 //bin //bioengr //boot //cgroup //collective //common //common1 //cugi //dev //etc //fast //home //lib //lib64 //local_scratch //lost+found //media //misc //mnt //newscratch //opt //proc //root //sbin //selinux //smlc //software //srv //sys //tmp //usr //vaar //var //xcatpost
 //2011-05-20 In void ex egrid array is three-dimensional while in this void this array was four-dimensional.
 // Also array vindx was 2D here, but 1D in the EX void.
@@ -133,7 +135,9 @@ void CDelphiSpace::msrf()
     itot = itot/3;
 
 //fScale boundary grid pointeger positions relative to acc data
+#ifdef VERBOSE
     cout <<"scaling vertices" << endl;
+#endif	
     //allocate(vnorm(vtot),vnorm2(vtot));
 
     //vnorm.assign(vtot+1, {0.,0.,0.});
@@ -228,10 +232,10 @@ void CDelphiSpace::msrf()
     if(tmlst != NULL) free_pt2d(tmlst,9+1,imxvtx+1);
 
 
-
+#ifdef VERBOSE
     cout << "number of vertices = " << vtot << endl;
     cout << "number of triangles = " << itot << endl;
-
+#endif
     //vnorm2={0.,0.,0}; //already initialized
 
 //calculate area
@@ -291,8 +295,9 @@ void CDelphiSpace::msrf()
         vmg=sqrt( optDot( vnorm2[i],vnorm2[i] ) );
         vnorm2[i]=vnorm2[i]/vmg;
     }// do
-
+#ifdef VERBOSE
     cout <<"MS area = " << area << endl;
+#endif
 
 //2011-05-26 Subroutine wrtsurf is short and called only once,
 // therefore put the body of the void here
@@ -306,7 +311,9 @@ void CDelphiSpace::msrf()
         surfile.open ("grasp.srf");
 
         fname="grasp.srf";
+#ifdef VERBOSE		
         cout << "writing GRASP file to " << fname << endl;
+#endif		
         //line=" ";
         line[1]="format=2";
         line[2]="vertices,normals,triangles";
@@ -319,8 +326,9 @@ void CDelphiSpace::msrf()
         surfile << setw(6) << setw(12) << setprecision(6) << cOldMid.nX
                 << setw(6) << setw(12) << setprecision(6) << cOldMid.nY
                 << setw(6) << setw(12) << setprecision(6) << cOldMid.nZ;
-
+#ifdef VERBOSE	
         cout << "writing data for" << vtot << " vertices and" << itot << " triangles" << endl;
+#endif		
         for(i=1;i<=mxvtx;i++){
             surfile << vert[i] << endl;
         }
@@ -332,8 +340,9 @@ void CDelphiSpace::msrf()
         }
 
         surfile.close();
-
+#ifdef VERBOSE	
         cout << "finished writing " << fname << endl;
+#endif		
     }
     else
     {

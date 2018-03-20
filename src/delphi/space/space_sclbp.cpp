@@ -111,8 +111,9 @@ void CDelphiSpace::sclbp() // scspos-> scspos; scsnor-> scsnor; iBoundNum-> iBou
     {
 //find extrema
 //here one should consider the global system (Walter)
+#ifdef VERBOSE
         cout <<"Scaling routine in action//" << endl;
-
+#endif
 //2011-05-19 Using operations on coord and int_coord type variables defined in module operators_on_coordinates
         //cMin= {6000.,6000.,6000.};
         cMin.nX=6000.;
@@ -124,9 +125,12 @@ void CDelphiSpace::sclbp() // scspos-> scspos; scsnor-> scsnor; iBoundNum-> iBou
         cMax.nY=-6000.;
         cMax.nZ=-6000.;
 
-
-        for(ii=1; ii<=iNObject; ii++)
+	//cout << "Lin Li sclbp: ii :"<< ii << " iNObject: " << iNObject << endl;
+        //for(ii=1; ii<=iNObject; ii++)
+        for(ii=0; ii<iNObject; ii++)
         {
+            
+	    //cout << "Lin Li sclbp: ii :"<< ii << "sLimObject[ii]: " << sLimObject[ii] << endl;
             cMin=optMin(cMin,sLimObject[ii].nMin);
             cMax=optMax(cMax,sLimObject[ii].nMax);
         }// do
@@ -159,7 +163,9 @@ void CDelphiSpace::sclbp() // scspos-> scspos; scsnor-> scsnor; iBoundNum-> iBou
 
 //D500:
     //do i=1,iBoundNum;
+#ifdef VERBOSE	
     cout << "iBoundNum: " << iBoundNum << endl;
+#endif	
     for(i=1; i<=iBoundNum; i++)
     {
 
@@ -167,7 +173,9 @@ void CDelphiSpace::sclbp() // scspos-> scspos; scsnor-> scsnor; iBoundNum-> iBou
         if (iBoundNum!=iBoundNumsurf&&numbmol>1)
         {
 //2011-05-19 Converted to int_coord derived type
+#ifdef VERBOSE
             cout << "###### sclbp iente iepsmp: " << endl;
+#endif				
             ixyz=optCast <delphi_integer,delphi_real> (scspos[i]);
 
             ix=ixyz.nX;
@@ -263,8 +271,9 @@ void CDelphiSpace::sclbp() // scspos-> scspos; scsnor-> scsnor; iBoundNum-> iBou
                     }// if
                 }// if
             }// do
-
+#ifdef VERBOSE
             if(liml!=1||limu!=0) cout <<"bgp close to nothing" << endl;
+#endif			
         }
         else
         {
@@ -287,10 +296,7 @@ void CDelphiSpace::sclbp() // scspos-> scspos; scsnor-> scsnor; iBoundNum-> iBou
             if (ia<=iNatom)
             {
 /**
- *b+aggiunto iflag per salvare comunque in atsurf valore
- *del + vicino (01/02)
- *non sono sicurissimo perche' non ricordo esattmente che
- *fa poi con prevmed...
+ *added iflag to still save in atsurf value
 */
                 if (iflag)
                 {
@@ -377,7 +383,8 @@ void CDelphiSpace::sclbp() // scspos-> scspos; scsnor-> scsnor; iBoundNum-> iBou
 /**
  * try to find closest VdW surface, better if it is buried internal is used for the object to which surface the bgp is closer
 */
-                    cout << "$$$$$$ warning: distobj is called: $$$$$$$$$$" << endl;
+
+                   // cout << "$$$$$$ warning: distobj is called: $$$$$$$$$$" << endl;				
                    // call distobj(xq,dist,dixyz,iii,0.0,false);
 
                     precedenza=ia>iac&&(iac>iNatom||iac==0);
@@ -474,7 +481,7 @@ void CDelphiSpace::sclbp() // scspos-> scspos; scsnor-> scsnor; iBoundNum-> iBou
 //I want to know if u is within the shell sorrounding the object
                         xq=u123;
 
-                        cout << "$$$$$$ warning: distobj is called: $$$$$$$$$$" << endl;
+                        //cout << "$$$$$$ warning: distobj is called: $$$$$$$$$$" << endl;
                         //call distobj(xq,dist,dixyz,ia-iNatom,0.,true);
 
                         if (dist>0.0&&dist<fRadPrb[1]-1.e-6) out=false;
@@ -681,7 +688,7 @@ void CDelphiSpace::sclbp() // scspos-> scspos; scsnor-> scsnor; iBoundNum-> iBou
 
                         {
                             xq=s123;
-                            cout << "$$$$$$ warning: distobj is called: $$$$$$$$$$" << endl;
+                            //cout << "$$$$$$ warning: distobj is called: $$$$$$$$$$" << endl;
                            // call distobj(xq,dist,dixyz,ii,0.,true);
 
 //assuming that if the VdW pointeger is half grid space into an object that means that this belongs to an atom buried in the object
@@ -705,7 +712,9 @@ void CDelphiSpace::sclbp() // scspos-> scspos; scsnor-> scsnor; iBoundNum-> iBou
                 }
                 else
                 {
-                    cout <<"bdp close to arcp " << i << rdist << endl;
+#ifdef VERBOSE					
+                   cout <<"bdp close to arcp " << i << rdist << endl;
+#endif				   
                 }// if
             }// if
         }// do D700;

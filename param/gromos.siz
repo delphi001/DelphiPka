@@ -64,6 +64,8 @@ CB    ASP   1.500
 CG    ASP   1.500
 OD1   ASP   1.050
 OD2   ASP   1.050
+HD1   ASP   0.000
+HD2   ASP   0.000
 C     ASP   1.500
 O     ASP   1.050
 
@@ -74,6 +76,7 @@ CB    AS0   1.500
 CG    AS0   1.500
 OD1   AS0   1.050
 OD2   AS0   1.050
+HD1   AS0   0.400
 HD2   AS0   0.400
 C     AS0   1.500
 O     AS0   1.050
@@ -116,6 +119,8 @@ CG    GLU   1.500
 CD    GLU   1.500
 OE1   GLU   1.050
 OE2   GLU   1.050
+HE1   GLU   0.000
+HE2   GLU   0.000
 C     GLU   1.500
 O     GLU   1.050
 
@@ -127,6 +132,7 @@ CG    GL0   1.500
 CD    GL0   1.500
 OE1   GL0   1.050
 OE2   GL0   1.050
+HE1   GL0   0.400
 HE2   GL0   0.400
 C     GL0   1.500
 O     GL0   1.050
@@ -281,19 +287,38 @@ H     SER   0.400
 CA    SER   1.500
 CB    SER   1.500
 OG    SER   1.050
-HG    SER   0.400
+HG    SER   0.000
 C     SER   1.500
 O     SER   1.050
+
+N     SE0   1.100
+H     SE0   0.400
+CA    SE0   1.500
+CB    SE0   1.500
+OG    SE0   1.050
+HG    SE0   0.400
+C     SE0   1.500
+O     SE0   1.050
 
 N     THR   1.100
 H     THR   0.400
 CA    THR   1.500
 CB    THR   1.500
 OG1   THR   1.050
-HG1   THR   0.400
+HG1   THR   0.000
 CG2   THR   1.500
 C     THR   1.500
 O     THR   1.050
+
+N     TH0   1.100
+H     TH0   0.400
+CA    TH0   1.500
+CB    TH0   1.500
+OG1   TH0   1.050
+HG1   TH0   0.400
+CG2   TH0   1.500
+C     TH0   1.500
+O     TH0   1.050
 
 N     TRP   1.100
 H     TRP   0.400
@@ -332,9 +357,28 @@ CE2   TYR   1.500
 HE2   TYR   0.400
 CZ    TYR   1.500
 OH    TYR   1.050
-HH    TYR   0.400
+HH    TYR   0.000
 C     TYR   1.500
 O     TYR   1.050
+
+N     TY0   1.100
+H     TY0   0.400
+CA    TY0   1.500
+CB    TY0   1.500
+CG    TY0   1.500
+CD1   TY0   1.500
+HD1   TY0   0.400
+CD2   TY0   1.500
+HD2   TY0   0.400
+CE1   TY0   1.500
+HE1   TY0   0.400
+CE2   TY0   1.500
+HE2   TY0   0.400
+CZ    TY0   1.500
+OH    TY0   1.050
+HH    TY0   0.400
+C     TY0   1.500
+O     TY0   1.050
 
 N     VAL   1.100
 H     VAL   0.400

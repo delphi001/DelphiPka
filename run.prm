@@ -5,12 +5,12 @@
 ##
 
 PDB file name                      : sample.pdb
-Charge parameter                   : /common1/compbio/TOOLS/DelphiPKA/param/parseres.crg
-Radius parameter                   : /common1/compbio/TOOLS/DelphiPKA/param/parseres.siz
-Topology parameter                 : /common1/compbio/TOOLS/DelphiPKA/param/topology
+Charge parameter                   : param/amber.crg
+Radius parameter                   : param/amber.siz
+Topology parameter                 : param/topology
 
 # By default HETATM is deleted. If user need HETATM for ligand/ion binding
-# Set 1st "F", 3rd "T". And make HETATM in correct PQR format. 
+# Set 1st "F", 3rd "T". And make HETATM in correct PQR format.
 Remove HETATM                      : T
 Remove water molecule              : T
 HETATM in PQR format               : F
@@ -20,9 +20,12 @@ Do Protonation                     : T
 Do Energy Calculation              : T
 Do pKa's  Calculation              : T
 
-# 2nd and 3rd options can create PQR format at user-given pH value 
+# Calculate more titratable residues (Ser, Tyr, Thr)
+Calculate More Residues            : F
+
+# 2nd and 3rd options can create PQR format at user-given pH value
 Output PQR file (With Topology)    : T
-Output PQR file (With pKa result)  : F
+Output PQR file (With pKa result)  : T
 At given pH Value                  : 7.0
 
 # Parameters for Gaussian function in DelPhi
@@ -30,6 +33,7 @@ At given pH Value                  : 7.0
 # 3rd represents reference dielectric constant
 # 4th represents solvent   dielectric constant
 Gaussian surface                   : 1
+Surface cutoff                     : 20
 Variance of Gaussian distribution  : 0.70
 Internal Dielectric                : 8.0
 External Dielectric                : 80.0
@@ -39,7 +43,7 @@ External Dielectric                : 80.0
 Cluster Delimitation Threshold (A) : 12.0
 Kmean++ cluster number             : AUTO
 
-# Choose Hydrogen attach Atom of GLU or ASP 
+# Choose Hydrogen attach Atom of GLU or ASP
 # Defualt is OE2 for GLU / OD2 for ASP
 Hydrogen of GLU Attached to Atom   : OE1
 Hydrogen of ASP Attached to Atom   : OD1
@@ -47,4 +51,7 @@ Hydrogen of ASP Attached to Atom   : OD1
 # pH Range and interval
 pH Initial Value                   : 0.0
 pH End Value                       : 14.0
-pH Interval                        : 1.0
+pH Interval                        : 0.5
+
+# Salt Concentration
+Salt Concentration                 : 0.15

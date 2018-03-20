@@ -24,84 +24,85 @@ using namespace std;
 
 class CTitration2 {
 private:
-    
-    /* From Data_STORE */
-    
-    const string&                       pdb_input;
-    const int& n_cluster;
-    const vector<vector<int> >&         vecCluster;
-    const vector<vector<int> >&         vecIonRes;
-    const vector<string>&               strHETATM;
-    vector<PDBFORM>&                    newPDB;
-    const unordered_map<string, float>& pkamap;
-    
-    const vector<vector<Energy> >&   EnergyPair;
-    const vector<float>&             EnergyPolarCrg;
-    const vector<float>&             EnergyPolarNeu;
-    const vector<float>&             EnergyRxnCrg;
-    const vector<float>&             EnergyRxnNeu;
 
-    
-    const float& pH_initial;
-    const float& pH_end;
-    const float& pH_step;
-    const float& fGivenPhVal;
-    const bool& bOutPQRpka;
-    const bool& bRemoveHETATM;
-    const bool& bHETATMinPQR;
-    
-    unordered_map<string, float>& sizmap;
-    unordered_map<string, float>& crgmap;
-    
-    
+    /* From Data_STORE */
+
+    const string                       &pdb_input;
+    const int                          &n_cluster;
+    const vector<vector<int> >         &vecCluster;
+    const vector<vector<int> >         &vecIonRes;
+    const vector<string>               &strHETATM;
+    vector<PDBFORM>                    &newPDB;
+    const unordered_map<string, float> &pkamap;
+
+    const vector<vector<Energy> > &EnergyPair;
+    const vector<float>           &EnergyPolarCrg;
+    const vector<float>           &EnergyPolarNeu;
+    const vector<float>           &EnergyRxnCrg;
+    const vector<float>           &EnergyRxnNeu;
+
+
+    const float &pH_initial;
+    const float &pH_end;
+    const float &pH_step;
+    const float &fGivenPhVal;
+    const bool  &bOutPQRpka;
+    const bool  &bRemoveHETATM;
+    const bool  &bHETATMinPQR;
+
+    unordered_map<string, float> &sizmap;
+    unordered_map<string, float> &crgmap;
+
+
     /* End */
-    
-    vector<vector<int> >              vecState;
-    vector<vector<int> >              vecCluster1;
-    vector<vector<respair> >          vecPair;
-    vector<vector<float> >            vec2dProb;
-    
-    void genState(int&);
+
+    vector<vector<int> >     vecState;
+    vector<vector<int> >     vecCluster1;
+    vector<vector<respair> > vecPair;
+    vector<vector<float> >   vec2dProb;
+
+    void genState(int &);
+
     void genCluster1();
+
     void linearReg();
+
     void output_PQR();
-    float genEnergy0(int&, float&);
-    
-    
-    
+
+    float genEnergy0(int &, float &);
+
+
 public:
     CTitration2(shared_ptr<DATA_STORE> pData) :
-    
-    pdb_input(pData->pdb_input),
-    n_cluster(pData->n_cluster),
-    newPDB(pData->newPDB),
-    pkamap(pData->pkamap),
-    vecCluster(pData->vecCluster),
-    vecIonRes (pData->vecIonRes),
-    strHETATM (pData->strHETATM),
-    
-    sizmap(pData->sizmap),
-    crgmap(pData->crgmap),
-    
-    EnergyPair(pData->EnergyPair),
-    EnergyPolarCrg(pData->EnergyPolarCrg),
-    EnergyPolarNeu(pData->EnergyPolarNeu),
-    EnergyRxnCrg(pData->EnergyRxnCrg),
-    EnergyRxnNeu(pData->EnergyRxnNeu),
-    
-    bOutPQRpka(pData->bOutPQRpka),
-    bRemoveHETATM(pData->bRemoveHETATM),
-    bHETATMinPQR(pData->bHETATMinPQR),
-    pH_initial(pData->pH_initial),
-    pH_end(pData->pH_end),
-    pH_step(pData->pH_step),
-    fGivenPhVal(pData->fGivenPhVal)
-    
-    {};
-    
+
+            pdb_input(pData->pdb_input),
+            n_cluster(pData->n_cluster),
+            newPDB(pData->newPDB),
+            pkamap(pData->pkamap),
+            vecCluster(pData->vecCluster),
+            vecIonRes(pData->vecIonRes),
+            strHETATM(pData->strHETATM),
+
+            sizmap(pData->sizmap),
+            crgmap(pData->crgmap),
+
+            EnergyPair(pData->EnergyPair),
+            EnergyPolarCrg(pData->EnergyPolarCrg),
+            EnergyPolarNeu(pData->EnergyPolarNeu),
+            EnergyRxnCrg(pData->EnergyRxnCrg),
+            EnergyRxnNeu(pData->EnergyRxnNeu),
+
+            bOutPQRpka(pData->bOutPQRpka),
+            bRemoveHETATM(pData->bRemoveHETATM),
+            bHETATMinPQR(pData->bHETATMinPQR),
+            pH_initial(pData->pH_initial),
+            pH_end(pData->pH_end),
+            pH_step(pData->pH_step),
+            fGivenPhVal(pData->fGivenPhVal) {};
+
     void run();
-    
-    
+
+
     ~CTitration2() {};
 };
 

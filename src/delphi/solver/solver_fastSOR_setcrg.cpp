@@ -14,6 +14,7 @@
  */
 
 #include "solver_fastSOR.h"
+/*#define DEBUG_DELPHI_SOLVER_SETCRG 1*/
 
 //-----------------------------------------------------------------------//
 void CDelphiFastSOR::setCrg()
@@ -40,6 +41,9 @@ void CDelphiFastSOR::setCrg()
     vector<delphi_real> gchrgd,gchrgtmp;
     SDoubleGridValue fdbGridVal;
     vector<delphi_integer> gchrg2;
+	vector<delphi_real> vecttemp(6, 0.0); // vecttemp 
+	vector<vector<delphi_real>> gaussianChargeDielecTemp;
+	vector<delphi_real> gaussianChargeDensityTemp;
 
     //++++++++++ OUTPUT:
     delphi_integer& icount1a = iCrgedGridEven;
@@ -204,7 +208,7 @@ void CDelphiFastSOR::setCrg()
         iy = it->nY;
         iz = it->nZ;
 
-        if(iGaussian==0)
+        if(iGaussian==0 && iConvolute==0)
         {
             iext=0;
             ibgp=0;
@@ -232,18 +236,21 @@ void CDelphiFastSOR::setCrg()
                 if (0 == inearest[cont]) iext = 1;
                 if (inearest[cont-1] != inearest[cont]) ibgp = 1;
             }
-        } //iGaussian
+        } //iGaussian && iConvolute == 0 |--> 2-eps model
         deb = 0.0;
 
         if (idebmap[(iz-1)*iGrid*iGrid + (iy-1)*iGrid + (ix-1)]) deb = 1.0;
 
+		vector<delphi_real> dbrow_original;
+		delphi_real gridDensity = gaussianDensityMap[(iz - 1)*iGrid*iGrid + (iy - 1)*iGrid + (ix - 1)];
+		
         if (0 == idirectalg)
         {
             throw CDirectEpsilonMap(idirectalg);
         }
         else
         {
-            if(iGaussian==0)
+            if(iGaussian==0 && iConvolute==0)
             {
                 temp=0.0;
                 iw = (iz-1)*iGrid*iGrid + (iy-1)*iGrid + (ix-1);
@@ -270,7 +277,7 @@ void CDelphiFastSOR::setCrg()
 
                 gchrgd.push_back(temp);
             }
-            else if(iGaussian==1)
+            else if(iGaussian==1 || iConvolute!=0)
             {
                 //cout << setprecision(6) << "fEpsDiff,fEpsIn,fEpsOut: " << fEpsDiff << " " << fEpsIn << " " << fEpsOut << endl;
 
@@ -290,20 +297,37 @@ void CDelphiFastSOR::setCrg()
                     //& +gepsmp2(ix-1,iy,iz)%x+gepsmp2(ix,iy-1,iz)%y+gepsmp2(ix,iy,iz-1)%z
                     iw = (ix-1)*iGrid*iGrid + (iy-1)*iGrid + (iz-1);
                     temp+=gepsmp2[iw].nX;
+					vecttemp[0]= gepsmp2[iw].nX;
                     temp+=gepsmp2[iw].nY;
+					vecttemp[1] = gepsmp2[iw].nY;
                     temp+=gepsmp2[iw].nZ;
+					vecttemp[2] = gepsmp2[iw].nZ;
                     iw = (ix-1-1)*iGrid*iGrid + (iy-1)*iGrid + (iz-1);
                     temp+=gepsmp2[iw].nX;
+					vecttemp[3] = gepsmp2[iw].nX;
                     iw = (ix-1)*iGrid*iGrid + (iy-1-1)*iGrid + (iz-1);
                     temp+=gepsmp2[iw].nY;
+					vecttemp[4] = gepsmp2[iw].nY;
                     iw = (ix-1)*iGrid*iGrid + (iy-1)*iGrid + (iz-1-1);
                     temp+=gepsmp2[iw].nZ;
+					vecttemp[5] = gepsmp2[iw].nZ;
 
                     //temp=temp/epkt
                     temp=temp/fEPKT;
                     //gchrgd(i)=temp+ debfct*deb
                     gchrgd.push_back(temp+fDebFct*deb);
                     //cout << "gchrgd: " << temp+fDebFct*deb << endl;
+
+					vector<delphi_real> dbrow_original;
+					dbrow_original.push_back(vecttemp[3]);
+					dbrow_original.push_back(vecttemp[0]);
+					dbrow_original.push_back(vecttemp[4]);
+					dbrow_original.push_back(vecttemp[1]);
+					dbrow_original.push_back(vecttemp[5]);
+					dbrow_original.push_back(vecttemp[2]);
+
+					gaussianChargeDielecTemp.push_back(dbrow_original);
+					gaussianChargeDensityTemp.push_back(gridDensity);
                 } //endif
 
             }
@@ -330,19 +354,28 @@ void CDelphiFastSOR::setCrg()
     } //----- end of for (vector< SGrid<delphi_integer> >::iterator it = gchrgp.begin(); it != gchrgp.end(); ++it)
 
 #ifdef VERBOSE
-    cout << "no. charged boundary grid points = " << ibc << endl;
+    cout << " Info> Number of charged boundary grid points = " << ibc << endl;
     if (0 != ibc) CCrgedPtsInSolution waring(ico);
 #endif
 
     //---------- make qval, fpoh term so potentials will be in kt/e
     qval.assign(icount1b,0.0);
     gval.assign(icount1b,0.0);
+	vecttemp.assign(6, 0.0);
+	gaussianChargeDielec.assign(icount1b, vecttemp);
+	gaussianChargeDensity.assign(icount1b, 0.0);
+
     for (i = 0; i < icount1b; i++)
     {
         j = gchrg2[i];
         qval[j-1] = gchrg[i]*(f4Pi*fScale/gchrgd[i]);
         gval[j-1] = gchrg[i];
-    }
+		if (iGaussian != 0 || iConvolute != 0)
+		{
+			gaussianChargeDielec[j - 1] = gaussianChargeDielecTemp[i];
+			gaussianChargeDensity[j - 1] = gaussianChargeDensityTemp[i];
+		}
+	}
 
     vector<delphi_real>().swap(gchrgd); // remove gchrgd, need in below
 
@@ -359,7 +392,11 @@ void CDelphiFastSOR::setCrg()
 
 #ifdef DEBUG_DELPHI_SOLVER_SETCRG
     {
-        string strTestFile = "test_setcrg.dat";
+        //ORIGINAL:
+    	//string strTestFile = "test_setcrg.dat";
+    	//MODIFIED
+    	string strTestFile = "test_setcrg" + std::to_string(inhomo)+".dat";
+
         ofstream ofTestStream(strTestFile.c_str());
         ofTestStream << boolalpha;
         ofTestStream << fixed << setprecision(7);

@@ -9,6 +9,13 @@
  *
  * The order included headers in this file is crucial in order to avoid ambiguous reference to "real" when
  * compiling the code in Mac system
+ *
+ *
+ * ARGO
+ * ADDED A NEW FILE TYPE FOR OUTPUT. Named it as .zphi /zee-phee/ file.
+ * Will contain the x-y-z-phi[gx][gy][gz] data determined at zetaSurface/
+ * 17-FEB 2016
+ *
  */
 
 #include "delphi_datamarshal.h"
@@ -84,7 +91,7 @@ bool CDelphiDataMarshal::getFunction(string strLineNoSpace)
      */
     if (2 == strLineNoSpace.substr(pos, strLineNoSpace.size()-pos).length()) // function has no argument
     {
-        CEnmptyParameter_FUNCTION warning(strFunc);
+        CEmptyParameter_FUNCTION warning(strFunc);
         return false;
     }
 
@@ -501,6 +508,7 @@ bool CDelphiDataMarshal::getFunction(string strLineNoSpace)
          *    UNFRC  : for unformatted frc files
          *    ENERGY : writes the file "energy.dat" containing energy data. (Example: out(energy))
          *             Note that this is different from the Energy function!
+         *    ZPHI   : for outputting the x-y-z-phimap[gx][gy][gz] to provide as a result of pe
          */
         case 4:
         {
@@ -913,6 +921,41 @@ bool CDelphiDataMarshal::getFunction(string strLineNoSpace)
                 }
             }
             /*
+             * ARGO 17 FEB 2016
+             * ZPHI file
+             */
+            else if (0 == prgstrArgTokens_UpperCase[0].compare("ZPHI"))
+            {
+
+                bZetaPhiOut = true;
+		            bPhimapOut = true;
+
+                if (1 < prgstrArgTokens_UpperCase.size()) // more than one argument
+                {
+                    for (vector<string>::iterator it = prgstrArgTokens_UpperCase.begin()+1; it != prgstrArgTokens_UpperCase.end(); ++it)
+                    {
+                        itt++;
+
+                        // a token describing output file name
+                        if (string::npos != it->find("UNIT=") || string::npos != it->find("FILE=") )
+                            strZetaPhiFile = getFile_Name_or_Format(*it,*itt);
+                        // invalid token
+                        else
+                            CUnknownParameter_FUNCTION warning(strFunc,*itt);
+                    }
+                }
+
+                if ( zetaOn == 0 )
+                {
+                	//ABORT The mission
+                	bZetaPhiOut = false;
+                	bPhimapOut = false;
+                	//cout << " WARNING !!! ZPHI output will be ignored since Surface calculations are turned off." << endl;
+                  //cout << " WARNING !!! Set SURFPOT = 1 || SP = 1" << endl;
+                }
+
+            }
+            /*
              * unconditionally turn off write function for all
              */
             else if (0 == prgstrArgTokens_UpperCase[0].compare("OFF"))
@@ -930,6 +973,8 @@ bool CDelphiDataMarshal::getFunction(string strLineNoSpace)
                 bDbOut          = false;
                 bSurfEngOut     = false;
                 bSurfCrgOut     = false;
+                bZetaPhiOut	= false;
+
 
                 if (1 < prgstrArgTokens_UpperCase.size()) // more than one argument
                 {
@@ -1329,5 +1374,3 @@ inline vector<string> CDelphiDataMarshal::getArguments(string strArgs)
 
     return prgstrTokens;
 }
-
-
