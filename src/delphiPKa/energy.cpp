@@ -545,7 +545,7 @@ void CEnergy::run() {
             string sign;
             string resnam = newPDB[vecIonRes[i][0]].res_name;
 
-            if (resnam == "GLU" || resnam == "ASP" || resnam == "TYR" || resnam == "THR" || resnam == "SER") sign = "-";
+            if (resnam == "GLU" || resnam == "ASP" || resnam == "TYR" || resnam == "THR" || resnam == "SER" || resnam == "CYS") sign = "-";
             if (resnam == "ARG" || resnam == "HIS" || resnam == "LYS" || resnam == "A" || resnam == "C") sign = "+";
 
             ergsOutput << newPDB[vecIonRes[i][0]].res_name + "0" + newPDB[vecIonRes[i][0]].chain_id;
@@ -583,7 +583,7 @@ void CEnergy::run() {
                 string sign;
                 string resnam = newPDB[vecIonRes[i][0]].res_name;
 
-                if (resnam == "GLU" || resnam == "ASP" || resnam == "TYR" || resnam == "THR" || resnam == "SER")
+                if (resnam == "GLU" || resnam == "ASP" || resnam == "TYR" || resnam == "THR" || resnam == "SER" || resnam == "CYS")
                     sign = "-";
                 if (resnam == "ARG" || resnam == "HIS" || resnam == "LYS" || resnam == "A" || resnam == "C")
                     sign = "+";

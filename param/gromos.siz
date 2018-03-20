@@ -94,9 +94,18 @@ H     CYS   0.400
 CA    CYS   1.500
 CB    CYS   1.500
 SG    CYS   1.600
-HG    CYS   0.400
+HG    CYS   0.000
 C     CYS   1.500
 O     CYS   1.050
+
+N     CY0   1.100
+H     CY0   0.400
+CA    CY0   1.500
+CB    CY0   1.500
+SG    CY0   1.600
+HG    CY0   0.400
+C     CY0   1.500
+O     CY0   1.050
 
 N     GLN   1.100
 H     GLN   0.400

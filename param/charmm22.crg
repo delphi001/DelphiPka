@@ -168,19 +168,34 @@ N     CYS      -0.470
 H     CYS       0.310
 CA    CYS       0.070
 HA    CYS       0.090
-CB    CYS      -0.110
+CB    CYS      -0.530
 1HB   CYS       0.090
 2HB   CYS       0.090
 3HB   CYS       0.090
 HB1   CYS       0.090 
 HB2   CYS       0.090 
 HB3   CYS       0.090 
-SG    CYS      -0.230
-HG    CYS       0.160
+SG    CYS      -0.650
 C     CYS       0.510
 O     CYS      -0.510
-HG1   CYS       0.160
-1HG   CYS       0.160  
+
+N     CY0      -0.470
+H     CY0       0.310
+CA    CY0       0.070
+HA    CY0       0.090
+CB    CY0      -0.110
+1HB   CY0       0.090
+2HB   CY0       0.090
+3HB   CY0       0.090
+HB1   CY0       0.090
+HB2   CY0       0.090
+HB3   CY0       0.090
+SG    CY0      -0.230
+HG    CY0       0.160
+C     CY0       0.510
+O     CY0      -0.510
+HG1   CY0       0.160
+1HG   CY0       0.160
 
 N     CSS      -0.470   !!Cysteine bridge residue
 H     CSS       0.310 

@@ -130,6 +130,7 @@ CG    ASH       0.550
 OD1   ASH      -0.495
 OD2   ASH      -0.490
 HD2   ASH       0.435
+
 N     CYS      -0.400
 CA    CYS      -0.000
 HN    CYS       0.400
@@ -137,12 +138,25 @@ H     CYS       0.400
 HA    CYS       0.000
 C     CYS       0.550
 O     CYS      -0.550
-CB    CYS       0.000
+CB    CYS      -0.355
 HB1   CYS       0.000
 HB2   CYS       0.000
-SG    CYS      -0.290
-HG    CYS       0.290
-HT    CYS       0.290
+SG    CYS      -0.645
+
+N     CY0      -0.400
+CA    CY0      -0.000
+HN    CY0       0.400
+H     CY0       0.400
+HA    CY0       0.000
+C     CY0       0.550
+O     CY0      -0.550
+CB    CY0       0.000
+HB1   CY0       0.000
+HB2   CY0       0.000
+SG    CY0      -0.290
+HG    CY0       0.290
+HT    CY0       0.290
+
 N     CSS      -0.400           !cystine in a disulfide bridge
 CA    CSS      -0.000           !no solvation energy to parameterize against
 HN    CSS       0.400           !using same charge as in methylthiol

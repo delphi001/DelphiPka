@@ -347,6 +347,7 @@ void CPlaceHydrogen::output_newPDB() {
                 if (it_pdb->res_name == "TYR") key = "TY0 " + it_pdb->atom_name;
                 if (it_pdb->res_name == "THR") key = "TH0 " + it_pdb->atom_name;
                 if (it_pdb->res_name == "SER") key = "SE0 " + it_pdb->atom_name;
+                if (it_pdb->res_name == "CYS") key = "CY0 " + it_pdb->atom_name;
             }
         }
 
@@ -397,7 +398,8 @@ void CPlaceHydrogen::output_newPDB() {
                 (bCalMoreRes &&
                  (it_pdb->res_name == "TYR" ||
                   it_pdb->res_name == "THR" ||
-                  it_pdb->res_name == "SER")
+                  it_pdb->res_name == "SER" ||
+                  it_pdb->res_name == "CYS")
                 ) ||
                 it_pdb->res_name == "A" ||
                 it_pdb->res_name == "C" ||

@@ -86,7 +86,7 @@ void CTitration2::linearReg() {
         string resname = newPDB[vecIonRes[i][0]].res_name;
 
         if (fPKA > 14.0) {
-            if (resname == "ASP" || resname == "GLU" || resname == "TYR" || resname == "THR" || resname == "SER") pkaOuptut << "  <0.0";
+            if (resname == "ASP" || resname == "GLU" || resname == "TYR" || resname == "THR" || resname == "SER" || resname == "CYS") pkaOuptut << "  <0.0";
             else pkaOuptut << "  >14.0";
         } else if (fPKA < 0.0) {
             if (resname == "ARG" || resname == "HIS" || resname == "LYS") pkaOuptut << "  <0.0";
@@ -167,7 +167,7 @@ float CTitration2::genEnergy0(int &n, float &fPH) {
         pkaref = pkamap.find(resnam)->second;
     }
 
-    if ("ASP" == resnam || "GLU" == resnam || "TYR" == resnam || "THR" == resnam || "SER" == resnam) {
+    if ("ASP" == resnam || "GLU" == resnam || "TYR" == resnam || "THR" == resnam || "SER" == resnam || "CYS" == resnam) {
         iGamma = -1.0;
         pkaref = pkamap.find(resnam)->second;
     }
@@ -251,6 +251,11 @@ void CTitration2::output_PQR() {
 
             if (itr->res_name == "SER") {
                 if (fProb <= 0.50) key = "SE0 " + itr->atom_name;
+                if (fProb > 0.50) key  = key_to_hashmapQR(*itr);
+            }
+
+            if (itr->res_name == "CYS") {
+                if (fProb <= 0.50) key = "CY0 " + itr->atom_name;
                 if (fProb > 0.50) key  = key_to_hashmapQR(*itr);
             }
 

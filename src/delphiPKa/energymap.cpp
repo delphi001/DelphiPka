@@ -108,6 +108,7 @@ void CEnergy :: genEnergyMap(const int& k, float& ergpolar, const bool& bNeutral
                 if (resnam2 == "TYR") strtmp = "TY0";
                 if (resnam2 == "THR") strtmp = "TH0";
                 if (resnam2 == "SER") strtmp = "SE0";
+                if (resnam2 == "CYS") strtmp = "CY0";
                 if (resnam2 == "HIS") strtmp = "HI0";
                 if (resnam2 == "LYS") strtmp = "LY0";
                 if (resnam2 == "A") strtmp   = "A0";
@@ -181,6 +182,7 @@ void CEnergy :: genEnergyMap(const int& k, float& ergpolar, const bool& bNeutral
             if (newPDB[itr].res_name == "TYR") strtmp = "TY0";
             if (newPDB[itr].res_name == "THR") strtmp = "TH0";
             if (newPDB[itr].res_name == "SER") strtmp = "SE0";
+            if (newPDB[itr].res_name == "CYS") strtmp = "CY0";
             if (newPDB[itr].res_name == "ARG") strtmp = "AR0";
             if (newPDB[itr].res_name == "HIS") strtmp = "HI0";
             if (newPDB[itr].res_name == "LYS") strtmp = "LY0";

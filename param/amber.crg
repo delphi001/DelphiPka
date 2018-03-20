@@ -135,20 +135,36 @@ OD2   AS0      -0.6376
 HD2   AS0       0.4747
 C     AS0       0.5973
 O     AS0      -0.5679
+
 N     CYS      -0.4157
 H     CYS       0.2719
 CA    CYS       0.0213
 HA    CYS       0.1124
-CB    CYS      -0.1231
+CB    CYS      -0.5270
 1HB   CYS       0.1112
 HB1   CYS       0.1112
 HB2   CYS       0.1112
 2HB   CYS       0.1112
 HB3   CYS       0.1112
-SG    CYS      -0.3119
-HG    CYS       0.1933
+SG    CYS      -0.7157
 C     CYS       0.5973
 O     CYS      -0.5679
+
+N     CY0      -0.4157
+H     CY0       0.2719
+CA    CY0       0.0213
+HA    CY0       0.1124
+CB    CY0      -0.1231
+1HB   CY0       0.1112
+HB1   CY0       0.1112
+HB2   CY0       0.1112
+2HB   CY0       0.1112
+HB3   CY0       0.1112
+SG    CY0      -0.3119
+HG    CY0       0.1933
+C     CY0       0.5973
+O     CY0      -0.5679
+
 N     GLU      -0.5163
 H     GLU       0.2936
 CA    GLU       0.0397

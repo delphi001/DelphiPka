@@ -135,7 +135,22 @@ HB1   CYS   0.0
 HB2   CYS   0.0
 HB3   CYS   0.0
 SG    CYS   1.85
-HG    CYS   1.0
+HG    CYS   0.0
+
+N     CY0   1.5
+CA    CY0   2.0
+HN    CY0   1.0
+H     CY0   1.0
+HA    CY0   0.0
+C     CY0   1.7
+O     CY0   1.4
+CB    CY0   2.0
+HB1   CY0   0.0
+HB2   CY0   0.0
+HB3   CY0   0.0
+SG    CY0   1.85
+HG    CY0   1.0
+
 N     CSS   1.5           !cystine in disulfide bridge
 CA    CSS   2.0
 HN    CSS   1.0

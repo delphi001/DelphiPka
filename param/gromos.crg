@@ -89,11 +89,19 @@ O     CYSD      -0.450
 N     CYS       -0.310
 H     CYS        0.310
 CA    CYS        0.000
-CB    CYS        0.150
-SG    CYS       -0.370
-HG    CYS        0.220
+CB    CYS       -0.240
+SG    CYS       -0.760
 C     CYS        0.450
 O     CYS       -0.450
+
+N     CY0       -0.310
+H     CY0        0.310
+CA    CY0        0.000
+CB    CY0        0.150
+SG    CY0       -0.370
+HG    CY0        0.220
+C     CY0        0.450
+O     CY0       -0.450
 
 N     GLN       -0.310
 H     GLN        0.310
