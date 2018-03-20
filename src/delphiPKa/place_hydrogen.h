@@ -30,6 +30,7 @@ private:
     const string &pdb_input;
     const bool   &bRemoveHETATM;
     const bool   &bOutPQRtopo;
+    const bool   &bCalMoreRes;
 
     mapTopology &map;
     mapPDBFORM  &mapPDB;
@@ -70,7 +71,8 @@ public:
             strHETATM(pData->strHETATM),
             pdb_input(pData->pdb_input),
             bOutPQRtopo(pData->bOutPQRtopo),
-            bRemoveHETATM(pData->bRemoveHETATM) {};
+            bRemoveHETATM(pData->bRemoveHETATM),
+            bCalMoreRes(pData->bCalMoreRes){};
 
 
     void run();

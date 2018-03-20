@@ -60,6 +60,7 @@ private:
     float &pH_step;
 
     float &salt;
+    bool  &bCalMoreRes;
 
     /*  END */
 
@@ -98,7 +99,8 @@ public:
             pH_initial(pData->pH_initial),
             pH_end(pData->pH_end),
             pH_step(pData->pH_step),
-            salt(pData->salt) {};
+            salt(pData->salt),
+            bCalMoreRes(pData->bCalMoreRes){};
 
     void run();
 

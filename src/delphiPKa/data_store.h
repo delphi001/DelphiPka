@@ -62,6 +62,7 @@ public:
     float pH_step    = 1.0;
 
     float salt = 0.15;
+    bool  bCalMoreRes = false;
 
     unordered_map<string, float> sizmap;
     unordered_map<string, float> crgmap;

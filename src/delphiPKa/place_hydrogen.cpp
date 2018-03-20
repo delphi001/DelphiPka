@@ -340,12 +340,14 @@ void CPlaceHydrogen::output_newPDB() {
         if (bOutput_neutral == true) {
             if (it_pdb->res_name == "ASP") key = "AS0 " + it_pdb->atom_name;
             if (it_pdb->res_name == "GLU") key = "GL0 " + it_pdb->atom_name;
-            if (it_pdb->res_name == "TYR") key = "TY0 " + it_pdb->atom_name;
-            if (it_pdb->res_name == "THR") key = "TH0 " + it_pdb->atom_name;
-            if (it_pdb->res_name == "SER") key = "SE0 " + it_pdb->atom_name;
             if (it_pdb->res_name == "HIS") key = "HI0 " + it_pdb->atom_name;
             if (it_pdb->res_name == "ARG") key = "AR0 " + it_pdb->atom_name;
             if (it_pdb->res_name == "LYS") key = "LY0 " + it_pdb->atom_name;
+            if (bCalMoreRes){
+                if (it_pdb->res_name == "TYR") key = "TY0 " + it_pdb->atom_name;
+                if (it_pdb->res_name == "THR") key = "TH0 " + it_pdb->atom_name;
+                if (it_pdb->res_name == "SER") key = "SE0 " + it_pdb->atom_name;
+            }
         }
 
         if (crgmap.find(key) != crgmap.end()) {
@@ -386,22 +388,21 @@ void CPlaceHydrogen::output_newPDB() {
 
         ///////////////////   Label ionizable residue    /////////////////
 
-        if (it_pdb->res_name == "HIS" ||
-            it_pdb->res_name == "LYS" ||
-            it_pdb->res_name == "ARG" ||
-            it_pdb->res_name == "ASP" ||
-            it_pdb->res_name == "GLU" ||
-            it_pdb->res_name == "TYR" ||
-            it_pdb->res_name == "THR" ||
-            it_pdb->res_name == "SER" ||
-            it_pdb->res_name == "A" ||
-            it_pdb->res_name == "C" ||
-            it_pdb->res_name == "DA" ||
-            it_pdb->res_name == "DC") {
-            it_pdb->bIonizable = true;
-        } else {
-            it_pdb->bIonizable = false;
-        }
+        it_pdb->bIonizable =
+                it_pdb->res_name == "HIS" ||
+                it_pdb->res_name == "LYS" ||
+                it_pdb->res_name == "ARG" ||
+                it_pdb->res_name == "ASP" ||
+                it_pdb->res_name == "GLU" ||
+                (bCalMoreRes &&
+                 (it_pdb->res_name == "TYR" ||
+                  it_pdb->res_name == "THR" ||
+                  it_pdb->res_name == "SER")
+                ) ||
+                it_pdb->res_name == "A" ||
+                it_pdb->res_name == "C" ||
+                it_pdb->res_name == "DA" ||
+                it_pdb->res_name == "DC";
 
         ///////////////////   Label backbone and sidechain   /////////////////
 

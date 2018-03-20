@@ -148,6 +148,10 @@ void CReadParam::run() {
                 if (strtmp1 == "pH Interval") pH_step         = stof(strtmp2);
 
                 if (strtmp1 == "Salt Concentration") salt = stof(strtmp2);
+                if (strtmp1 == "Calculate More Residues") {
+                    if (toupper(strtmp2[0]) == 'T') bCalMoreRes = true;
+                    else if (toupper(strtmp2[0]) == 'F') bCalMoreRes = false;
+                };
             }
 
         }
