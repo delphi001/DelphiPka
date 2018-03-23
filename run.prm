@@ -20,7 +20,7 @@ Do Protonation                     : T
 Do Energy Calculation              : T
 Do pKa's  Calculation              : T
 
-# Calculate more titratable residues (Ser, Tyr, Thr, CYS)
+# Calculate more titratable residues (Ser, Tyr, Thr, Cys)
 Calculate More Residues            : F
 
 # 2nd and 3rd options can create PQR format at user-given pH value
