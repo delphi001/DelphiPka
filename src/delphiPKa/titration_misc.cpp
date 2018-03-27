@@ -259,6 +259,18 @@ void CTitration2::output_PQR() {
                 if (fProb > 0.50) key  = key_to_hashmapQR(*itr);
             }
 
+            if (itr->res_name == "DA") {
+                if (fProb <= 0.50) key = "DA0 " + itr->atom_name;
+                if (fProb > 0.50) key  = key_to_hashmapQR(*itr);
+            }
+
+            if (itr->res_name == "DC") {
+                if (fProb <= 0.50) key = "DC0 " + itr->atom_name;
+                if (fProb > 0.50) key  = key_to_hashmapQR(*itr);
+            }
+
+
+
         } else {
             key = key_to_hashmapQR(*itr);
         }
