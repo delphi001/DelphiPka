@@ -41,7 +41,6 @@ To run the program, you need:
 3. PBS script (A sample can be found in current directory)
 
 Steps:
-1. Copy the run.prm and PBS script with your PDB file in any working directory.
-2. Open the run.prm and edit pdb name entry, charge and radius parameter entries with your desire. Currently supports amber, charmm22 and parse parameters.
-3. For other entries, ref the [manual](http://compbio.clemson.edu/pka_webserver/assets/manual/DelPhiPKa_User_Manual.html) and edit with your own desire.
-4. Change the sample.pbs to your desired job name. And qsub the pbs script.
+1. Open the run.prm and edit pdb name entry, charge and radius parameter entries with your desire. Currently supports amber, charmm22 and parse parameters.
+2. For other entries, ref the [manual](http://compbio.clemson.edu/pka_webserver/assets/manual/DelPhiPKa_User_Manual.html) and edit with your own desire.
+3. Change the sample.pbs to your desired job name. And qsub the pbs script.
