@@ -4,4 +4,6 @@ module add gcc/4.8.1 openmpi/1.6.4 gsl/1.16
 
 cd $PBS_O_WORKDIR
 
-mpirun --mca btl openib,self --mca btl_openib_warn_nonexistent_if 0 -np 8 /common1/compbio/TOOLS/DelphiPKA/bin/delphiPKa run.prm
+make -j8
+
+mpirun --mca btl openib,self --mca btl_openib_warn_nonexistent_if 0 -np 8 bin/delphiPKa run.prm
