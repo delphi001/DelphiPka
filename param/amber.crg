@@ -7,6 +7,7 @@ atom__resnumbc_charge_
 H1              0.0906
 H2              0.0906
 H3              0.0906
+
 N     ALA      -0.4157
 H     ALA       0.2719
 CA    ALA       0.0337
@@ -20,6 +21,7 @@ HB2   ALA       0.0603
 HB3   ALA       0.0603
 C     ALA       0.5973
 O     ALA      -0.5679
+
 N     ARG      -0.3479
 H     ARG       0.2747
 CA    ARG      -0.2637
@@ -57,6 +59,7 @@ HH21  ARG       0.4478
 HH22  ARG       0.4478
 C     ARG       0.7341
 O     ARG      -0.5894
+
 N     AR0      -0.4157
 H     AR0       0.2719
 CA    AR0      -0.0720
@@ -84,6 +87,7 @@ HH21  AR0       0.1953
 HH22  AR0       0.1953
 C     AR0       0.7341
 O     AR0      -0.5894
+
 N     ASN      -0.4157
 H     ASN       0.2719
 CA    ASN       0.0143
@@ -103,6 +107,7 @@ HD21  ASN       0.4196
 HD22  ASN       0.4196
 C     ASN       0.5973
 O     ASN      -0.5679
+
 N     ASP      -0.5163
 H     ASP       0.2936
 CA    ASP       0.0381
@@ -120,6 +125,7 @@ OD2   ASP      -0.8014
 HD2   ASP       0.0000
 C     ASP       0.5366
 O     ASP      -0.5819
+
 N     AS0      -0.4157
 H     AS0       0.2719
 CA    AS0       0.0341
@@ -129,10 +135,10 @@ HB1   AS0       0.0488
 HB2   AS0       0.0488
 HB3   AS0       0.0488
 CG    AS0       0.6462
-OD1   AS0      -0.5554
-HD1   AS0       0.3925
-OD2   AS0      -0.6376
-HD2   AS0       0.4747
+OD1   AS0      -0.5965
+HD1   AS0       0.4336
+OD2   AS0      -0.5965
+HD2   AS0       0.4336
 C     AS0       0.5973
 O     AS0      -0.5679
 
