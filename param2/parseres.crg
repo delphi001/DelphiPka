@@ -131,18 +131,6 @@ OD1   ASH      -0.495
 OD2   ASH      -0.490
 HD2   ASH       0.435
 
-N     CY-      -0.400
-CA    CY-      -0.000
-HN    CY-       0.400
-H     CY-       0.400
-HA    CY-       0.000
-C     CY-       0.550
-O     CY-      -0.550
-CB    CY-      -0.355
-HB1   CY-       0.000
-HB2   CY-       0.000
-SG    CY-      -0.645
-
 N     CYS      -0.400
 CA    CYS      -0.000
 HN    CYS       0.400
@@ -150,12 +138,24 @@ H     CYS       0.400
 HA    CYS       0.000
 C     CYS       0.550
 O     CYS      -0.550
-CB    CYS       0.000
+CB    CYS      -0.355
 HB1   CYS       0.000
 HB2   CYS       0.000
-SG    CYS      -0.290
-HG    CYS       0.290
-HT    CYS       0.290
+SG    CYS      -0.645
+
+N     CY0      -0.400
+CA    CY0      -0.000
+HN    CY0       0.400
+H     CY0       0.400
+HA    CY0       0.000
+C     CY0       0.550
+O     CY0      -0.550
+CB    CY0       0.000
+HB1   CY0       0.000
+HB2   CY0       0.000
+SG    CY0      -0.290
+HG    CY0       0.290
+HT    CY0       0.290
 
 N     CSS      -0.400           !cystine in a disulfide bridge
 CA    CSS      -0.000           !no solvation energy to parameterize against
@@ -168,7 +168,18 @@ CB    CSS       0.290
 HB1   CSS       0.000
 HB2   CSS       0.000
 SG    CSS      -0.290
-
+N     CY-      -0.400
+CA    CY-      -0.000
+HN    CY-       0.400
+H     CY-       0.400
+HA    CY-       0.000
+C     CY-       0.550
+O     CY-      -0.550
+CB    CY-      -0.080
+HB1   CY-       0.000
+HB2   CY-       0.000
+HB3   CY-       0.000
+SG    CY-      -0.920
 N     GLU      -0.400            ! charged glutamic
 CA    GLU      -0.000
 HN    GLU       0.400
@@ -184,7 +195,7 @@ HG1   GLU       0.000
 HG2   GLU       0.000
 CD    GLU       0.100
 OE1   GLU      -0.550
-HE1   GLU       0.000
+HE1   GLU       0.000 
 OE2   GLU      -0.550
 HE2   GLU       0.000
 N     GL0      -0.400             ! neutral glutamic
@@ -481,20 +492,6 @@ CG    PRO       0.000
 HG1   PRO       0.000
 HG2   PRO       0.000
 
-N     SE-      -0.400
-CA    SE-      -0.000
-HN    SE-       0.400
-H     SE-       0.400
-HA    SE-       0.000
-C     SE-       0.550
-O     SE-      -0.550
-CB    SE-      -0.255
-HB1   SE-       0.000
-HB2   SE-       0.000
-OG    SE-      -0.745
-HG    SE-       0.000
-HT    SE-       0.490
-
 N     SER      -0.400
 CA    SER      -0.000
 HN    SER       0.400
@@ -502,31 +499,26 @@ H     SER       0.400
 HA    SER       0.000
 C     SER       0.550
 O     SER      -0.550
-CB    SER       0.000
+CB    SER      -0.255
 HB1   SER       0.000
 HB2   SER       0.000
-OG    SER      -0.490
-HG    SER       0.490
+OG    SER      -0.745
+HG    SER       0.000
 HT    SER       0.490
 
-N     TH-      -0.400
-CA    TH-      -0.000
-HN    TH-       0.400
-H     TH-       0.400
-HA    TH-       0.000
-C     TH-       0.550
-O     TH-      -0.550
-CB    TH-       0.000
-HB    TH-       0.000
-HB1   TH-       0.000
-OG1   TH-      -0.745
-HG1   TH-       0.000
-CG2   TH-      -0.255
-HG2   TH-       0.000
-HG21  TH-       0.000
-HG22  TH-       0.000
-HG23  TH-       0.000
-HT    TH-       0.490
+N     SE0      -0.400
+CA    SE0      -0.000
+HN    SE0       0.400
+H     SE0       0.400
+HA    SE0       0.000
+C     SE0       0.550
+O     SE0      -0.550
+CB    SE0       0.000
+HB1   SE0       0.000
+HB2   SE0       0.000
+OG    SE0      -0.490
+HG    SE0       0.490
+HT    SE0       0.490
 
 N     THR      -0.400
 CA    THR      -0.000
@@ -538,14 +530,33 @@ O     THR      -0.550
 CB    THR       0.000
 HB    THR       0.000
 HB1   THR       0.000
-OG1   THR      -0.490
-HG1   THR       0.490
-CG2   THR       0.000
+OG1   THR      -0.745
+HG1   THR       0.000
+CG2   THR      -0.255
 HG2   THR       0.000
 HG21  THR       0.000
 HG22  THR       0.000
 HG23  THR       0.000
 HT    THR       0.490
+
+N     TH0      -0.400
+CA    TH0      -0.000
+HN    TH0       0.400
+H     TH0       0.400
+HA    TH0       0.000
+C     TH0       0.550
+O     TH0      -0.550
+CB    TH0       0.000
+HB    TH0       0.000
+HB1   TH0       0.000
+OG1   TH0      -0.490
+HG1   TH0       0.490
+CG2   TH0       0.000
+HG2   TH0       0.000
+HG21  TH0       0.000
+HG22  TH0       0.000
+HG23  TH0       0.000
+HT    TH0       0.490
 
 N     TRP      -0.400
 CA    TRP      -0.000
@@ -573,6 +584,30 @@ HH2   TRP       0.125
 CZ2   TRP      -0.125
 HZ2   TRP       0.125
 
+N     TY0      -0.400
+CA    TY0      -0.000
+HN    TY0       0.400
+H     TY0       0.400
+HA    TY0       0.000
+C     TY0       0.550
+O     TY0      -0.550
+CB    TY0       0.125
+HB1   TY0       0.000
+HB2   TY0       0.000
+CG    TY0      -0.125
+CD1   TY0      -0.125
+HD1   TY0       0.125
+CE1   TY0      -0.125
+HE1   TY0       0.125
+CZ    TY0       0.055
+OH    TY0      -0.490
+HH    TY0       0.435
+HT    TY0       0.435
+CE2   TY0      -0.125
+HE2   TY0       0.125
+CD2   TY0      -0.125
+HD2   TY0       0.125
+
 N     TYR      -0.400
 CA    TYR      -0.000
 HN    TYR       0.400
@@ -583,42 +618,18 @@ O     TYR      -0.550
 CB    TYR       0.125
 HB1   TYR       0.000
 HB2   TYR       0.000
-CG    TYR      -0.125
-CD1   TYR      -0.125
+CG    TYR      -0.195
+CD1   TYR      -0.195
 HD1   TYR       0.125
-CE1   TYR      -0.125
+CE1   TYR      -0.195
 HE1   TYR       0.125
-CZ    TYR       0.055
-OH    TYR      -0.490
-HH    TYR       0.435
-HT    TYR       0.435
-CE2   TYR      -0.125
+CZ    TYR      -0.070
+OH    TYR      -0.580
+HH    TYR       0.000
+CE2   TYR      -0.195
 HE2   TYR       0.125
-CD2   TYR      -0.125
+CD2   TYR      -0.195
 HD2   TYR       0.125
-
-N     TY-      -0.400
-CA    TY-      -0.000
-HN    TY-       0.400
-H     TY-       0.400
-HA    TY-       0.000
-C     TY-       0.550
-O     TY-      -0.550
-CB    TY-       0.125
-HB1   TY-       0.000
-HB2   TY-       0.000
-CG    TY-      -0.195
-CD1   TY-      -0.195
-HD1   TY-       0.125
-CE1   TY-      -0.195
-HE1   TY-       0.125
-CZ    TY-      -0.070
-OH    TY-      -0.580
-HH    TY-       0.000
-CE2   TY-      -0.195
-HE2   TY-       0.125
-CD2   TY-      -0.195
-HD2   TY-       0.125
 
 N     VAL      -0.400
 CA    VAL      -0.000
@@ -960,7 +971,7 @@ H1    DA        0.396
 
 P     DA0       0.962
 OP1   DA0      -0.662
-OP2   DA0      -0.662
+OP2   DA0      -0.662 
 O5'   DA0      -0.537
 C5'   DA0      -0.057
 C4'   DA0       0.142

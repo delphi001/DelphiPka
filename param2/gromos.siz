@@ -89,23 +89,23 @@ SG    CYSD  1.600
 C     CYSD  1.500
 O     CYSD  1.050
 
-N     CY-   1.100
-H     CY-   0.400
-CA    CY-   1.500
-CB    CY-   1.500
-SG    CY-   1.600
-HG    CY-   0.000
-C     CY-   1.500
-O     CY-   1.050
-
 N     CYS   1.100
 H     CYS   0.400
 CA    CYS   1.500
 CB    CYS   1.500
 SG    CYS   1.600
-HG    CYS   0.400
+HG    CYS   0.000
 C     CYS   1.500
 O     CYS   1.050
+
+N     CY0   1.100
+H     CY0   0.400
+CA    CY0   1.500
+CB    CY0   1.500
+SG    CY0   1.600
+HG    CY0   0.400
+C     CY0   1.500
+O     CY0   1.050
 
 N     GLN   1.100
 H     GLN   0.400
@@ -291,43 +291,43 @@ CD    PRO   1.500
 C     PRO   1.500
 O     PRO   1.050
 
-N     SE-   1.100
-H     SE-   0.400
-CA    SE-   1.500
-CB    SE-   1.500
-OG    SE-   1.050
-HG    SE-   0.000
-C     SE-   1.500
-O     SE-   1.050
-
 N     SER   1.100
 H     SER   0.400
 CA    SER   1.500
 CB    SER   1.500
 OG    SER   1.050
-HG    SER   0.400
+HG    SER   0.000
 C     SER   1.500
 O     SER   1.050
 
-N     TH-   1.100
-H     TH-   0.400
-CA    TH-   1.500
-CB    TH-   1.500
-OG1   TH-   1.050
-HG1   TH-   0.000
-CG2   TH-   1.500
-C     TH-   1.500
-O     TH-   1.050
+N     SE0   1.100
+H     SE0   0.400
+CA    SE0   1.500
+CB    SE0   1.500
+OG    SE0   1.050
+HG    SE0   0.400
+C     SE0   1.500
+O     SE0   1.050
 
 N     THR   1.100
 H     THR   0.400
 CA    THR   1.500
 CB    THR   1.500
 OG1   THR   1.050
-HG1   THR   0.400
+HG1   THR   0.000
 CG2   THR   1.500
 C     THR   1.500
 O     THR   1.050
+
+N     TH0   1.100
+H     TH0   0.400
+CA    TH0   1.500
+CB    TH0   1.500
+OG1   TH0   1.050
+HG1   TH0   0.400
+CG2   TH0   1.500
+C     TH0   1.500
+O     TH0   1.050
 
 N     TRP   1.100
 H     TRP   0.400
@@ -351,25 +351,6 @@ HH2   TRP   0.400
 C     TRP   1.500
 O     TRP   1.050
 
-N     TY-   1.100
-H     TY-   0.400
-CA    TY-   1.500
-CB    TY-   1.500
-CG    TY-   1.500
-CD1   TY-   1.500
-HD1   TY-   0.400
-CD2   TY-   1.500
-HD2   TY-   0.400
-CE1   TY-   1.500
-HE1   TY-   0.400
-CE2   TY-   1.500
-HE2   TY-   0.400
-CZ    TY-   1.500
-OH    TY-   1.050
-HH    TY-   0.000
-C     TY-   1.500
-O     TY-   1.050
-
 N     TYR   1.100
 H     TYR   0.400
 CA    TYR   1.500
@@ -385,9 +366,28 @@ CE2   TYR   1.500
 HE2   TYR   0.400
 CZ    TYR   1.500
 OH    TYR   1.050
-HH    TYR   0.400
+HH    TYR   0.000
 C     TYR   1.500
 O     TYR   1.050
+
+N     TY0   1.100
+H     TY0   0.400
+CA    TY0   1.500
+CB    TY0   1.500
+CG    TY0   1.500
+CD1   TY0   1.500
+HD1   TY0   0.400
+CD2   TY0   1.500
+HD2   TY0   0.400
+CE1   TY0   1.500
+HE1   TY0   0.400
+CE2   TY0   1.500
+HE2   TY0   0.400
+CZ    TY0   1.500
+OH    TY0   1.050
+HH    TY0   0.400
+C     TY0   1.500
+O     TY0   1.050
 
 N     VAL   1.100
 H     VAL   0.400

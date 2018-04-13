@@ -86,22 +86,22 @@ SG    CYSD      -0.400
 C     CYSD       0.450
 O     CYSD      -0.450
 
-N     CY-       -0.310
-H     CY-        0.310
-CA    CY-        0.000
-CB    CY-       -0.240
-SG    CY-       -0.760
-C     CY-        0.450
-O     CY-       -0.450
-
 N     CYS       -0.310
 H     CYS        0.310
 CA    CYS        0.000
-CB    CYS        0.150
-SG    CYS       -0.370
-HG    CYS        0.220
+CB    CYS       -0.240
+SG    CYS       -0.760
 C     CYS        0.450
 O     CYS       -0.450
+
+N     CY0       -0.310
+H     CY0        0.310
+CA    CY0        0.000
+CB    CY0        0.150
+SG    CY0       -0.370
+HG    CY0        0.220
+C     CY0        0.450
+O     CY0       -0.450
 
 N     GLN       -0.310
 H     GLN        0.310
@@ -285,43 +285,43 @@ CD    PRO        0.000
 C     PRO        0.450
 O     PRO       -0.450
 
-N     SE-       -0.310
-H     SE-        0.310
-CA    SE-        0.000
-CB    SE-       -0.030
-OG    SE-       -0.970
-HG    SE-        0.000
-C     SE-        0.450
-O     SE-       -0.450
-
 N     SER       -0.310
 H     SER        0.310
 CA    SER        0.000
-CB    SER        0.266
-OG    SER       -0.674
-HG    SER        0.408
+CB    SER       -0.030
+OG    SER       -0.970
+HG    SER        0.000
 C     SER        0.450
 O     SER       -0.450
 
-N     TH-       -0.310
-H     TH-        0.310
-CA    TH-        0.000
-CB    TH-        0.266
-OG1   TH-       -0.970
-HG1   TH-        0.000
-CG2   TH-       -0.296
-C     TH-        0.450
-O     TH-       -0.450
+N     SE0       -0.310
+H     SE0        0.310
+CA    SE0        0.000
+CB    SE0        0.266
+OG    SE0       -0.674
+HG    SE0        0.408
+C     SE0        0.450
+O     SE0       -0.450
 
 N     THR       -0.310
 H     THR        0.310
 CA    THR        0.000
 CB    THR        0.266
-OG1   THR       -0.674
-HG1   THR        0.408
-CG2   THR        0.000
+OG1   THR       -0.970
+HG1   THR        0.000
+CG2   THR       -0.296
 C     THR        0.450
 O     THR       -0.450
+
+N     TH0       -0.310
+H     TH0        0.310
+CA    TH0        0.000
+CB    TH0        0.266
+OG1   TH0       -0.674
+HG1   TH0        0.408
+CG2   TH0        0.000
+C     TH0        0.450
+O     TH0       -0.450
 
 N     TRP       -0.310
 H     TRP        0.310
@@ -345,25 +345,6 @@ HH2   TRP        0.140
 C     TRP        0.450
 O     TRP       -0.450
 
-N     TY-       -0.310
-H     TY-        0.310
-CA    TY-        0.000
-CB    TY-        0.000
-CG    TY-        0.000
-CD1   TY-       -0.140
-HD1   TY-        0.140
-CD2   TY-       -0.140
-HD2   TY-        0.140
-CE1   TY-       -0.140
-HE1   TY-        0.140
-CE2   TY-       -0.436
-HE2   TY-        0.140
-CZ    TY-        0.203
-OH    TY-       -0.907
-HH    TY-        0.000
-C     TY-        0.450
-O     TY-       -0.450
-
 N     TYR       -0.310
 H     TYR        0.310
 CA    TYR        0.000
@@ -375,13 +356,32 @@ CD2   TYR       -0.140
 HD2   TYR        0.140
 CE1   TYR       -0.140
 HE1   TYR        0.140
-CE2   TYR       -0.140
+CE2   TYR       -0.436
 HE2   TYR        0.140
 CZ    TYR        0.203
-OH    TYR       -0.611
-HH    TYR        0.408
+OH    TYR       -0.907
+HH    TYR        0.000
 C     TYR        0.450
 O     TYR       -0.450
+
+N     TY0       -0.310
+H     TY0        0.310
+CA    TY0        0.000
+CB    TY0        0.000
+CG    TY0        0.000
+CD1   TY0       -0.140
+HD1   TY0        0.140
+CD2   TY0       -0.140
+HD2   TY0        0.140
+CE1   TY0       -0.140
+HE1   TY0        0.140
+CE2   TY0       -0.140
+HE2   TY0        0.140
+CZ    TY0        0.203
+OH    TY0       -0.611
+HH    TY0        0.408
+C     TY0        0.450
+O     TY0       -0.450
 
 N     VAL       -0.310
 H     VAL        0.310

@@ -154,21 +154,6 @@ HD2   AS0   1.4090
 C     AS0   1.9080
 O     AS0   1.6612
 
-N     CY-   1.8240
-H     CY-   0.6000
-CA    CY-   1.9080
-HA    CY-   1.3870
-CB    CY-   1.9080
-1HB   CY-   1.3870
-HB1   CY-   1.3870
-HB2   CY-   1.3870
-2HB   CY-   1.3870
-HB3   CY-   1.3870
-SG    CY-   2.0000
-HG    CY-   0.0000
-C     CY-   1.9080
-O     CY-   1.6612
-
 N     CYS   1.8240
 H     CYS   0.6000
 CA    CYS   1.9080
@@ -180,9 +165,24 @@ HB2   CYS   1.3870
 2HB   CYS   1.3870
 HB3   CYS   1.3870
 SG    CYS   2.0000
-HG    CYS   0.6000
+HG    CYS   0.0000
 C     CYS   1.9080
 O     CYS   1.6612
+
+N     CY0   1.8240
+H     CY0   0.6000
+CA    CY0   1.9080
+HA    CY0   1.3870
+CB    CY0   1.9080
+1HB   CY0   1.3870
+HB1   CY0   1.3870
+HB2   CY0   1.3870
+2HB   CY0   1.3870
+HB3   CY0   1.3870
+SG    CY0   2.0000
+HG    CY0   0.6000
+C     CY0   1.9080
+O     CY0   1.6612
 
 N     GLU   1.8240
 H     GLU   0.6000
@@ -510,21 +510,6 @@ HG3   PRO   1.4870
 C     PRO   1.9080
 O     PRO   1.6612
 
-N     SE-   1.8240
-H     SE-   0.6000
-CA    SE-   1.9080
-HA    SE-   1.3870
-CB    SE-   1.9080
-1HB   SE-   1.3870
-HB1   SE-   1.3870
-HB2   SE-   1.3870
-2HB   SE-   1.3870
-HB3   SE-   1.3870
-OG    SE-   1.7210
-HG    SE-   0.0000
-C     SE-   1.9080
-O     SE-   1.6612
-
 N     SER   1.8240
 H     SER   0.6000
 CA    SER   1.9080
@@ -536,27 +521,24 @@ HB2   SER   1.3870
 2HB   SER   1.3870
 HB3   SER   1.3870
 OG    SER   1.7210
-HG    SER   0.6000
+HG    SER   0.0000 !HG    SER   0.0001
 C     SER   1.9080
 O     SER   1.6612
 
-N     TH-   1.8240
-H     TH-   0.6000
-CA    TH-   1.9080
-HA    TH-   1.3870
-CB    TH-   1.9080
-HB    TH-   1.3870
-OG1   TH-   1.7210
-HG1   TH-   0.0000
-CG2   TH-   1.9080
-1HG2  TH-   1.4870
-HG21  TH-   1.4870
-2HG2  TH-   1.4870
-HG22  TH-   1.4870
-3HG2  TH-   1.4870
-HG23  TH-   1.4870
-C     TH-   1.9080
-O     TH-   1.6612
+N     SE0   1.8240
+H     SE0   0.6000
+CA    SE0   1.9080
+HA    SE0   1.3870
+CB    SE0   1.9080
+1HB   SE0   1.3870
+HB1   SE0   1.3870
+HB2   SE0   1.3870
+2HB   SE0   1.3870
+HB3   SE0   1.3870
+OG    SE0   1.7210
+HG    SE0   0.6000 !HG    SER   0.0001
+C     SE0   1.9080
+O     SE0   1.6612
 
 N     THR   1.8240
 H     THR   0.6000
@@ -565,7 +547,7 @@ HA    THR   1.3870
 CB    THR   1.9080
 HB    THR   1.3870
 OG1   THR   1.7210
-HG1   THR   0.6000
+HG1   THR   0.0000 !HG1   THR   0.0001
 CG2   THR   1.9080
 1HG2  THR   1.4870
 HG21  THR   1.4870
@@ -575,6 +557,24 @@ HG22  THR   1.4870
 HG23  THR   1.4870
 C     THR   1.9080
 O     THR   1.6612
+
+N     TH0   1.8240
+H     TH0   0.6000
+CA    TH0   1.9080
+HA    TH0   1.3870
+CB    TH0   1.9080
+HB    TH0   1.3870
+OG1   TH0   1.7210
+HG1   TH0   0.6000 !HG1   THR   0.0001
+CG2   TH0   1.9080
+1HG2  TH0   1.4870
+HG21  TH0   1.4870
+2HG2  TH0   1.4870
+HG22  TH0   1.4870
+3HG2  TH0   1.4870
+HG23  TH0   1.4870
+C     TH0   1.9080
+O     TH0   1.6612
 
 N     TRP   1.8240
 H     TRP   0.6000
@@ -604,31 +604,6 @@ HH2   TRP   1.4590
 C     TRP   1.9080
 O     TRP   1.6612
 
-N     TY-   1.8240
-H     TY-   0.6000
-CA    TY-   1.9080
-HA    TY-   1.3870
-CB    TY-   1.9080
-1HB   TY-   1.4870
-HB1   TY-   1.4870
-HB2   TY-   1.4870
-2HB   TY-   1.4870
-HB3   TY-   1.4870
-CG    TY-   1.9080
-CD1   TY-   1.9080
-HD1   TY-   1.4590
-CD2   TY-   1.9080
-HD2   TY-   1.4590
-CE1   TY-   1.9080
-HE1   TY-   1.4590
-CE2   TY-   1.9080
-HE2   TY-   1.4590
-CZ    TY-   1.9080
-OH    TY-   1.7210
-HH    TY-   0.0000
-C     TY-   1.9080
-O     TY-   1.6612
-
 N     TYR   1.8240
 H     TYR   0.6000
 CA    TYR   1.9080
@@ -650,9 +625,34 @@ CE2   TYR   1.9080
 HE2   TYR   1.4590
 CZ    TYR   1.9080
 OH    TYR   1.7210
-HH    TYR   0.6000
+HH    TYR   0.0000  !HH    TYR   0.0001
 C     TYR   1.9080
 O     TYR   1.6612
+
+N     TY0   1.8240
+H     TY0   0.6000
+CA    TY0   1.9080
+HA    TY0   1.3870
+CB    TY0   1.9080
+1HB   TY0   1.4870
+HB1   TY0   1.4870
+HB2   TY0   1.4870
+2HB   TY0   1.4870
+HB3   TY0   1.4870
+CG    TY0   1.9080
+CD1   TY0   1.9080
+HD1   TY0   1.4590
+CD2   TY0   1.9080
+HD2   TY0   1.4590
+CE1   TY0   1.9080
+HE1   TY0   1.4590
+CE2   TY0   1.9080
+HE2   TY0   1.4590
+CZ    TY0   1.9080
+OH    TY0   1.7210
+HH    TY0   0.6000  !HH    TYR   0.0001
+C     TY0   1.9080
+O     TY0   1.6612
 
 N     VAL   1.8240
 H     VAL   0.6000
