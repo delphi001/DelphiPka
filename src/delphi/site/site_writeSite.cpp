@@ -491,27 +491,27 @@ void CSite::writeSite(const int& iisitsf)
             SGrid<delphi_real> xt;
 
             xt = xn; xt.nX += rads;
-            vphi = tricubicInterpl(iGrid,phimap,xt);
+            vphi = interpl(iGrid,phimap,xt);
             aphi = vphi;
 
             xt = xn; xt.nX -= rads;
-            vphi = tricubicInterpl(iGrid,phimap,xt);
+            vphi = interpl(iGrid,phimap,xt);
             aphi += vphi;
 
             xt = xn; xt.nY += rads;
-            vphi = tricubicInterpl(iGrid,phimap,xt);
+            vphi = interpl(iGrid,phimap,xt);
             aphi += vphi;
 
             xt = xn; xt.nY -= rads;
-            vphi = tricubicInterpl(iGrid,phimap,xt);
+            vphi = interpl(iGrid,phimap,xt);
             aphi += vphi;
 
             xt = xn; xt.nZ += rads;
-            vphi = tricubicInterpl(iGrid,phimap,xt);
+            vphi = interpl(iGrid,phimap,xt);
             aphi += vphi;
 
             xt = xn; xt.nZ -= rads;
-            vphi = tricubicInterpl(iGrid,phimap,xt);
+            vphi = interpl(iGrid,phimap,xt);
             aphi += vphi;
 
             aphi = aphi/6.0;
@@ -519,8 +519,8 @@ void CSite::writeSite(const int& iisitsf)
 
          if (isitp || isiti || (isitap && fZero > abs(chrgv)))
          {
-            vphi = tricubicInterpl(iGrid,phimap,xn);
-            //vphi = tricubicInterpl(iGrid,phimap,xn); // test Lin Li test
+            vphi = interpl(iGrid,phimap,xn);
+            //vphi = interpl(iGrid,phimap,xn); // test Lin Li test
             //cout << "Lin Li test: iGrid: " << iGrid << " vphi: " << vphi << " xn: " <<  xn << endl; 
             //delphi_real p[4]={143.2846,113.7093,94.3843,80.7234};
             //delphi_real p[4]={-9,-1,1,9};
@@ -565,12 +565,12 @@ void CSite::writeSite(const int& iisitsf)
 
          if (isitf)
          {  
-            xn.nX += 1.0;               fu.nX = tricubicInterpl(iGrid,phimap,xn);
-            xn.nX -= 2.0;               fl.nX = tricubicInterpl(iGrid,phimap,xn);
-            xn.nX += 1.0; xn.nY += 1.0; fu.nY = tricubicInterpl(iGrid,phimap,xn);
-            xn.nY -= 2.0;               fl.nY = tricubicInterpl(iGrid,phimap,xn);
-            xn.nY += 1.0; xn.nZ += 1.0; fu.nZ = tricubicInterpl(iGrid,phimap,xn);
-            xn.nZ -= 2.0;               fl.nZ = tricubicInterpl(iGrid,phimap,xn);
+            xn.nX += 1.0;               fu.nX = interpl(iGrid,phimap,xn);
+            xn.nX -= 2.0;               fl.nX = interpl(iGrid,phimap,xn);
+            xn.nX += 1.0; xn.nY += 1.0; fu.nY = interpl(iGrid,phimap,xn);
+            xn.nY -= 2.0;               fl.nY = interpl(iGrid,phimap,xn);
+            xn.nY += 1.0; xn.nZ += 1.0; fu.nZ = interpl(iGrid,phimap,xn);
+            xn.nZ -= 2.0;               fl.nZ = interpl(iGrid,phimap,xn);
             xn.nZ += 1.0;
             fxyz = (fl-fu)*0.5*fScale; // the electric field is opposite the potential gradient so I change the sign
          }
@@ -656,7 +656,7 @@ void CSite::writeSite(const int& iisitsf)
                /*
                 * find the grid potentials..
                 */
-               phiv = tricubicInterpl(iGrid,phimap,xn);
+               phiv = interpl(iGrid,phimap,xn);
 
                string strFileName7 = "extra.dat";
                ofstream ofFileSteam7;
@@ -905,12 +905,12 @@ void CSite::writeSite(const int& iisitsf)
             xo = prgfgSurfCrgA[jj]+rgfProbeRadius[0]*prgfgSurfCrgE[jj];
             xn = (xo-fgBoxCenter)*fScale+goff;
 
-            xn.nX += 1.0;               fu.nX = tricubicInterpl(iGrid,phimap,xn);
-            xn.nX -= 2.0;               fu.nX = tricubicInterpl(iGrid,phimap,xn);
-            xn.nX += 1.0; xn.nY += 1.0; fu.nY = tricubicInterpl(iGrid,phimap,xn);
-            xn.nY -= 2.0;               fu.nY = tricubicInterpl(iGrid,phimap,xn);
-            xn.nY += 1.0; xn.nZ += 1.0; fu.nZ = tricubicInterpl(iGrid,phimap,xn);
-            xn.nZ -= 2.0;               fu.nZ = tricubicInterpl(iGrid,phimap,xn);
+            xn.nX += 1.0;               fu.nX = interpl(iGrid,phimap,xn);
+            xn.nX -= 2.0;               fu.nX = interpl(iGrid,phimap,xn);
+            xn.nX += 1.0; xn.nY += 1.0; fu.nY = interpl(iGrid,phimap,xn);
+            xn.nY -= 2.0;               fu.nY = interpl(iGrid,phimap,xn);
+            xn.nY += 1.0; xn.nZ += 1.0; fu.nZ = interpl(iGrid,phimap,xn);
+            xn.nZ -= 2.0;               fu.nZ = interpl(iGrid,phimap,xn);
             xn.nZ += 1.0;
 
             fxyz = fl - fu;

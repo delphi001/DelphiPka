@@ -331,7 +331,7 @@ bool CEnergy::runFocus(shared_ptr<SPrime> param, SGrid<double> &center1) {
     int    len1, halflen1, len0, halflen0;
     bool   bCenterReset = false;
     int    gsize0       = param->igrid1;
-    int    gsize1       = 81;
+    int    gsize1       = 65;
     double scale0       = param->scale1;
     double scale1;
     double dist_l, dist_r;
@@ -484,7 +484,7 @@ void CEnergy::resSolv(shared_ptr<SPrime> param) {
  */
 
 void CEnergy::setfocus(shared_ptr<SPrime> param) {
-    param->gsize  = 81;
+    param->gsize  = 65;
     param->bndcon = 3;
 
     param->strFRCOut   = frcnam;

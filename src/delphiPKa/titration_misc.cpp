@@ -86,11 +86,13 @@ void CTitration2::linearReg() {
         string resname = newPDB[vecIonRes[i][0]].res_name;
 
         if (fPKA > 14.0) {
-            if (resname == "ASP" || resname == "GLU" || resname == "TYR" || resname == "THR" || resname == "SER" || resname == "CYS") pkaOuptut << "  <0.0";
-            else pkaOuptut << "  >14.0";
+            if (resname == "ASP" || resname == "GLU" || resname == "TYR" || resname == "THR" || resname == "SER" || resname == "CYS")
+                pkaOuptut << "  undetermined";
+            else pkaOuptut << "  undetermined";
         } else if (fPKA < 0.0) {
-            if (resname == "ARG" || resname == "HIS" || resname == "LYS") pkaOuptut << "  <0.0";
-            else pkaOuptut << "  <0.0";
+            if (resname == "ARG" || resname == "HIS" || resname == "LYS")
+                pkaOuptut << "  undetermined";
+            else pkaOuptut << "  undetermined";
         } else pkaOuptut << fixed << setw(7) << setprecision(2) << right << fPKA;
 
         pkaOuptut << "    ";
