@@ -1,4 +1,4 @@
-# DelphiPka v2.1
+# DelphiPka v2.3
 Delphi-PKA is a DelPhi-based C++ program, allowing to predict pKa's for ionizable groups in proteins, RNA and DNA.
 Unique approach stems from:
 1. Use gaussian-based smooth function to mimic conformational changes associated with ionization changes.

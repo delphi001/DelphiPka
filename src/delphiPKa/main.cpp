@@ -68,7 +68,7 @@ using namespace std;
 
 void banner() {
 
-    cout << "   _________________________    DelPhiPKa   ver 2.2    _________________________ " << endl;
+    cout << "   _________________________    DelPhiPKa   ver 2.3    _________________________ " << endl;
     cout << "  |                                                                             |" << endl;
     cout << "  |   DelPhiPKA is a DelPhi-based C++ program, allowing to predict pKa's for    |" << endl;
     cout << "  |   ionizable groups in proteins, RNA and DNA.  Unique approach stems from:   |" << endl;
@@ -83,7 +83,7 @@ void banner() {
     cout << "  |                          Developed by Lin Wang, 2015                        |" << endl;
     cout << "  |              ( Dr. Emil Alexov's group at Clemson University )              |" << endl;
     cout << "  |                                                                             |" << endl;
-    cout << "  |_________________________    DelPhiPKa   ver 2.2    _________________________|" << endl;
+    cout << "  |_________________________    DelPhiPKa   ver 2.3    _________________________|" << endl;
 
     cout << endl;
     cout << endl;
