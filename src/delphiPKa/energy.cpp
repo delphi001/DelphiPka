@@ -183,7 +183,17 @@ void CEnergy::run() {
             currentResNum = newPDB[vecIonRes[k][j]].res_num;
             currentResNam = newPDB[vecIonRes[k][j]].res_name;
 
-            if (newPDB[vecIonRes[k][j]].atom_name == "CG" || newPDB[vecIonRes[k][j]].atom_name == "C1'") {
+            // CG: ASP, GLU, ARG, HIS, LYS, TYR
+            // C1': DT, DG
+            // OG: SER
+            // OG1: THR
+            // SG: CYS
+            if (newPDB[vecIonRes[k][j]].atom_name == "CG" ||
+                newPDB[vecIonRes[k][j]].atom_name == "C1'" ||
+                newPDB[vecIonRes[k][j]].atom_name == "OG" ||
+                newPDB[vecIonRes[k][j]].atom_name == "OG1" ||
+                newPDB[vecIonRes[k][j]].atom_name == "SG")
+            {
                 center1.nX = newPDB[vecIonRes[k][j]].coord.X;
                 center1.nY = newPDB[vecIonRes[k][j]].coord.Y;
                 center1.nZ = newPDB[vecIonRes[k][j]].coord.Z;
@@ -303,7 +313,17 @@ void CEnergy::run() {
             currentResNum = newPDB[vecIonRes[k][j]].res_num;
             currentResNam = newPDB[vecIonRes[k][j]].res_name;
 
-            if (newPDB[vecIonRes[k][j]].atom_name == "CG" || newPDB[vecIonRes[k][j]].atom_name == "C1'") {
+            // CG: ASP, GLU, ARG, HIS, LYS, TYR
+            // C1': DT, DG
+            // OG: SER
+            // OG1: THR
+            // SG: CYS
+            if (newPDB[vecIonRes[k][j]].atom_name == "CG" ||
+                newPDB[vecIonRes[k][j]].atom_name == "C1'" ||
+                newPDB[vecIonRes[k][j]].atom_name == "OG" ||
+                newPDB[vecIonRes[k][j]].atom_name == "OG1" ||
+                newPDB[vecIonRes[k][j]].atom_name == "SG")
+            {
                 center1.nX = newPDB[vecIonRes[k][j]].coord.X;
                 center1.nY = newPDB[vecIonRes[k][j]].coord.Y;
                 center1.nZ = newPDB[vecIonRes[k][j]].coord.Z;
