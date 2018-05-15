@@ -1,5 +1,8 @@
 #PBS -l select=1:ncpus=8:mem=40gb:mpiprocs=8:interconnect=fdr,walltime=72:00:00
 
+# If you want to add more cores, you need to modify the ncpus, mpiprocs, and the '-np 8' sections in mpirun.
+# The script runs with 8 cores by default.
+
 module purge
 module add gcc/4.8.1 openmpi/1.6.4 gsl/1.16
 
