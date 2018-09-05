@@ -534,11 +534,13 @@ delphi_real CDelphiFastSOR::calcExpSolvE(delphi_real gdens)
 	delphi_real solvationEnergy;
 	delphi_real halfSternRadiusInverse;
 	
-	repsdens = gdens*repsout + (1 - gdens)*repsin;
+	// repsdens = gdens*repsout + (1 - gdens)*repsin;
+	repsdens = gdens*repsin + (1 - gdens)*repsout;
 	halfSternRadiusInverse = 1 / 2.0 * 0.5;
 	solvationEnergy = -fEPKT * halfSternRadiusInverse*(1 / repsdens - 1 / repsout);
 
-	result = calcExp(solvationEnergy);
+	// result = calcExp(solvationEnergy);
+	result = exp(solvationEnergy);
 	
 	return result;
 
