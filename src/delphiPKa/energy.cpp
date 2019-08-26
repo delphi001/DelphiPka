@@ -25,6 +25,7 @@ void CEnergy::run() {
     bool   bNeutral;
     int    currentResNum;
     string currentResNam;
+    string currentChainID;
     strFRCOutFile = "frclog";
     if (bHETATMinPQR) {
         vecGridPotential.resize(newPDB.size() + vecCrgHETATM.size());
@@ -182,6 +183,7 @@ void CEnergy::run() {
 
             currentResNum = newPDB[vecIonRes[k][j]].res_num;
             currentResNam = newPDB[vecIonRes[k][j]].res_name;
+            currentChainID = newPDB[vecIonRes[k][j]].chain_id;
 
             // CG: ASP, GLU, ARG, HIS, LYS, TYR
             // C1': DT, DG
@@ -210,6 +212,7 @@ void CEnergy::run() {
         for (i = 0; i < newPDB.size(); i++) {
             if (newPDB[i].res_name == currentResNam
                 && newPDB[i].res_num == currentResNum
+                && newPDB[i].chain_id == currentChainID
                 && newPDB[i].conf != "BK") {
                 singleRes_to_DelPhi.push_back(PQR_to_DelPhi[i]);
             }
@@ -225,7 +228,7 @@ void CEnergy::run() {
         /////////////////////////////
 
         delphi_progress << "    Now Starting the DelPhi focusing with charged residue ";
-        delphi_progress << currentResNam << setw(4) << currentResNum << endl;
+        delphi_progress << currentResNam << setw(4) << currentResNum << currentChainID << endl;
 
         param->ntimes = k;
 
@@ -312,6 +315,7 @@ void CEnergy::run() {
 
             currentResNum = newPDB[vecIonRes[k][j]].res_num;
             currentResNam = newPDB[vecIonRes[k][j]].res_name;
+            currentChainID = newPDB[vecIonRes[k][j]].chain_id;
 
             // CG: ASP, GLU, ARG, HIS, LYS, TYR
             // C1': DT, DG
@@ -340,6 +344,7 @@ void CEnergy::run() {
         for (i = 0; i < newPDB.size(); i++) {
             if (newPDB[i].res_name == currentResNam
                 && newPDB[i].res_num == currentResNum
+                && newPDB[i].chain_id == currentChainID
                 && newPDB[i].conf != "BK") {
                 singleRes_to_DelPhi.push_back(PQR_to_DelPhi[i]);
             }
@@ -347,7 +352,7 @@ void CEnergy::run() {
 
 
         delphi_progress << "    Now Starting the DelPhi focusing with neutral residue ";
-        delphi_progress << currentResNam << setw(4) << currentResNum << endl;
+        delphi_progress << currentResNam << setw(4) << currentResNum << currentChainID << endl;
 
         setbase(param, center1);
 

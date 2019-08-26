@@ -30,6 +30,7 @@ private:
     const string                       &pdb_input;
     const int                          &n_cluster;
     const vector<vector<int> >         &vecCluster;
+    const vector<vector<string> >      &vecClusterChID;
     const vector<vector<int> >         &vecIonRes;
     const vector<string>               &strHETATM;
     vector<PDBFORM>                    &newPDB;
@@ -80,6 +81,7 @@ public:
             newPDB(pData->newPDB),
             pkamap(pData->pkamap),
             vecCluster(pData->vecCluster),
+            vecClusterChID(pData->vecClusterChID),
             vecIonRes(pData->vecIonRes),
             strHETATM(pData->strHETATM),
 

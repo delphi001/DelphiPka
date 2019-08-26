@@ -134,19 +134,21 @@ void CTitration2::genState(int &n) {
 
 
 void CTitration2::genCluster1() {
-    int         i, j, k;
-    vector<int> vecIonRes1d;
-    vector<int> vectmp;
+    int            i, j, k;
+    vector<int>    vecIonRes1d;
+    vector<string> vecIonCh1d;
+    vector<int>    vectmp;
 
     for (i = 0; i < vecIonRes.size(); i++) {
         vecIonRes1d.push_back(newPDB[vecIonRes[i][0]].res_num);
+        vecIonCh1d.push_back(newPDB[vecIonRes[i][0]].chain_id);
     }
 
 
     for (i = 0; i < vecCluster.size(); i++) {
         for (j = 0; j < vecCluster[i].size(); j++) {
             for (k = 0; k < vecIonRes1d.size(); k++) {
-                if (vecCluster[i][j] == vecIonRes1d[k])
+                if (vecCluster[i][j] == vecIonRes1d[k] && vecClusterChID[i][j] == vecIonCh1d[k])
                     vectmp.push_back(k);
             }
         }

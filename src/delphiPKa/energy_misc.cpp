@@ -23,16 +23,18 @@ using namespace std;
 
 void CEnergy::ionizableArr() {
     int         i         = 0, j = 0, k;
+    string      tmpChainID = "";
     int         tmpResnum = 0;
     vector<int> vectmp;
 
     for (k = 0; k < newPDB.size(); ++k) {
         if (newPDB[k].bIonizable && newPDB[k].conf != "BK") {
-            if (tmpResnum != newPDB[k].res_num) {
+            if (!(tmpResnum == newPDB[k].res_num && tmpChainID == newPDB[k].chain_id)) {
                 vecIonRes.push_back(vectmp);
                 vectmp.clear();
             }
             tmpResnum = newPDB[k].res_num;
+            tmpChainID = newPDB[k].chain_id;
             vectmp.push_back(k);
         } else {
             continue;
